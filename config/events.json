@@ -1,0 +1,33 @@
+[
+  {
+    "id": "upgrade",
+    "icon": "⬆️",
+    "label": "指定升级",
+    "desc": "升级一件指定类型的物品",
+    "pool": "normal",
+    "condition": "hasUpgradeable"
+  },
+  {
+    "id": "shop",
+    "icon": "🏪",
+    "label": "进入商店",
+    "desc": "购买指定类型的物品",
+    "pool": "normal"
+  },
+  {
+    "id": "exchange",
+    "icon": "🔀",
+    "label": "以物换物",
+    "desc": "选一件物品换取随机同品质物品",
+    "pool": "normal",
+    "condition": "hasItems"
+  },
+  {
+    "id": "storm_blessing",
+    "icon": "🌊",
+    "label": "风暴祝福",
+    "desc": "下一场开场获得护盾",
+    "pool": "last",
+    "guaranteed": true
+  }
+]

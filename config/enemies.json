@@ -1,0 +1,134 @@
+[
+  {
+    "id": "parrot",
+    "name": "鹦鹉船员",
+    "portrait": "enemies/parrot.webp",
+    "hp": 300,
+    "abilities": [
+      { "id": "parrot-a1", "name": "利喙啄击", "cooldown": 3000, "damage": 10, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3秒造成10伤害" },
+      { "id": "parrot-a2", "name": "尖锐鸣叫", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 4, "poison": 0, "description": "每7秒造成4灼烧" }
+    ]
+  },
+  {
+    "id": "rat",
+    "name": "毒鼠盗贼",
+    "portrait": "enemies/rat.webp",
+    "hp": 380,
+    "abilities": [
+      { "id": "rat-a1", "name": "抓挠", "cooldown": 3000, "damage": 12, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3秒造成12伤害" },
+      { "id": "rat-a2", "name": "毒牙咬", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 10, "description": "每7秒施加10层剧毒" },
+      { "id": "rat-a3", "name": "鼠群护盾", "cooldown": 12000, "damage": 0, "heal": 0, "shield": 25, "burn": 0, "poison": 0, "description": "每12秒获得25护盾" }
+    ]
+  },
+  {
+    "id": "shark",
+    "name": "鲨鱼海盗",
+    "portrait": "enemies/shark.webp",
+    "hp": 480,
+    "abilities": [
+      { "id": "shark-a1", "name": "撕咬", "cooldown": 4000, "damage": 20, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每4秒造成20伤害" },
+      { "id": "shark-a2", "name": "血腥撕裂", "cooldown": 10000, "damage": 40, "heal": 0, "shield": 0, "burn": 5, "poison": 0, "description": "每10秒造成40伤害并附加5灼烧" }
+    ]
+  },
+  {
+    "id": "crab",
+    "name": "铁壳螃蟹将军",
+    "portrait": "enemies/crab.webp",
+    "hp": 600,
+    "abilities": [
+      { "id": "crab-a1", "name": "钳击", "cooldown": 5000, "damage": 18, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每5秒造成18伤害" },
+      { "id": "crab-a2", "name": "铁甲护盾", "cooldown": 8000, "damage": 0, "heal": 0, "shield": 50, "burn": 0, "poison": 0, "description": "每8秒获得50护盾" },
+      { "id": "crab-a3", "name": "横扫钳爪", "cooldown": 14000, "damage": 45, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每14秒造成45伤害" }
+    ]
+  },
+  {
+    "id": "owl",
+    "name": "猫头鹰法师",
+    "portrait": "enemies/owl.webp",
+    "hp": 550,
+    "abilities": [
+      { "id": "owl-a1", "name": "魔法弹", "cooldown": 4000, "damage": 15, "heal": 0, "shield": 0, "burn": 5, "poison": 0, "description": "每4秒造成15伤害并附加5灼烧" },
+      { "id": "owl-a2", "name": "诅咒雾霭", "cooldown": 9000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 15, "description": "每9秒施加15层剧毒" },
+      { "id": "owl-a3", "name": "法术回复", "cooldown": 13000, "damage": 0, "heal": 50, "shield": 0, "burn": 0, "poison": 0, "description": "每13秒恢复50生命" }
+    ]
+  },
+  {
+    "id": "wolf",
+    "name": "狼影刺客",
+    "portrait": "enemies/wolf.webp",
+    "hp": 650,
+    "abilities": [
+      { "id": "wolf-a1", "name": "暗影斩", "cooldown": 3500, "damage": 25, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3.5秒造成25伤害" },
+      { "id": "wolf-a2", "name": "魔焰嚎叫", "cooldown": 8000, "damage": 0, "heal": 0, "shield": 0, "burn": 12, "poison": 0, "description": "每8秒施加12层灼烧" },
+      { "id": "wolf-a3", "name": "暗影护甲", "cooldown": 11000, "damage": 0, "heal": 0, "shield": 55, "burn": 0, "poison": 0, "description": "每11秒获得55护盾" }
+    ]
+  },
+  {
+    "id": "bear",
+    "name": "熊霸船长",
+    "portrait": "enemies/bear.webp",
+    "hp": 800,
+    "abilities": [
+      { "id": "bear-a1", "name": "熊掌重击", "cooldown": 5000, "damage": 30, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每5秒造成30伤害" },
+      { "id": "bear-a2", "name": "狂暴嘶吼", "cooldown": 9000, "damage": 0, "heal": 25, "shield": 25, "burn": 0, "poison": 0, "description": "每9秒恢复25生命并获得25护盾" },
+      { "id": "bear-a3", "name": "地动山摇", "cooldown": 15000, "damage": 60, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每15秒造成60伤害" }
+    ]
+  },
+  {
+    "id": "octopus",
+    "name": "章鱼幻术师",
+    "portrait": "enemies/octopus.webp",
+    "hp": 750,
+    "abilities": [
+      { "id": "oct-a1", "name": "触手连击", "cooldown": 3000, "damage": 15, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3秒造成15伤害" },
+      { "id": "oct-a2", "name": "毒墨喷射", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 20, "description": "每7秒施加20层剧毒" },
+      { "id": "oct-a3", "name": "幻影分身", "cooldown": 12000, "damage": 0, "heal": 40, "shield": 40, "burn": 0, "poison": 0, "description": "每12秒恢复40生命并获得40护盾" }
+    ]
+  },
+  {
+    "id": "ninja",
+    "name": "幽影忍者",
+    "portrait": "enemies/ninja.webp",
+    "hp": 700,
+    "abilities": [
+      { "id": "ninja-a1", "name": "飞镖", "cooldown": 2500, "damage": 15, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每2.5秒造成15伤害" },
+      { "id": "ninja-a2", "name": "暗杀突袭", "cooldown": 8000, "damage": 55, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每8秒造成55伤害" },
+      { "id": "ninja-a3", "name": "烟雾护盾", "cooldown": 11000, "damage": 0, "heal": 0, "shield": 50, "burn": 0, "poison": 0, "description": "每11秒获得50护盾" }
+    ]
+  },
+  {
+    "id": "skeleton",
+    "name": "不死骷髅舰长",
+    "portrait": "enemies/skeleton.webp",
+    "hp": 900,
+    "abilities": [
+      { "id": "skel-a1", "name": "骨刺突刺", "cooldown": 4500, "damage": 28, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每4.5秒造成28伤害" },
+      { "id": "skel-a2", "name": "生命汲取", "cooldown": 9000, "damage": 20, "heal": 35, "shield": 0, "burn": 0, "poison": 0, "description": "每9秒造成20伤害并恢复35生命" },
+      { "id": "skel-a3", "name": "冥骨长矛", "cooldown": 13000, "damage": 55, "heal": 0, "shield": 0, "burn": 0, "poison": 12, "description": "每13秒造成55伤害并施加12层剧毒" }
+    ]
+  },
+  {
+    "id": "bat-demon",
+    "name": "恶魔蝠王",
+    "portrait": "enemies/bat-demon.webp",
+    "hp": 1000,
+    "abilities": [
+      { "id": "bat-a1", "name": "黑暗噬咬", "cooldown": 4000, "damage": 22, "heal": 0, "shield": 0, "burn": 8, "poison": 0, "description": "每4秒造成22伤害并附加8灼烧" },
+      { "id": "bat-a2", "name": "诅咒瘴气", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 18, "description": "每7秒施加18层剧毒" },
+      { "id": "bat-a3", "name": "暗影屏障", "cooldown": 10000, "damage": 0, "heal": 0, "shield": 70, "burn": 0, "poison": 0, "description": "每10秒获得70护盾" },
+      { "id": "bat-a4", "name": "吸血嚎叫", "cooldown": 15000, "damage": 35, "heal": 60, "shield": 0, "burn": 0, "poison": 0, "description": "每15秒造成35伤害并恢复60生命" }
+    ]
+  },
+  {
+    "id": "demon-boss",
+    "name": "海渊魔神",
+    "portrait": "enemies/demon-boss.webp",
+    "hp": 1200,
+    "abilities": [
+      { "id": "boss-a1", "name": "魔炮轰击", "cooldown": 4000, "damage": 32, "heal": 0, "shield": 0, "burn": 6, "poison": 0, "description": "每4秒造成32伤害并附加6灼烧" },
+      { "id": "boss-a2", "name": "剧毒云雾", "cooldown": 6000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 22, "description": "每6秒施加22层剧毒" },
+      { "id": "boss-a3", "name": "魔神护盾", "cooldown": 9000, "damage": 0, "heal": 0, "shield": 90, "burn": 0, "poison": 0, "description": "每9秒获得90护盾" },
+      { "id": "boss-a4", "name": "魔神降临", "cooldown": 14000, "damage": 65, "heal": 40, "shield": 0, "burn": 15, "poison": 15, "description": "每14秒造成65伤害并恢复40生命，附加15灼烧和15剧毒" }
+    ]
+  }
+]

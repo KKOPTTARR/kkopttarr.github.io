@@ -1,0 +1,44 @@
+[
+  {
+    "id": "samurai",
+    "icon": "🗡️",
+    "portrait": "/identities/samurai.jpg",
+    "name": "武士",
+    "flavor": "一刀定胜负，以快制敌",
+    "startItems": ["1b955b8d-0ea6-4437-935c-d588be5898c1"],
+    "itemNames": ["弯刀"]
+  },
+  {
+    "id": "gunner",
+    "icon": "🔫",
+    "portrait": "/identities/gunner.jpg",
+    "name": "枪炮专家",
+    "flavor": "双枪齐发，弹无虚发",
+    "startItems": [
+      "92e7ab18-a035-43c7-a53c-965aeecbe357",
+      "92e7ab18-a035-43c7-a53c-965aeecbe357"
+    ],
+    "itemNames": ["左轮手枪", "左轮手枪"]
+  },
+  {
+    "id": "tamer",
+    "icon": "🐠",
+    "portrait": "/identities/tamer.jpg",
+    "name": "海洋驯兽师",
+    "flavor": "与海洋生灵共同战斗",
+    "startItems": [
+      "840b6bc5-4786-40bc-b864-cc5c2b78641a",
+      "b4ccf465-fbf6-4fd4-b4ed-515594ed8722"
+    ],
+    "itemNames": ["食人鱼", "水母"]
+  },
+  {
+    "id": "alchemist",
+    "icon": "🔥",
+    "portrait": "/identities/alchemist.jpg",
+    "name": "炼金术士",
+    "flavor": "以灼烧为道，炼化一切",
+    "startItems": ["d1788cd1-cd70-4391-a0d9-c50fc9e08d9a"],
+    "itemNames": ["风暴瓶"]
+  }
+]

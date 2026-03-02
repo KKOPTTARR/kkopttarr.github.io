@@ -1,0 +1,960 @@
+[
+  {
+    "id": 1,
+    "name_cn": "打火机",
+    "name_en": "Lighter",
+    "tags": [
+      "工具"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 5,
+        "poison": 0,
+        "skill_cn": "每3秒造成5灼烧"
+      },
+      "Silver": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 7,
+        "poison": 0,
+        "skill_cn": "每3秒造成7灼烧"
+      },
+      "Gold": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 9,
+        "poison": 0,
+        "skill_cn": "每3秒造成9灼烧"
+      },
+      "Diamond": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 16,
+        "poison": 0,
+        "skill_cn": "每3秒16灼烧"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "name_cn": "食人鱼",
+    "name_en": "Piranha",
+    "tags": [
+      "水系",
+      "伙伴"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 6000,
+        "damage": 5,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒造成5伤害"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 7,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒造成7伤害"
+      },
+      "Gold": {
+        "cooldown": 6000,
+        "damage": 9,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒造成9伤害"
+      },
+      "Diamond": {
+        "cooldown": 6000,
+        "damage": 16,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒16伤害"
+      }
+    }
+  },
+  {
+    "id": 3,
+    "name_cn": "珍珠",
+    "name_en": "Pearl",
+    "tags": [
+      "水系",
+      "防具"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 10,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒获得10护盾"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 15,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒获得15护盾"
+      },
+      "Gold": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 20,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒获得20护盾"
+      },
+      "Diamond": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 36,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒获得36护盾"
+      }
+    }
+  },
+  {
+    "id": 4,
+    "name_cn": "海草",
+    "name_en": "Seaweed",
+    "tags": [
+      "水系",
+      "食物"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 5,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒治疗5生命"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 10,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒治疗10生命"
+      },
+      "Gold": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 20,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒治疗20生命"
+      },
+      "Diamond": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 36,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒治疗36生命"
+      }
+    }
+  },
+  {
+    "id": 5,
+    "name_cn": "水母",
+    "name_en": "Jellyfish",
+    "tags": [
+      "水系",
+      "伙伴"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 5,
+        "skill_cn": "每7秒施加5层剧毒"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 7,
+        "skill_cn": "每7秒施加7层剧毒"
+      },
+      "Gold": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 9,
+        "skill_cn": "每7秒施加9层剧毒"
+      },
+      "Diamond": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 16,
+        "skill_cn": "每7秒16层剧毒"
+      }
+    }
+  },
+  {
+    "id": 6,
+    "name_cn": "左轮手枪",
+    "name_en": "Revolver",
+    "tags": [
+      "武器",
+      "枪械"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 3000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每3秒造成8伤害"
+      },
+      "Silver": {
+        "cooldown": 3000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每3秒造成10伤害"
+      },
+      "Gold": {
+        "cooldown": 3000,
+        "damage": 12,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每3秒造成12伤害"
+      },
+      "Diamond": {
+        "cooldown": 3000,
+        "damage": 22,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每3秒22伤害"
+      }
+    }
+  },
+  {
+    "id": 7,
+    "name_cn": "弯刀",
+    "name_en": "Cutlass",
+    "tags": [
+      "武器"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 5000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒10伤害"
+      },
+      "Silver": {
+        "cooldown": 5000,
+        "damage": 16,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒16伤害"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 28,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒28伤害"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 50,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒50伤害"
+      }
+    }
+  },
+  {
+    "id": 8,
+    "name_cn": "手雷",
+    "name_en": "Grenade",
+    "tags": [
+      "武器"
+    ],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 5000,
+        "damage": 50,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒50伤害"
+      },
+      "Silver": {
+        "cooldown": 5000,
+        "damage": 80,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒80伤害"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 140,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒140伤害"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 252,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒252伤害"
+      }
+    }
+  },
+  {
+    "id": 9,
+    "name_cn": "连发步枪",
+    "name_en": "Repeater",
+    "tags": [
+      "武器",
+      "枪械"
+    ],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 5000,
+        "damage": 30,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒30伤害"
+      },
+      "Silver": {
+        "cooldown": 5000,
+        "damage": 48,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒48伤害"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 84,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒84伤害"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 151,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒151伤害"
+      }
+    }
+  },
+  {
+    "id": 10,
+    "name_cn": "河豚",
+    "name_en": "Pufferfish",
+    "tags": [
+      "水系",
+      "伙伴"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 10,
+        "skill_cn": "每8秒10剧毒"
+      },
+      "Silver": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 16,
+        "skill_cn": "每8秒16剧毒"
+      },
+      "Gold": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 28,
+        "skill_cn": "每8秒28剧毒"
+      },
+      "Diamond": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 50,
+        "skill_cn": "每8秒50层剧毒"
+      }
+    }
+  },
+  {
+    "id": 11,
+    "name_cn": "幽渊鮟鱇",
+    "name_en": "Darkwater Anglerfish",
+    "tags": [
+      "伙伴",
+      "水系"
+    ],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 10,
+        "poison": 0,
+        "skill_cn": "每8秒10灼烧"
+      },
+      "Silver": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 16,
+        "poison": 0,
+        "skill_cn": "每8秒16灼烧"
+      },
+      "Gold": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 28,
+        "poison": 0,
+        "skill_cn": "每8秒28灼烧"
+      },
+      "Diamond": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 50,
+        "poison": 0,
+        "skill_cn": "每8秒50灼烧"
+      }
+    }
+  },
+  {
+    "id": 12,
+    "name_cn": "鹦鹉皮特",
+    "name_en": "Pesky Pete",
+    "tags": [
+      "伙伴"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 3,
+        "poison": 0,
+        "skill_cn": "每8秒3灼烧"
+      },
+      "Silver": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 5,
+        "poison": 0,
+        "skill_cn": "每8秒5灼烧"
+      },
+      "Gold": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 8,
+        "poison": 0,
+        "skill_cn": "每8秒8灼烧"
+      },
+      "Diamond": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 14,
+        "poison": 0,
+        "skill_cn": "每8秒14灼烧"
+      }
+    }
+  },
+  {
+    "id": 13,
+    "name_cn": "龟壳",
+    "name_en": "Turtle Shell",
+    "tags": [
+      "水系",
+      "防具"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 10000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 25,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每10秒获得25护盾"
+      },
+      "Silver": {
+        "cooldown": 10000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 40,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每10秒获得40护盾"
+      },
+      "Gold": {
+        "cooldown": 10000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 70,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每10秒获得70护盾"
+      },
+      "Diamond": {
+        "cooldown": 10000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 126,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每10秒获得126护盾"
+      }
+    }
+  },
+  {
+    "id": 14,
+    "name_cn": "珊瑚护甲",
+    "name_en": "Coral Armor",
+    "tags": [
+      "水系",
+      "服饰",
+      "防具"
+    ],
+    "price": 5,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 50,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得50护盾"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 80,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得80护盾"
+      },
+      "Gold": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 140,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得140护盾"
+      },
+      "Diamond": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 252,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得252护盾"
+      }
+    }
+  },
+  {
+    "id": 15,
+    "name_cn": "珊瑚",
+    "name_en": "Coral",
+    "tags": [
+      "水系",
+      "遗物"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 20,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒治疗20生命"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 32,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒治疗32生命"
+      },
+      "Gold": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 56,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒治疗56生命"
+      },
+      "Diamond": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 101,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒治疗101生命"
+      }
+    }
+  },
+  {
+    "id": 16,
+    "name_cn": "风暴瓶",
+    "name_en": "Weather Glass",
+    "tags": [
+      "工具"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "skill_cn": "每7秒4灼烧"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 6,
+        "poison": 0,
+        "skill_cn": "每7秒6灼烧"
+      },
+      "Gold": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 11,
+        "poison": 0,
+        "skill_cn": "每7秒11灼烧"
+      },
+      "Diamond": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 20,
+        "poison": 0,
+        "skill_cn": "每7秒20灼烧"
+      }
+    }
+  },
+  {
+    "id": 17,
+    "name_cn": "鱼饵",
+    "name_en": "Chum",
+    "tags": [
+      "水系",
+      "食物"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 5000,
+        "damage": 0,
+        "heal": 8,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒治疗8生命"
+      },
+      "Silver": {
+        "cooldown": 5000,
+        "damage": 0,
+        "heal": 13,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒治疗13生命"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 0,
+        "heal": 22,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒治疗22生命"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 0,
+        "heal": 40,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒治疗40生命"
+      }
+    }
+  },
+  {
+    "id": 18,
+    "name_cn": "潜水头盔",
+    "name_en": "Diving Helmet",
+    "tags": [
+      "水系",
+      "工具",
+      "服饰"
+    ],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 25,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得25护盾"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 40,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得40护盾"
+      },
+      "Gold": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 70,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得70护盾"
+      },
+      "Diamond": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 126,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒获得126护盾"
+      }
+    }
+  },
+  {
+    "id": 19,
+    "name_cn": "深潜器",
+    "name_en": "Submersible",
+    "tags": [
+      "水系",
+      "武器",
+      "载具",
+      "科技"
+    ],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 5000,
+        "damage": 20,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒20伤害"
+      },
+      "Silver": {
+        "cooldown": 5000,
+        "damage": 32,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒32伤害"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 56,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒56伤害"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 101,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒101伤害"
+      }
+    }
+  },
+  {
+    "id": 20,
+    "name_cn": "燃烧响炮",
+    "name_en": "Pop Snappers",
+    "tags": [
+      "玩具"
+    ],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "skill_cn": "每3秒4灼烧"
+      },
+      "Silver": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 6,
+        "poison": 0,
+        "skill_cn": "每3秒6灼烧"
+      },
+      "Gold": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 11,
+        "poison": 0,
+        "skill_cn": "每3秒11灼烧"
+      },
+      "Diamond": {
+        "cooldown": 3000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 20,
+        "poison": 0,
+        "skill_cn": "每3秒20灼烧"
+      }
+    }
+  }
+]
