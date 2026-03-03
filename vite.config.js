@@ -36,5 +36,5 @@ function battleLogPlugin() {
 export default defineConfig({
   plugins: [vue(), battleLogPlugin()],
   publicDir: 'public',
-  base: './',
+  base: '/',
 })
