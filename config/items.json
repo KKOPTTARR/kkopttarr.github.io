@@ -275,7 +275,7 @@
       "枪械"
     ],
     "price": 3,
-    "cylinderSize": 6,
+    "cylinderSize": 3,
     "tiers": {
       "Bronze": {
         "cooldown": 5000,
@@ -285,7 +285,7 @@
         "burn": 0,
         "poison": 0,
         "cylinderAccel": 500,
-        "skill_cn": "每{val:5}秒{dmg:8伤害}；每6发后触发时间减{val:0.5s}；可叠加，最快{val:0.5s}"
+        "skill_cn": "每{val:5}秒{dmg:8伤害}；每3发后触发时间减{val:0.5s}；可叠加，最快{val:0.5s}"
       },
       "Silver": {
         "cooldown": 4000,
@@ -295,7 +295,7 @@
         "burn": 0,
         "poison": 0,
         "cylinderAccel": 1000,
-        "skill_cn": "每{val:4}秒{dmg:8伤害}；每6发后触发时间减{val:1s}；可叠加，最快{val:0.5s}"
+        "skill_cn": "每{val:4}秒{dmg:8伤害}；每3发后触发时间减{val:1s}；可叠加，最快{val:0.5s}"
       },
       "Gold": {
         "cooldown": 3000,
@@ -305,7 +305,7 @@
         "burn": 0,
         "poison": 0,
         "cylinderAccel": 1500,
-        "skill_cn": "每{val:3}秒{dmg:8伤害}；每6发后触发时间减{val:1.5s}；可叠加，最快{val:0.5s}"
+        "skill_cn": "每{val:3}秒{dmg:8伤害}；每3发后触发时间减{val:1.5s}；可叠加，最快{val:0.5s}"
       },
       "Diamond": {
         "cooldown": 3000,
@@ -315,7 +315,7 @@
         "burn": 0,
         "poison": 0,
         "cylinderAccel": 2000,
-        "skill_cn": "每{val:3}秒{dmg:8伤害}；每6发后触发时间减{val:2s}；可叠加，最快{val:0.5s}"
+        "skill_cn": "每{val:3}秒{dmg:8伤害}；每3发后触发时间减{val:2s}；可叠加，最快{val:0.5s}"
       }
     }
   },

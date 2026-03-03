@@ -4,9 +4,9 @@
     "name": "鹦鹉船员",
     "portrait": "enemies/parrot.png",
     "hp": {
-      "normal": 90,
-      "elite": 120,
-      "radiant": 140
+      "normal": 108,
+      "elite": 144,
+      "radiant": 168
     },
     "normalAbilities": [
       {
@@ -53,9 +53,9 @@
     "name": "毒鼠盗贼",
     "portrait": "enemies/rat.png",
     "hp": {
-      "normal": 120,
-      "elite": 150,
-      "radiant": 180
+      "normal": 144,
+      "elite": 180,
+      "radiant": 216
     },
     "normalAbilities": [
       {
@@ -102,9 +102,9 @@
     "name": "鲨鱼海盗",
     "portrait": "enemies/shark.png",
     "hp": {
-      "normal": 150,
-      "elite": 190,
-      "radiant": 230
+      "normal": 180,
+      "elite": 228,
+      "radiant": 276
     },
     "normalAbilities": [
       {
@@ -151,9 +151,9 @@
     "name": "噬骨蜘蛛",
     "portrait": "enemies/spider.png",
     "hp": {
-      "normal": 160,
-      "elite": 200,
-      "radiant": 240
+      "normal": 192,
+      "elite": 240,
+      "radiant": 288
     },
     "normalAbilities": [
       {
@@ -200,9 +200,9 @@
     "name": "深海灯笼鱼",
     "portrait": "enemies/anglerfish.png",
     "hp": {
-      "normal": 180,
-      "elite": 230,
-      "radiant": 270
+      "normal": 216,
+      "elite": 276,
+      "radiant": 324
     },
     "normalAbilities": [
       {
@@ -249,9 +249,9 @@
     "name": "铁壳螃蟹将军",
     "portrait": "enemies/crab.png",
     "hp": {
-      "normal": 190,
-      "elite": 240,
-      "radiant": 280
+      "normal": 228,
+      "elite": 288,
+      "radiant": 336
     },
     "normalAbilities": [
       {
@@ -298,9 +298,9 @@
     "name": "地狱猎犬",
     "portrait": "enemies/hellhound.png",
     "hp": {
-      "normal": 200,
-      "elite": 260,
-      "radiant": 310
+      "normal": 240,
+      "elite": 312,
+      "radiant": 372
     },
     "normalAbilities": [
       {
@@ -347,9 +347,9 @@
     "name": "猫头鹰法师",
     "portrait": "enemies/owl.png",
     "hp": {
-      "normal": 170,
-      "elite": 220,
-      "radiant": 260
+      "normal": 204,
+      "elite": 264,
+      "radiant": 312
     },
     "normalAbilities": [
       {
@@ -396,9 +396,9 @@
     "name": "九尾狐妖",
     "portrait": "enemies/fox.png",
     "hp": {
-      "normal": 200,
-      "elite": 250,
-      "radiant": 290
+      "normal": 240,
+      "elite": 300,
+      "radiant": 348
     },
     "normalAbilities": [
       {
@@ -445,9 +445,9 @@
     "name": "狼影刺客",
     "portrait": "enemies/wolf.png",
     "hp": {
-      "normal": 200,
-      "elite": 260,
-      "radiant": 310
+      "normal": 240,
+      "elite": 312,
+      "radiant": 372
     },
     "normalAbilities": [
       {
@@ -494,9 +494,9 @@
     "name": "堕落天使",
     "portrait": "enemies/angel.png",
     "hp": {
-      "normal": 220,
-      "elite": 270,
-      "radiant": 330
+      "normal": 264,
+      "elite": 324,
+      "radiant": 396
     },
     "normalAbilities": [
       {
@@ -543,9 +543,9 @@
     "name": "幽影忍者",
     "portrait": "enemies/armored-wolf.png",
     "hp": {
-      "normal": 220,
-      "elite": 270,
-      "radiant": 330
+      "normal": 264,
+      "elite": 324,
+      "radiant": 396
     },
     "normalAbilities": [
       {
@@ -592,9 +592,9 @@
     "name": "章鱼幻术师",
     "portrait": "enemies/octopus.png",
     "hp": {
-      "normal": 240,
-      "elite": 290,
-      "radiant": 350
+      "normal": 288,
+      "elite": 348,
+      "radiant": 420
     },
     "normalAbilities": [
       {
@@ -641,9 +641,9 @@
     "name": "吸血鬼伯爵",
     "portrait": "enemies/vampire.png",
     "hp": {
-      "normal": 250,
-      "elite": 310,
-      "radiant": 380
+      "normal": 300,
+      "elite": 372,
+      "radiant": 456
     },
     "normalAbilities": [
       {
@@ -690,9 +690,9 @@
     "name": "熊霸船长",
     "portrait": "enemies/bear.png",
     "hp": {
-      "normal": 250,
-      "elite": 310,
-      "radiant": 380
+      "normal": 300,
+      "elite": 372,
+      "radiant": 456
     },
     "normalAbilities": [
       {
@@ -739,9 +739,9 @@
     "name": "远古树精",
     "portrait": "enemies/treant.png",
     "hp": {
-      "normal": 270,
-      "elite": 330,
-      "radiant": 400
+      "normal": 324,
+      "elite": 396,
+      "radiant": 480
     },
     "normalAbilities": [
       {
@@ -788,9 +788,9 @@
     "name": "不死骷髅舰长",
     "portrait": "enemies/skeleton.png",
     "hp": {
-      "normal": 280,
-      "elite": 350,
-      "radiant": 420
+      "normal": 336,
+      "elite": 420,
+      "radiant": 504
     },
     "normalAbilities": [
       {
@@ -837,9 +837,9 @@
     "name": "暗夜石像鬼",
     "portrait": "enemies/gargoyle.png",
     "hp": {
-      "normal": 300,
-      "elite": 370,
-      "radiant": 450
+      "normal": 360,
+      "elite": 444,
+      "radiant": 540
     },
     "normalAbilities": [
       {
@@ -886,9 +886,9 @@
     "name": "恶魔蝠王",
     "portrait": "enemies/lava-golem.png",
     "hp": {
-      "normal": 310,
-      "elite": 390,
-      "radiant": 470
+      "normal": 372,
+      "elite": 468,
+      "radiant": 564
     },
     "normalAbilities": [
       {
@@ -935,9 +935,9 @@
     "name": "海渊魔神",
     "portrait": "enemies/mimic.png",
     "hp": {
-      "normal": 380,
-      "elite": 470,
-      "radiant": 560
+      "normal": 456,
+      "elite": 564,
+      "radiant": 672
     },
     "normalAbilities": [
       {
