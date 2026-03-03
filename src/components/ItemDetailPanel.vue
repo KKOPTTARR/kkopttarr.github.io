@@ -1,36 +1,44 @@
 <template>
   <Transition name="panel">
-    <div v-if="item" class="idp-wrap">
-      <div class="idp-backdrop" @click="$emit('close')" />
+    <div v-if="items.length" class="idp-wrap">
+      <div class="idp-backdrop" @click="closeAll" />
       <div class="idp-panel">
-        <button class="idp-close" @click="$emit('close')">✕</button>
+        <template v-for="(item, idx) in items" :key="item.id ?? idx">
+          <div class="idp-item">
+            <button class="idp-close" @click="$emit('close', idx)">✕</button>
 
-        <img
-          class="idp-icon"
-          :src="getIconUrl(item.name_en, item.tier)"
-          :alt="item.name_cn"
-          @error="onImgError"
-        />
+            <img
+              class="idp-icon"
+              :src="getIconUrl(item.name_en, item.tier)"
+              :alt="item.name_cn"
+              @error="onImgError"
+            />
 
-        <div class="idp-tier-pill" :class="`merge-tier-${item.tier}`">
-          {{ TIER_LABELS[item.tier] ?? item.tier }}
-        </div>
+            <div class="idp-tier-pill" :class="`merge-tier-${item.tier}`">
+              {{ TIER_LABELS[item.tier] ?? item.tier }}
+            </div>
 
-        <div class="idp-name">{{ item.name_cn }}</div>
+            <div class="idp-name">{{ item.name_cn }}</div>
 
-        <div v-if="item.tags?.length" class="idp-tags">{{ item.tags.join(' · ') }}</div>
+            <div v-if="item.tags?.length" class="idp-tags">{{ item.tags.join(' · ') }}</div>
 
-        <div class="idp-stats">
-          <div v-if="item.damage"  class="idp-stat-row"><span>⚔️</span><span>{{ item.damage }}</span></div>
-          <div v-if="item.heal"    class="idp-stat-row"><span>💚</span><span>{{ item.heal }}</span></div>
-          <div v-if="item.shield"  class="idp-stat-row"><span>🛡</span><span>{{ item.shield }}</span></div>
-          <div v-if="item.burn"    class="idp-stat-row"><span>🔥</span><span>{{ item.burn }}</span></div>
-          <div v-if="item.poison"  class="idp-stat-row"><span>☠</span><span>{{ item.poison }}</span></div>
-          <div class="idp-stat-row"><span>⏱</span><span>{{ ((item._cooldown ?? item.cooldown) / 1000).toFixed(1) }}s</span></div>
-        </div>
+            <div class="idp-stats">
+              <div v-if="item.damage"  class="idp-stat-row"><span>⚔️</span><span>{{ item.damage }}</span></div>
+              <div v-if="item.heal"    class="idp-stat-row"><span>💚</span><span>{{ item.heal }}</span></div>
+              <div v-if="item.shield"  class="idp-stat-row"><span>🛡</span><span>{{ item.shield }}</span></div>
+              <div v-if="item.burn"    class="idp-stat-row"><span>🔥</span><span>{{ item.burn }}</span></div>
+              <div v-if="item.poison"  class="idp-stat-row"><span>☠</span><span>{{ item.poison }}</span></div>
+              <div class="idp-stat-row"><span>⏱</span><span>{{ ((item._cooldown ?? item.cooldown) / 1000).toFixed(1) }}s</span></div>
+            </div>
 
-        <div v-if="item.skill_cn" class="idp-divider" />
-        <div v-if="item.skill_cn" class="idp-skill">{{ item.skill_cn }}</div>
+            <template v-if="item.skill_cn">
+              <div class="idp-divider" />
+              <div class="idp-skill" v-html="parseSkill(item.skill_cn)" />
+            </template>
+          </div>
+
+          <div v-if="idx < items.length - 1" class="idp-separator" />
+        </template>
       </div>
     </div>
   </Transition>
@@ -40,11 +48,32 @@
 import { getIconUrl } from '../data/items.js'
 import { TIER_LABELS } from '../data/tiers.js'
 
-defineProps({ item: Object })
-defineEmits(['close'])
+const props = defineProps({ items: { type: Array, default: () => [] } })
+const emit = defineEmits(['close'])
 
 function onImgError(e) {
   e.target.style.display = 'none'
+}
+
+function closeAll() {
+  for (let i = props.items.length - 1; i >= 0; i--) emit('close', i)
+}
+
+const SKILL_COLORS = {
+  dmg:    '#ff6060',
+  burn:   '#ff9040',
+  heal:   '#6dcc6d',
+  shield: '#60a8ff',
+  poison: '#b070e8',
+  val:    '#e8c840',
+}
+
+function parseSkill(text) {
+  return text.replace(/\{(\w+):([^}]*)\}/g, (_, type, content) => {
+    const color = SKILL_COLORS[type]
+    if (!color) return content
+    return `<span style="color:${color};font-weight:600">${content}</span>`
+  })
 }
 </script>
 
@@ -77,8 +106,23 @@ function onImgError(e) {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
+  gap: 0;
+}
+
+.idp-item {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
+  padding: 8px 0;
+}
+
+.idp-separator {
+  width: 100%;
+  height: 1px;
+  background: var(--panel-border);
+  opacity: 0.5;
+  margin: 4px 0;
 }
 
 .idp-close {
@@ -90,7 +134,6 @@ function onImgError(e) {
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  margin-bottom: 4px;
 }
 .idp-close:hover { color: var(--gold); }
 
@@ -149,7 +192,7 @@ function onImgError(e) {
 }
 
 .idp-skill {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-dim);
   font-style: italic;
   line-height: 1.6;

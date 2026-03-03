@@ -203,8 +203,8 @@
       </Teleport>
     </div>
 
-    <!-- 物品详情侧边面板 -->
-    <ItemDetailPanel :item="selectedItem" @close="selectedItem = null" />
+    <!-- 物品详情气泡 -->
+    <ItemBubble :bubble="bubbleItem" @close="bubbleItem = null" />
 
     <!-- 升星提示（仅用于非合成消息，如空间已满） -->
     <Teleport to="body">
@@ -237,7 +237,7 @@ import BattleScreen        from './components/BattleScreen.vue'
 import ShopScreen          from './components/ShopScreen.vue'
 import ArrangeScreen       from './components/ArrangeScreen.vue'
 import EnemySelectScreen   from './components/EnemySelectScreen.vue'
-import ItemDetailPanel     from './components/ItemDetailPanel.vue'
+import ItemBubble          from './components/ItemBubble.vue'
 import DragGhostOverlay    from './components/DragGhostOverlay.vue'
 import MergeAnimOverlay    from './components/MergeAnimOverlay.vue'
 import DiceAnimOverlay     from './components/DiceAnimOverlay.vue'
@@ -299,7 +299,7 @@ const selectedDifficulty = ref('normal')
 const pendingRewards     = ref([])
 
 const battleScreenRef = ref(null)
-const selectedItem    = ref(null)
+const bubbleItem      = ref(null)   // { item, x, y }
 
 const unlockedCols = computed(() => Math.min(2 + battleCount.value, GRID_COLS))
 
@@ -345,15 +345,21 @@ const { startActualBattle, onDeployComplete } = useBattleFlow({
 onMounted(() => {
   registerGlobalListeners()
   window.addEventListener('pointerdown', (e) => {
-    if (!e.target.closest('.item-card') && !e.target.closest('.shop-card') && !e.target.closest('.idp-panel')) {
-      selectedItem.value = null
+    if (!e.target.closest('.item-card') && !e.target.closest('.shop-card') && !e.target.closest('.bubble')) {
+      bubbleItem.value = null
     }
   }, { capture: true })
   setDragCallbacks({
     dropToGrid:      handleDropToGrid,
     dropToSell:      handleDropToSell,
     dropToBackpack:  handleDropToBackpack,
-    clickItem:       (item) => { selectedItem.value = item },
+    clickItem: (item, cx, cy) => {
+      if (bubbleItem.value?.item === item) {
+        bubbleItem.value = null
+      } else {
+        bubbleItem.value = { item, x: cx, y: cy }
+      }
+    },
     formationLimits: () => ({ cols: unlockedCols.value, rows: 1 }),
   })
 })

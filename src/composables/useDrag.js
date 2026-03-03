@@ -75,6 +75,7 @@ let dragStartX    = 0
 let dragStartY    = 0
 let dragStartTime = 0
 let didMove       = false
+let dragStartElTop = 0   // 被点击物品元素的 top（用于气泡稳定定位）
 
 // ── 开始拖拽（由子组件调用）────────────────────────────
 export function startDrag(event, item, sourceType, sourceInfo) {
@@ -95,6 +96,14 @@ export function startDrag(event, item, sourceType, sourceInfo) {
   dragStartY    = event.clientY
   dragStartTime = Date.now()
   didMove       = false
+  if (sourceType === 'backpack') {
+    // 背包有两行，始终锚定到第一行顶部，避免第二行物品气泡遮挡第一行
+    const firstRow = document.querySelector('[data-grid="backpack"][data-row="0"]')
+    dragStartElTop = (firstRow ?? event.target).getBoundingClientRect().top
+  } else {
+    const el = event.target.closest('.item-card, .shop-card') ?? event.target
+    dragStartElTop = el.getBoundingClientRect().top
+  }
   event.preventDefault?.()
 }
 
@@ -164,7 +173,7 @@ function onPointerUp(e) {
       )
     }
   } else if (isClick && (dragState.sourceType === 'shop' || dragState.sourceType === 'grid' || dragState.sourceType === 'backpack')) {
-    onClickItem?.(dragState.item, e.clientX, e.clientY)
+    onClickItem?.(dragState.item, e.clientX, dragStartElTop)
   }
 
   ghostEl = null
