@@ -28,7 +28,8 @@ const FX_PIXI = {
   special: { main: 0xffd060, subs: [0xffaa20, 0xffee80] },
 }
 
-let _app = null
+let _app    = null
+let _canvas = null
 let _pixiSpeed = 1
 export function setPixiSpeed(s) { _pixiSpeed = s }
 
@@ -39,37 +40,28 @@ const _rings       = []
 const _stars       = []
 
 // ── 初始化 / 销毁 ──────────────────────────────────────────────
-export async function initPixi(canvasEl) {
-  if (_app) { _app.destroy(false); _app = null }
+export async function initPixi() {
+  if (_app) { _app.destroy(true); _app = null }
+  if (_canvas) { _canvas.remove(); _canvas = null }
+
+  _canvas = document.createElement('canvas')
+  _canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:999'
+  document.body.appendChild(_canvas)
+
   const tmp = new Application()
   await tmp.init({
-    canvas: canvasEl, backgroundAlpha: 0, antialias: true,
+    canvas: _canvas, backgroundAlpha: 0, antialias: true,
     autoDensity: true, resolution: window.devicePixelRatio || 1,
-    resizeTo: canvasEl.parentElement,
+    resizeTo: window,
   })
   _app = tmp
   _app.ticker.add(_tick)
 }
 
 export function destroyPixi() {
-  if (_app) { _app.destroy(false); _app = null }
+  if (_app) { _app.destroy(true); _app = null }
+  if (_canvas) { _canvas.remove(); _canvas = null }
   _floats.length = _projectiles.length = _particles.length = _rings.length = _stars.length = 0
-}
-
-// ── 空存根（兼容旧调用）──────────────────────────────────────
-export function registerSprites() {}
-export function syncPositions()   {}
-export function setItems()        {}
-export function drawSynergyLine() {}
-
-// ── 浮字（instanceId 定位，保留兼容）────────────────────────
-export function spawnFloatingText(instanceId, text, type) {
-  if (!_app) return
-  const el = document.querySelector(`[data-instance="${instanceId}"]`)
-  if (!el) return
-  const r  = el.getBoundingClientRect()
-  const cr = _app.canvas.getBoundingClientRect()
-  _addFloat(r.left + r.width / 2 - cr.left, r.top + r.height / 2 - cr.top, text, type)
 }
 
 // ── 浮字（canvas 坐标，落点专用）─────────────────────────────
@@ -154,43 +146,6 @@ function _makeComet(type) {
   g.circle(0, 0,  5).fill({ color: fx.subs[0], alpha: 0.92 })  // 亮核
   g.circle(0, 0,  2).fill({ color: 0xffffff,   alpha: 0.85 })  // 白热点
   return g
-}
-
-// ── 特殊效果：卡牌位置粒子爆发（加强版）────────────────────
-export function spawnCardBurst(instanceId) {
-  if (!_app) return
-  const el = document.querySelector(`[data-instance="${instanceId}"]`)
-  if (!el) return
-  const r  = el.getBoundingClientRect()
-  const cr = _app.canvas.getBoundingClientRect()
-  const x  = r.left + r.width  / 2 - cr.left
-  const y  = r.top  + r.height / 2 - cr.top
-  const fx = FX_PIXI.special
-
-  // 粒子：数量 × 2，速度更快，颗粒更大
-  for (let i = 0; i < 20; i++) {
-    const angle = (i / 20) * Math.PI * 2 + (Math.random() - 0.5) * 0.5
-    const spd   = 5 + Math.random() * 8
-    const sz    = 2.5 + Math.random() * 4
-    const col   = Math.random() > 0.4
-      ? fx.main
-      : fx.subs[Math.floor(Math.random() * fx.subs.length)]
-    const g = new Graphics()
-    g.circle(0, 0, sz).fill({ color: col })
-    g.x = x; g.y = y
-    _app.stage.addChild(g)
-    const life = 0.6 + Math.random() * 0.4
-    _particles.push({ obj: g, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd, life, maxLife: life })
-  }
-
-  // 双冲击波：内环小而快，外环大而慢
-  for (const [maxR, delay, sw] of [[80, 0, 4], [130, 80, 2.5]]) {
-    const ring = new Graphics()
-    ring.x = x; ring.y = y; ring.alpha = 0
-    _app.stage.addChild(ring)
-    setTimeout(() => { ring.alpha = 1 }, delay)
-    _rings.push({ obj: ring, color: fx.main, radius: 6, maxRadius: maxR, strokeWidth: sw, life: 1.0 })
-  }
 }
 
 // ── 特殊效果：星形爆发 ────────────────────────────────────────

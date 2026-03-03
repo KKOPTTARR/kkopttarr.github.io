@@ -89,7 +89,7 @@ const props = defineProps({
 defineEmits(['go-back', 'confirm-battle'])
 
 const livesText = computed(() =>
-  '❤️'.repeat(props.lives) + '🖤'.repeat(Math.max(0, 3 - props.lives))
+  '⚡'.repeat(props.lives) + '○'.repeat(Math.max(0, 3 - props.lives))
 )
 
 // 简单威胁评估：敌方总伤害 vs 玩家总护盾/治疗

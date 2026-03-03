@@ -2,133 +2,981 @@
   {
     "id": "parrot",
     "name": "鹦鹉船员",
-    "portrait": "enemies/parrot.webp",
-    "hp": 240,
-    "abilities": [
-      { "id": "parrot-a1", "name": "利喙啄击", "cooldown": 3000, "damage": 8, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3秒造成8伤害" },
-      { "id": "parrot-a2", "name": "尖锐鸣叫", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 3, "poison": 0, "description": "每7秒造成3灼烧" }
+    "portrait": "enemies/parrot.png",
+    "hp": {
+      "normal": 90,
+      "elite": 120,
+      "radiant": 140
+    },
+    "normalAbilities": [
+      {
+        "id": "parrot-n1",
+        "name": "利喙啄击",
+        "cooldown": 3000,
+        "damage": 6,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3秒造成8伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "parrot-e1",
+        "name": "群鸦冲击",
+        "cooldown": 9000,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 1,
+        "poison": 0,
+        "description": "每9秒造成20伤害并附加2灼烧"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "parrot-r1",
+        "name": "焰羽散射",
+        "cooldown": 5000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每5秒造成12伤害并附加5灼烧"
+      }
     ]
   },
   {
     "id": "rat",
     "name": "毒鼠盗贼",
-    "portrait": "enemies/rat.webp",
-    "hp": 304,
-    "abilities": [
-      { "id": "rat-a1", "name": "抓挠", "cooldown": 3000, "damage": 10, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3秒造成10伤害" },
-      { "id": "rat-a2", "name": "毒牙咬", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 8, "description": "每7秒施加8层剧毒" },
-      { "id": "rat-a3", "name": "鼠群护盾", "cooldown": 12000, "damage": 0, "heal": 0, "shield": 20, "burn": 0, "poison": 0, "description": "每12秒获得20护盾" }
+    "portrait": "enemies/rat.png",
+    "hp": {
+      "normal": 120,
+      "elite": 150,
+      "radiant": 180
+    },
+    "normalAbilities": [
+      {
+        "id": "rat-n1",
+        "name": "抓挠",
+        "cooldown": 3000,
+        "damage": 7,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3秒造成10伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "rat-e1",
+        "name": "毒爪连击",
+        "cooldown": 6000,
+        "damage": 7,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 3,
+        "description": "每6秒造成10伤害并施加4层剧毒"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "rat-r1",
+        "name": "鼠群涌现",
+        "cooldown": 5000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每5秒造成14伤害"
+      }
     ]
   },
   {
     "id": "shark",
     "name": "鲨鱼海盗",
-    "portrait": "enemies/shark.webp",
-    "hp": 384,
-    "abilities": [
-      { "id": "shark-a1", "name": "撕咬", "cooldown": 4000, "damage": 16, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每4秒造成16伤害" },
-      { "id": "shark-a2", "name": "血腥撕裂", "cooldown": 10000, "damage": 32, "heal": 0, "shield": 0, "burn": 4, "poison": 0, "description": "每10秒造成32伤害并附加4灼烧" }
+    "portrait": "enemies/shark.png",
+    "hp": {
+      "normal": 150,
+      "elite": 190,
+      "radiant": 230
+    },
+    "normalAbilities": [
+      {
+        "id": "shark-n1",
+        "name": "撕咬",
+        "cooldown": 4000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每4秒造成16伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "shark-e1",
+        "name": "血腥冲锋",
+        "cooldown": 7000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每7秒造成22伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "shark-r1",
+        "name": "深海怒涛",
+        "cooldown": 5000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每5秒造成18伤害并附加5灼烧"
+      }
+    ]
+  },
+  {
+    "id": "spider",
+    "name": "噬骨蜘蛛",
+    "portrait": "enemies/spider.png",
+    "hp": {
+      "normal": 160,
+      "elite": 200,
+      "radiant": 240
+    },
+    "normalAbilities": [
+      {
+        "id": "spdr-n1",
+        "name": "毒牙咬击",
+        "cooldown": 3000,
+        "damage": 7,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 4,
+        "description": "每3秒造成10伤害并施加6层剧毒"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "spdr-e1",
+        "name": "毒液喷射",
+        "cooldown": 6000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 6,
+        "description": "每6秒造成14伤害并施加8层剧毒"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "spdr-r1",
+        "name": "闪咬突击",
+        "cooldown": 2500,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 6,
+        "description": "每2.5秒造成12伤害并施加8层剧毒"
+      }
+    ]
+  },
+  {
+    "id": "anglerfish",
+    "name": "深海灯笼鱼",
+    "portrait": "enemies/anglerfish.png",
+    "hp": {
+      "normal": 180,
+      "elite": 230,
+      "radiant": 270
+    },
+    "normalAbilities": [
+      {
+        "id": "ang-n1",
+        "name": "深渊撕咬",
+        "cooldown": 3500,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3.5秒造成14伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "ang-e1",
+        "name": "幽光诱杀",
+        "cooldown": 9000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 4,
+        "description": "每9秒造成16伤害并施加6层剧毒"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "ang-r1",
+        "name": "毒液撕咬",
+        "cooldown": 3000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 4,
+        "description": "每3秒造成16伤害并施加6层剧毒"
+      }
     ]
   },
   {
     "id": "crab",
     "name": "铁壳螃蟹将军",
-    "portrait": "enemies/crab.webp",
-    "hp": 480,
-    "abilities": [
-      { "id": "crab-a1", "name": "钳击", "cooldown": 5000, "damage": 14, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每5秒造成14伤害" },
-      { "id": "crab-a2", "name": "铁甲护盾", "cooldown": 8000, "damage": 0, "heal": 0, "shield": 40, "burn": 0, "poison": 0, "description": "每8秒获得40护盾" },
-      { "id": "crab-a3", "name": "横扫钳爪", "cooldown": 14000, "damage": 36, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每14秒造成36伤害" }
+    "portrait": "enemies/crab.png",
+    "hp": {
+      "normal": 190,
+      "elite": 240,
+      "radiant": 280
+    },
+    "normalAbilities": [
+      {
+        "id": "crab-n1",
+        "name": "钳击",
+        "cooldown": 5000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每5秒造成14伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "crab-e1",
+        "name": "横扫钳爪",
+        "cooldown": 13000,
+        "damage": 25,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每13秒造成36伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "crab-r1",
+        "name": "钳爪连击",
+        "cooldown": 4000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每4秒造成18伤害"
+      }
+    ]
+  },
+  {
+    "id": "hellhound",
+    "name": "地狱猎犬",
+    "portrait": "enemies/hellhound.png",
+    "hp": {
+      "normal": 200,
+      "elite": 260,
+      "radiant": 310
+    },
+    "normalAbilities": [
+      {
+        "id": "hell-n1",
+        "name": "炎爪撕咬",
+        "cooldown": 3000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 3,
+        "poison": 0,
+        "description": "每3秒造成16伤害并附加4灼烧"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "hell-e1",
+        "name": "三头连噬",
+        "cooldown": 6000,
+        "damage": 17,
+        "heal": 0,
+        "shield": 0,
+        "burn": 3,
+        "poison": 0,
+        "description": "每6秒造成24伤害并附加4灼烧"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "hell-r1",
+        "name": "焰息急袭",
+        "cooldown": 3000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每3秒造成18伤害并附加6灼烧"
+      }
     ]
   },
   {
     "id": "owl",
     "name": "猫头鹰法师",
-    "portrait": "enemies/owl.webp",
-    "hp": 440,
-    "abilities": [
-      { "id": "owl-a1", "name": "魔法弹", "cooldown": 4000, "damage": 12, "heal": 0, "shield": 0, "burn": 4, "poison": 0, "description": "每4秒造成12伤害并附加4灼烧" },
-      { "id": "owl-a2", "name": "诅咒雾霭", "cooldown": 9000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 12, "description": "每9秒施加12层剧毒" },
-      { "id": "owl-a3", "name": "法术回复", "cooldown": 13000, "damage": 0, "heal": 40, "shield": 0, "burn": 0, "poison": 0, "description": "每13秒恢复40生命" }
+    "portrait": "enemies/owl.png",
+    "hp": {
+      "normal": 170,
+      "elite": 220,
+      "radiant": 260
+    },
+    "normalAbilities": [
+      {
+        "id": "owl-n1",
+        "name": "魔法弹",
+        "cooldown": 4000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 3,
+        "poison": 0,
+        "description": "每4秒造成12伤害并附加4灼烧"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "owl-e1",
+        "name": "法术回复",
+        "cooldown": 13000,
+        "damage": 28,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每13秒造成40伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "owl-r1",
+        "name": "灼烧光束",
+        "cooldown": 5000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 6,
+        "poison": 0,
+        "description": "每5秒造成14伤害并附加8灼烧"
+      }
+    ]
+  },
+  {
+    "id": "fox",
+    "name": "九尾狐妖",
+    "portrait": "enemies/fox.png",
+    "hp": {
+      "normal": 200,
+      "elite": 250,
+      "radiant": 290
+    },
+    "normalAbilities": [
+      {
+        "id": "fox-n1",
+        "name": "尾击连斩",
+        "cooldown": 3000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3秒造成14伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "fox-e1",
+        "name": "幻影偷袭",
+        "cooldown": 6000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 0,
+        "burn": 3,
+        "poison": 0,
+        "description": "每6秒造成22伤害并附加4灼烧"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "fox-r1",
+        "name": "疾风斩尾",
+        "cooldown": 3000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每3秒造成16伤害并附加6灼烧"
+      }
     ]
   },
   {
     "id": "wolf",
     "name": "狼影刺客",
-    "portrait": "enemies/wolf.webp",
-    "hp": 520,
-    "abilities": [
-      { "id": "wolf-a1", "name": "暗影斩", "cooldown": 3500, "damage": 20, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3.5秒造成20伤害" },
-      { "id": "wolf-a2", "name": "魔焰嚎叫", "cooldown": 8000, "damage": 0, "heal": 0, "shield": 0, "burn": 10, "poison": 0, "description": "每8秒施加10层灼烧" },
-      { "id": "wolf-a3", "name": "暗影护甲", "cooldown": 11000, "damage": 0, "heal": 0, "shield": 44, "burn": 0, "poison": 0, "description": "每11秒获得44护盾" }
+    "portrait": "enemies/wolf.png",
+    "hp": {
+      "normal": 200,
+      "elite": 260,
+      "radiant": 310
+    },
+    "normalAbilities": [
+      {
+        "id": "wolf-n1",
+        "name": "暗影斩",
+        "cooldown": 3500,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3.5秒造成20伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "wolf-e1",
+        "name": "残影追击",
+        "cooldown": 6000,
+        "damage": 18,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每6秒造成26伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "wolf-r1",
+        "name": "暗杀突刺",
+        "cooldown": 4000,
+        "damage": 17,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每4秒造成24伤害并附加6灼烧"
+      }
     ]
   },
   {
-    "id": "bear",
-    "name": "熊霸船长",
-    "portrait": "enemies/bear.webp",
-    "hp": 640,
-    "abilities": [
-      { "id": "bear-a1", "name": "熊掌重击", "cooldown": 5000, "damage": 24, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每5秒造成24伤害" },
-      { "id": "bear-a2", "name": "狂暴嘶吼", "cooldown": 9000, "damage": 0, "heal": 20, "shield": 20, "burn": 0, "poison": 0, "description": "每9秒恢复20生命并获得20护盾" },
-      { "id": "bear-a3", "name": "地动山摇", "cooldown": 15000, "damage": 48, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每15秒造成48伤害" }
-    ]
-  },
-  {
-    "id": "octopus",
-    "name": "章鱼幻术师",
-    "portrait": "enemies/octopus.webp",
-    "hp": 600,
-    "abilities": [
-      { "id": "oct-a1", "name": "触手连击", "cooldown": 3000, "damage": 12, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每3秒造成12伤害" },
-      { "id": "oct-a2", "name": "毒墨喷射", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 16, "description": "每7秒施加16层剧毒" },
-      { "id": "oct-a3", "name": "幻影分身", "cooldown": 12000, "damage": 0, "heal": 32, "shield": 32, "burn": 0, "poison": 0, "description": "每12秒恢复32生命并获得32护盾" }
+    "id": "angel",
+    "name": "堕落天使",
+    "portrait": "enemies/angel.png",
+    "hp": {
+      "normal": 220,
+      "elite": 270,
+      "radiant": 330
+    },
+    "normalAbilities": [
+      {
+        "id": "angl-n1",
+        "name": "圣光斩击",
+        "cooldown": 4000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每4秒造成18伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "angl-e1",
+        "name": "天罚审判",
+        "cooldown": 12000,
+        "damage": 25,
+        "heal": 0,
+        "shield": 0,
+        "burn": 3,
+        "poison": 0,
+        "description": "每12秒造成36伤害并附加4灼烧"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "angl-r1",
+        "name": "迅捷圣击",
+        "cooldown": 3500,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3.5秒造成20伤害"
+      }
     ]
   },
   {
     "id": "ninja",
     "name": "幽影忍者",
-    "portrait": "enemies/ninja.webp",
-    "hp": 560,
-    "abilities": [
-      { "id": "ninja-a1", "name": "飞镖", "cooldown": 2500, "damage": 12, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每2.5秒造成12伤害" },
-      { "id": "ninja-a2", "name": "暗杀突袭", "cooldown": 8000, "damage": 44, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每8秒造成44伤害" },
-      { "id": "ninja-a3", "name": "烟雾护盾", "cooldown": 11000, "damage": 0, "heal": 0, "shield": 40, "burn": 0, "poison": 0, "description": "每11秒获得40护盾" }
+    "portrait": "enemies/armored-wolf.png",
+    "hp": {
+      "normal": 220,
+      "elite": 270,
+      "radiant": 330
+    },
+    "normalAbilities": [
+      {
+        "id": "ninja-n1",
+        "name": "飞镖",
+        "cooldown": 2500,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每2.5秒造成12伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "ninja-e1",
+        "name": "连环飞镖",
+        "cooldown": 5000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每5秒造成18伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "ninja-r1",
+        "name": "毒镖射击",
+        "cooldown": 3000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 6,
+        "description": "每3秒造成12伤害并施加8层剧毒"
+      }
+    ]
+  },
+  {
+    "id": "octopus",
+    "name": "章鱼幻术师",
+    "portrait": "enemies/octopus.png",
+    "hp": {
+      "normal": 240,
+      "elite": 290,
+      "radiant": 350
+    },
+    "normalAbilities": [
+      {
+        "id": "oct-n1",
+        "name": "触手连击",
+        "cooldown": 3000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3秒造成12伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "oct-e1",
+        "name": "触手旋风",
+        "cooldown": 9000,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每9秒造成20伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "oct-r1",
+        "name": "深海缠绕",
+        "cooldown": 4000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 6,
+        "description": "每4秒造成16伤害并施加8层剧毒"
+      }
+    ]
+  },
+  {
+    "id": "vampire",
+    "name": "吸血鬼伯爵",
+    "portrait": "enemies/vampire.png",
+    "hp": {
+      "normal": 250,
+      "elite": 310,
+      "radiant": 380
+    },
+    "normalAbilities": [
+      {
+        "id": "vamp-n1",
+        "name": "吸血噬咬",
+        "cooldown": 4000,
+        "damage": 11,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每4秒造成16伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "vamp-e1",
+        "name": "嗜血狂怒",
+        "cooldown": 7000,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每7秒造成20伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "vamp-r1",
+        "name": "迅捷汲血",
+        "cooldown": 3500,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3秒造成18伤害"
+      }
+    ]
+  },
+  {
+    "id": "bear",
+    "name": "熊霸船长",
+    "portrait": "enemies/bear.png",
+    "hp": {
+      "normal": 250,
+      "elite": 310,
+      "radiant": 380
+    },
+    "normalAbilities": [
+      {
+        "id": "bear-n1",
+        "name": "熊掌重击",
+        "cooldown": 5000,
+        "damage": 17,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每5秒造成24伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "bear-e1",
+        "name": "地动山摇",
+        "cooldown": 14000,
+        "damage": 34,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每14秒造成48伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "bear-r1",
+        "name": "熊爪狂攻",
+        "cooldown": 4000,
+        "damage": 20,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每4秒造成28伤害"
+      }
+    ]
+  },
+  {
+    "id": "treant",
+    "name": "远古树精",
+    "portrait": "enemies/treant.png",
+    "hp": {
+      "normal": 270,
+      "elite": 330,
+      "radiant": 400
+    },
+    "normalAbilities": [
+      {
+        "id": "tree-n1",
+        "name": "树枝重击",
+        "cooldown": 5000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每5秒造成18伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "tree-e1",
+        "name": "藤蔓缠绕",
+        "cooldown": 13000,
+        "damage": 28,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 3,
+        "description": "每13秒造成40伤害并施加4层剧毒"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "tree-r1",
+        "name": "荆棘刺击",
+        "cooldown": 4000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 4,
+        "description": "每4秒造成22伤害并施加6层剧毒"
+      }
     ]
   },
   {
     "id": "skeleton",
     "name": "不死骷髅舰长",
-    "portrait": "enemies/skeleton.webp",
-    "hp": 720,
-    "abilities": [
-      { "id": "skel-a1", "name": "骨刺突刺", "cooldown": 4500, "damage": 22, "heal": 0, "shield": 0, "burn": 0, "poison": 0, "description": "每4.5秒造成22伤害" },
-      { "id": "skel-a2", "name": "生命汲取", "cooldown": 9000, "damage": 16, "heal": 28, "shield": 0, "burn": 0, "poison": 0, "description": "每9秒造成16伤害并恢复28生命" },
-      { "id": "skel-a3", "name": "冥骨长矛", "cooldown": 13000, "damage": 44, "heal": 0, "shield": 0, "burn": 0, "poison": 10, "description": "每13秒造成44伤害并施加10层剧毒" }
+    "portrait": "enemies/skeleton.png",
+    "hp": {
+      "normal": 280,
+      "elite": 350,
+      "radiant": 420
+    },
+    "normalAbilities": [
+      {
+        "id": "skel-n1",
+        "name": "骨刺突刺",
+        "cooldown": 4500,
+        "damage": 15,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每4.5秒造成22伤害"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "skel-e1",
+        "name": "冥骨长矛",
+        "cooldown": 13000,
+        "damage": 31,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 7,
+        "description": "每13秒造成44伤害并施加10层剧毒"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "skel-r1",
+        "name": "骸骨连击",
+        "cooldown": 3500,
+        "damage": 18,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每3.5秒造成26伤害"
+      }
+    ]
+  },
+  {
+    "id": "gargoyle",
+    "name": "暗夜石像鬼",
+    "portrait": "enemies/gargoyle.png",
+    "hp": {
+      "normal": 300,
+      "elite": 370,
+      "radiant": 450
+    },
+    "normalAbilities": [
+      {
+        "id": "garg-n1",
+        "name": "石爪撕裂",
+        "cooldown": 4000,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每4秒造成20伤害并附加6灼烧"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "garg-e1",
+        "name": "暗影屏障",
+        "cooldown": 10000,
+        "damage": 39,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每10秒造成56伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "garg-r1",
+        "name": "暗爪连击",
+        "cooldown": 3000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 0,
+        "burn": 6,
+        "poison": 0,
+        "description": "每3秒造成22伤害并附加8灼烧"
+      }
     ]
   },
   {
     "id": "bat-demon",
     "name": "恶魔蝠王",
-    "portrait": "enemies/bat-demon.webp",
-    "hp": 800,
-    "abilities": [
-      { "id": "bat-a1", "name": "黑暗噬咬", "cooldown": 4000, "damage": 18, "heal": 0, "shield": 0, "burn": 6, "poison": 0, "description": "每4秒造成18伤害并附加6灼烧" },
-      { "id": "bat-a2", "name": "诅咒瘴气", "cooldown": 7000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 14, "description": "每7秒施加14层剧毒" },
-      { "id": "bat-a3", "name": "暗影屏障", "cooldown": 10000, "damage": 0, "heal": 0, "shield": 56, "burn": 0, "poison": 0, "description": "每10秒获得56护盾" },
-      { "id": "bat-a4", "name": "吸血嚎叫", "cooldown": 15000, "damage": 28, "heal": 48, "shield": 0, "burn": 0, "poison": 0, "description": "每15秒造成28伤害并恢复48生命" }
+    "portrait": "enemies/lava-golem.png",
+    "hp": {
+      "normal": 310,
+      "elite": 390,
+      "radiant": 470
+    },
+    "normalAbilities": [
+      {
+        "id": "bat-n1",
+        "name": "黑暗噬咬",
+        "cooldown": 4000,
+        "damage": 13,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每4秒造成18伤害并附加6灼烧"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "bat-e1",
+        "name": "暗影屏障",
+        "cooldown": 10000,
+        "damage": 39,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每10秒造成56伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "bat-r1",
+        "name": "黑暗裂爪",
+        "cooldown": 3000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 0,
+        "burn": 6,
+        "poison": 0,
+        "description": "每3秒造成22伤害并附加8灼烧"
+      }
     ]
   },
   {
     "id": "demon-boss",
     "name": "海渊魔神",
-    "portrait": "enemies/demon-boss.webp",
-    "hp": 960,
-    "abilities": [
-      { "id": "boss-a1", "name": "魔炮轰击", "cooldown": 4000, "damage": 26, "heal": 0, "shield": 0, "burn": 5, "poison": 0, "description": "每4秒造成26伤害并附加5灼烧" },
-      { "id": "boss-a2", "name": "剧毒云雾", "cooldown": 6000, "damage": 0, "heal": 0, "shield": 0, "burn": 0, "poison": 18, "description": "每6秒施加18层剧毒" },
-      { "id": "boss-a3", "name": "魔神护盾", "cooldown": 9000, "damage": 0, "heal": 0, "shield": 72, "burn": 0, "poison": 0, "description": "每9秒获得72护盾" },
-      { "id": "boss-a4", "name": "魔神降临", "cooldown": 14000, "damage": 52, "heal": 32, "shield": 0, "burn": 12, "poison": 12, "description": "每14秒造成52伤害并恢复32生命，附加12灼烧和12剧毒" }
+    "portrait": "enemies/mimic.png",
+    "hp": {
+      "normal": 380,
+      "elite": 470,
+      "radiant": 560
+    },
+    "normalAbilities": [
+      {
+        "id": "boss-n1",
+        "name": "魔炮轰击",
+        "cooldown": 4000,
+        "damage": 18,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 0,
+        "description": "每4秒造成26伤害并附加5灼烧"
+      }
+    ],
+    "eliteAbilities": [
+      {
+        "id": "boss-e1",
+        "name": "魔神护盾",
+        "cooldown": 9000,
+        "damage": 50,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "description": "每9秒造成72伤害"
+      }
+    ],
+    "radiantAbilities": [
+      {
+        "id": "boss-r1",
+        "name": "深渊魔焰",
+        "cooldown": 3500,
+        "damage": 21,
+        "heal": 0,
+        "shield": 0,
+        "burn": 8,
+        "poison": 0,
+        "description": "每3.5秒造成30伤害并附加12灼烧"
+      }
     ]
   }
 ]

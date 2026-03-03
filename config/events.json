@@ -2,6 +2,7 @@
   {
     "id": "upgrade",
     "icon": "⬆️",
+    "img": "/events/upgrade.png",
     "label": "指定升级",
     "desc": "升级一件指定类型的物品",
     "pool": "normal",
@@ -10,23 +11,89 @@
   {
     "id": "shop",
     "icon": "🏪",
-    "label": "进入商店",
+    "img": "/events/shop.png",
+    "label": "宝藏商店",
     "desc": "购买指定类型的物品",
-    "pool": "normal"
+    "pool": "rare"
   },
   {
     "id": "exchange",
     "icon": "🔀",
+    "img": "/events/exchange.png",
     "label": "以物换物",
     "desc": "选一件物品换取随机同品质物品",
     "pool": "normal",
     "condition": "hasItems"
   },
   {
+    "id": "wreck_search",
+    "icon": "⚓",
+    "img": "/events/wreck_search.png",
+    "label": "残骸搜寻",
+    "desc": "从海底残骸中随机打捞一件与你已有装备相符的宝物",
+    "pool": "normal",
+    "condition": "hasItems"
+  },
+  {
+    "id": "storm_shuffle",
+    "icon": "🌪️",
+    "img": "/events/storm_shuffle.png",
+    "label": "风暴洗牌",
+    "desc": "所有物品的品质将被随机重新分配，有得有失",
+    "pool": "normal",
+    "condition": "hasMultipleItems"
+  },
+  {
+    "id": "cash_out",
+    "icon": "💰",
+    "img": "/events/cash_out.png",
+    "label": "变现",
+    "desc": "出售一件物品，获得远超正常价格的金币",
+    "pool": "normal",
+    "condition": "hasItems"
+  },
+  {
+    "id": "tavern_gamble",
+    "icon": "🎰",
+    "img": "/events/tavern_gamble.png",
+    "label": "海盗酒馆",
+    "desc": "花费金币参与赌局，50% 概率大赚一笔",
+    "pool": "normal",
+    "condition": "hasTavernGold"
+  },
+  {
+    "id": "black_market",
+    "icon": "🏴",
+    "img": "/events/black_market.png",
+    "label": "走私交易",
+    "desc": "花费大量金币，从黑市换取一件银质物品",
+    "pool": "normal",
+    "condition": "hasBlackMarketGold"
+  },
+  {
+    "id": "alchemy",
+    "icon": "⚗️",
+    "img": "/events/alchemy.png",
+    "label": "炼金",
+    "desc": "销毁3件铜质物品，炼制一件金质宝物",
+    "pool": "normal",
+    "condition": "hasThreeBronze"
+  },
+  {
+    "id": "gambler_dice",
+    "icon": "🎲",
+    "img": "/events/gambler_dice.png",
+    "label": "赌徒的骰子",
+    "desc": "选一件物品，50% 升品质，50% 降品质",
+    "pool": "normal",
+    "condition": "hasItems"
+  },
+  {
     "id": "storm_blessing",
     "icon": "🌊",
+    "img": "/events/storm_blessing.png",
     "label": "风暴祝福",
-    "desc": "下一场开场获得护盾",
+    "desc": "下一场开场获得临时护盾",
     "pool": "last",
     "guaranteed": true
   }

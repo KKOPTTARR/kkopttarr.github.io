@@ -48,7 +48,7 @@ const props = defineProps({
 defineEmits(['select-node'])
 
 const livesText = computed(() =>
-  '❤️'.repeat(props.lives) + '🖤'.repeat(Math.max(0, 3 - props.lives))
+  '⚡'.repeat(props.lives) + '○'.repeat(Math.max(0, 3 - props.lives))
 )
 
 const nodes = [

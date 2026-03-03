@@ -1,8 +1,12 @@
 <template>
   <div class="home-screen">
     <div class="home-deco">☠️</div>
-    <h1 class="home-title">小扎巴</h1>
+    <h1 class="home-title">小巴扎</h1>
     <p class="home-sub">海盗贸易·卡牌自战</p>
+    <div class="home-rules">
+      <span>赢得 10 场战斗即可通关</span>
+      <span>每次失败消耗 1 点士气 ⚡，耗尽则游戏结束</span>
+    </div>
     <button class="btn btn-primary home-btn" @click="$emit('start')">开始游戏</button>
   </div>
 </template>
@@ -35,6 +39,12 @@ defineEmits(['start'])
 }
 .home-sub {
   font-size: 13px; color: var(--text-dim); letter-spacing: 3px;
+}
+.home-rules {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 20px; border-radius: 8px;
+  background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.08);
+  font-size: 12px; color: var(--text-dim); letter-spacing: 1px; line-height: 1.6;
 }
 .home-btn {
   margin-top: 12px; padding: 12px 48px; font-size: 16px;

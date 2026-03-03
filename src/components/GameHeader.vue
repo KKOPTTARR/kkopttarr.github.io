@@ -5,9 +5,9 @@
       <span class="wins-text">胜利 {{ wins }}/10</span>
     </div>
     <div class="lives-area">
-      <span class="lives-label">生命</span>
+      <span class="lives-label">士气</span>
       <span class="lives-icons">
-        <span v-for="i in 3" :key="i">{{ i <= lives ? '❤️' : '🖤' }}</span>
+        <span v-for="i in 3" :key="i">{{ i <= lives ? '⚡' : '○' }}</span>
       </span>
     </div>
   </div>

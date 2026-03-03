@@ -1,0 +1,22 @@
+{
+  "MAX_LIVES":               3,
+  "GOLD_PER_DAY":            20,
+  "WINS_TO_CLEAR":           7,
+  "EVENTS_PER_ROUND":        2,
+  "STORM_SHIELD":            50,
+  "SELL_PRICE":              1,
+  "MERGE_THRESHOLD":         2,
+  "SHOP_SLOTS":              3,
+  "EVENT_NORMAL_COUNT":      3,
+  "EVENT_LAST_NORMAL_COUNT": 2,
+  "ENEMY_HP_SCALE":          1.3,
+  "ENEMY_DMG_SCALE":         1.2,
+  "ENEMY_BASE_MULT":         0.7,
+  "DIFFICULTY_HP_MULTS":     { "normal": 1, "elite": 1.5, "radiant": 3 },
+  "SELECT_DIFFICULTIES":     ["normal", "elite", "radiant"],
+  "SHOP_ROUNDS":             [4, 8],
+  "CASH_OUT_PRICE":          { "Bronze": 5, "Silver": 10, "Gold": 25, "Diamond": 35 },
+  "TAVERN_COST":             8,
+  "TAVERN_WIN_GOLD":         24,
+  "BLACK_MARKET_COST":       10
+}

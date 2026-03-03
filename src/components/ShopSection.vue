@@ -75,29 +75,32 @@ function cdLabel(item) {
 
 function statLine(item) {
   const parts = []
-  if (item.damage)  parts.push(`⚔️${item.damage}`)
-  if (item.heal)    parts.push(`💚${item.heal}`)
-  if (item.shield)  parts.push(`🛡${item.shield}`)
-  if (item.burn)    parts.push(`🔥${item.burn}`)
-  if (item.poison)  parts.push(`☠${item.poison}`)
+  if (item.damage)          parts.push(`⚔️${item.damage}`)
+  if (item.heal)            parts.push(`💚${item.heal}`)
+  if (item.shield)          parts.push(`🛡${item.shield}`)
+  if (item.burn)            parts.push(`🔥${item.burn}`)
+  if (item.poison)          parts.push(`☠${item.poison}`)
+  if (item.globalCritBonus) parts.push(`🎯+${Math.round(item.globalCritBonus * 100)}%`)
   return parts.join('  ')
 }
 
 function primaryStatType(item) {
-  if (item.damage  > 0) return 'damage'
-  if (item.heal    > 0) return 'heal'
-  if (item.shield  > 0) return 'shield'
-  if (item.burn    > 0) return 'burn'
-  if (item.poison  > 0) return 'poison'
+  if (item.damage        > 0) return 'damage'
+  if (item.heal          > 0) return 'heal'
+  if (item.shield        > 0) return 'shield'
+  if (item.burn          > 0) return 'burn'
+  if (item.poison        > 0) return 'poison'
+  if (item.globalCritBonus)   return 'crit'
   return null
 }
 
 function primaryStat(item) {
-  if (item.damage  > 0) return item.damage
-  if (item.heal    > 0) return `+${item.heal}`
-  if (item.shield  > 0) return item.shield
-  if (item.burn    > 0) return item.burn
-  if (item.poison  > 0) return item.poison
+  if (item.damage        > 0) return item.damage
+  if (item.heal          > 0) return `+${item.heal}`
+  if (item.shield        > 0) return item.shield
+  if (item.burn          > 0) return item.burn
+  if (item.poison        > 0) return item.poison
+  if (item.globalCritBonus)   return `+${Math.round(item.globalCritBonus * 100)}%`
   return null
 }
 
@@ -117,7 +120,7 @@ function onCardPointerDown(e, item, idx) {
 /* ── 卡片容器 ── */
 .shop-card {
   flex: 1;
-  height: 172px;
+  aspect-ratio: 3 / 4;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -147,7 +150,7 @@ function onCardPointerDown(e, item, idx) {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
@@ -221,6 +224,7 @@ function onCardPointerDown(e, item, idx) {
 .stat-poison { background: rgba(20,100,30,.9); }
 .stat-heal   { background: rgba(40,170,60,.9); }
 .stat-shield { background: rgba(180,140,0,.9); }
+.stat-crit   { background: rgba(160,100,0,.9); }
 
 /* ── 底部渐变叠层 ── */
 .card-bottom {

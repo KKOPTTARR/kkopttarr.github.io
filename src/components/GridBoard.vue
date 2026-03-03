@@ -63,6 +63,7 @@
         :compact="compact"
         :stack="item.stack || 1"
         :neighbor-highlight="!compact && neighborIds.has(item.instanceId)"
+        :zone="zone"
         @hover-enter="onItemHoverEnter"
         @hover-leave="onItemHoverLeave"
       />
@@ -90,6 +91,7 @@ const props = defineProps({
 const CELL_DEFAULT = 90
 const CELL_COMPACT = 72
 const CELL_GAP     = 4
+const NAME_H       = 14   // 非 compact 模式名称行高度
 
 const effectiveCellSize = computed(() => {
   if (props.cellSize > 0) return props.cellSize
@@ -100,7 +102,7 @@ const COLS = computed(() => props.unlockedCols)
 const ROWS = computed(() => props.rows)
 
 const effectiveCellHeight = computed(() =>
-  props.cellHeight > 0 ? props.cellHeight : effectiveCellSize.value
+  props.cellHeight > 0 ? props.cellHeight : Math.round(effectiveCellSize.value * 4 / 3)
 )
 
 const svgW = computed(() => effectiveCellSize.value * COLS.value + CELL_GAP * (COLS.value - 1))
@@ -108,9 +110,10 @@ const svgH = computed(() => effectiveCellHeight.value * ROWS.value + CELL_GAP * 
 
 const containerStyle = computed(() => {
   const C = effectiveCellSize.value, G = CELL_GAP, H = effectiveCellHeight.value
+  const nameH = props.compact ? 0 : NAME_H
   return {
     width:  (C * COLS.value + G * (COLS.value - 1)) + 'px',
-    height: (H * ROWS.value + G * (ROWS.value - 1)) + 'px',
+    height: ((H + nameH) * ROWS.value + G * (ROWS.value - 1)) + 'px',
   }
 })
 
@@ -150,7 +153,7 @@ const adjacencyLinks = computed(() => {
   const sorted = [...props.items]
     .map(it => ({ item: it, left: itemColSpan(it)[0], right: itemColSpan(it)[1] }))
     .sort((a, b) => a.left - b.left)
-  const y = C / 2  // 单行，垂直居中
+  const y = effectiveCellHeight.value / 2  // 单行，垂直居中
   for (let i = 0; i < sorted.length - 1; i++) {
     const A = sorted[i], B = sorted[i + 1]
     if (B.left !== A.right + 1) continue
@@ -186,10 +189,15 @@ function onItemHoverEnter(item) { hoveredItem.value = item }
 function onItemHoverLeave()     { hoveredItem.value = null }
 
 // 动态 grid 布局（列数/行数由 props 决定）
-const slotsGridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${COLS.value}, 1fr)`,
-  gridTemplateRows:    `repeat(${ROWS.value}, 1fr)`,
-}))
+const slotsGridStyle = computed(() => {
+  const nameH = props.compact ? 0 : NAME_H
+  return {
+    gridTemplateColumns: `repeat(${COLS.value}, 1fr)`,
+    gridTemplateRows:    `repeat(${ROWS.value}, ${effectiveCellHeight.value}px)`,
+    rowGap:    `${CELL_GAP + nameH}px`,
+    columnGap: `${CELL_GAP}px`,
+  }
+})
 
 // stack 现在直接存在 item.stack 上，GridBoard 无需额外计算
 </script>

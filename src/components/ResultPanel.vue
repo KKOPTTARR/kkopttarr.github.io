@@ -45,9 +45,9 @@ const titleColor = computed(() => {
 })
 const desc = computed(() => {
   if (props.type === 'win')      return `第 ${props.day} 天胜利！累计 ${props.wins}/10 胜`
-  if (props.type === 'lose')     return `剩余生命：${'❤️'.repeat(props.lives)}${'🖤'.repeat(Math.max(0, 3 - props.lives))}，进入下一天`
+  if (props.type === 'lose')     return `剩余士气：${'⚡'.repeat(props.lives)}${'○'.repeat(Math.max(0, 3 - props.lives))}，进入下一天`
   if (props.type === 'clear')    return '恭喜！你已累积 10 场胜利，完成了 Demo！'
-  if (props.type === 'gameover') return '没有剩余生命值，本次挑战结束。'
+  if (props.type === 'gameover') return '士气耗尽，本次挑战结束。'
   return ''
 })
 const btnText = computed(() => {

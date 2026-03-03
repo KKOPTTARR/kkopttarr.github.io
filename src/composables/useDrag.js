@@ -1,8 +1,8 @@
 import { reactive } from 'vue'
 import { canPlace } from '../data/items.js'
+import { BP_ROWS, BP_COLS } from './useInventory.js'
 
 const CELL = 58   // 需与 CSS --cell-size 保持一致
-const GAP  = 4    // 需与 CSS --cell-gap 保持一致
 
 // ── 全局拖拽状态（单例，组件间共享）──────────────────────
 export const dragState = reactive({
@@ -27,31 +27,24 @@ let onDropToGrid        = null
 let onDropToSell        = null
 let onDropToBackpack    = null
 let onClickItem         = null
-let getGridState        = null
-let getBackpackState    = null
 let getFormationLimits  = null   // () => { cols, rows }
 
-export function setDragCallbacks({ dropToGrid, dropToSell, dropToBackpack, gridState, backpackGridState, clickItem, formationLimits }) {
+export function setDragCallbacks({ dropToGrid, dropToSell, dropToBackpack, clickItem, formationLimits }) {
   onDropToGrid       = dropToGrid
   onDropToSell       = dropToSell
   onDropToBackpack   = dropToBackpack ?? null
-  getGridState       = gridState
-  getBackpackState   = backpackGridState ?? null
   onClickItem        = clickItem ?? null
   getFormationLimits = formationLimits ?? null
 }
 
-// ── 计算 ghost 尺寸 ────────────────────────────────────
-function ghostSize() {
-  return { w: CELL, h: CELL }
-}
+// ── ghost 元素缓存（拖拽开始时设置，避免每帧 DOM 查询）────
+let ghostEl = null
 
 // ── 单次 DOM 查询同时找出 slot、sellZone、targetZone ────
 function findTargetAt(x, y) {
-  const ghost = document.querySelector('.drag-ghost')
-  if (ghost) ghost.style.display = 'none'
+  if (ghostEl) ghostEl.style.display = 'none'
   const el = document.elementFromPoint(x, y)
-  if (ghost) ghost.style.display = ''
+  if (ghostEl) ghostEl.style.display = ''
 
   let slot = null
   let inSellZone = false
@@ -78,28 +71,30 @@ function findTargetAt(x, y) {
 }
 
 // ── 记录拖拽起点（用于区分"点击"和"拖拽"）────────────
-let dragStartX = 0
-let dragStartY = 0
-let didMove    = false
+let dragStartX    = 0
+let dragStartY    = 0
+let dragStartTime = 0
+let didMove       = false
 
 // ── 开始拖拽（由子组件调用）────────────────────────────
 export function startDrag(event, item, sourceType, sourceInfo) {
-  const { w, h } = ghostSize()
   const isShop = sourceType === 'shop'
+  ghostEl = document.querySelector('.drag-ghost')
 
   Object.assign(dragState, {
     active: true, item, sourceType,
     sourceShopSlot:   isShop ? sourceInfo : -1,
     sourceInstanceId: isShop ? '' : sourceInfo,
-    ghostW: w, ghostH: h,
+    ghostW: CELL, ghostH: CELL,
     ghostX: event.clientX, ghostY: event.clientY,
     hoverCol: -1, hoverRow: -1, hoverValid: false, overSellZone: false,
     targetZone: null,
   })
 
-  dragStartX = event.clientX
-  dragStartY = event.clientY
-  didMove    = false
+  dragStartX    = event.clientX
+  dragStartY    = event.clientY
+  dragStartTime = Date.now()
+  didMove       = false
   event.preventDefault?.()
 }
 
@@ -110,7 +105,7 @@ function onPointerMove(e) {
   dragState.ghostX = cx
   dragState.ghostY = cy
 
-  if (!didMove && (Math.abs(cx - dragStartX) > 6 || Math.abs(cy - dragStartY) > 6))
+  if (!didMove && (Math.abs(cx - dragStartX) > 10 || Math.abs(cy - dragStartY) > 10))
     didMove = true
 
   const { slot, inSellZone, targetZone } = findTargetAt(cx, cy)
@@ -123,29 +118,16 @@ function onPointerMove(e) {
     dragState.hoverCol = slot.col
     dragState.hoverRow = slot.row
 
-    // 根据目标区域选取对应 gridState，同区域内移动时临时移除源格子
+    // 商店来源：落点合法性由购买逻辑处理，任何格子都视为有效
+    // 非商店来源：只要格位在范围内就视为有效（空格放置，有物品则交换）
     const isBackpackTarget = targetZone === 'backpack'
-    const getState = isBackpackTarget ? getBackpackState : getGridState
-    // 商店来源：落点合法性完全由 App.vue 购买逻辑处理，任何格子都视为有效
     if (dragState.sourceType === 'shop') {
       dragState.hoverValid = true
-    } else if (getState) {
-      let state = getState()
-      const sameZone = (isBackpackTarget && dragState.sourceType === 'backpack') ||
-                       (!isBackpackTarget && dragState.sourceType === 'grid')
-      if (sameZone && dragState.sourceInstanceId) {
-        state = state.map(row => row.map(cell =>
-          cell === dragState.sourceInstanceId ? null : cell
-        ))
-      }
-      if (isBackpackTarget) {
-        dragState.hoverValid = canPlace(state, slot.col, slot.row)
-      } else {
-        const lim = getFormationLimits ? getFormationLimits() : { cols: 4, rows: 2 }
-        dragState.hoverValid = canPlace(state, slot.col, slot.row, lim.cols, lim.rows)
-      }
+    } else if (isBackpackTarget) {
+      dragState.hoverValid = slot.col >= 0 && slot.col < BP_COLS && slot.row >= 0 && slot.row < BP_ROWS
     } else {
-      dragState.hoverValid = false
+      const lim = getFormationLimits ? getFormationLimits() : { cols: 4, rows: 2 }
+      dragState.hoverValid = slot.col >= 0 && slot.col < lim.cols && slot.row >= 0 && slot.row < lim.rows
     }
   } else if (dragState.sourceType === 'shop' && targetZone !== null) {
     // 商店物品悬停在阵容/背包区域（未精确命中格子）→ 同样视为可放置，auto-place 由 tryBuyItem 处理
@@ -164,7 +146,7 @@ function onPointerMove(e) {
 function onPointerUp(e) {
   if (!dragState.active) return
 
-  const isClick = !didMove
+  const isClick = !didMove || (Date.now() - dragStartTime < 200)
 
   if (dragState.overSellZone && (dragState.sourceType === 'grid' || dragState.sourceType === 'backpack')) {
     onDropToSell?.(dragState.sourceInstanceId)
@@ -181,10 +163,11 @@ function onPointerUp(e) {
         dragState.sourceType, dragState.sourceInstanceId, dragState.sourceShopSlot,
       )
     }
-  } else if (isClick && (dragState.sourceType === 'shop' || dragState.sourceType === 'grid')) {
+  } else if (isClick && (dragState.sourceType === 'shop' || dragState.sourceType === 'grid' || dragState.sourceType === 'backpack')) {
     onClickItem?.(dragState.item, e.clientX, e.clientY)
   }
 
+  ghostEl = null
   Object.assign(dragState, {
     active: false, item: null,
     hoverCol: -1, hoverRow: -1, overSellZone: false, targetZone: null,
@@ -194,6 +177,7 @@ function onPointerUp(e) {
 
 // ── 强制取消拖拽（进入战斗时清除遗留状态）────────────
 export function cancelDrag() {
+  ghostEl = null
   Object.assign(dragState, {
     active: false, item: null,
     hoverCol: -1, hoverRow: -1, overSellZone: false, targetZone: null,

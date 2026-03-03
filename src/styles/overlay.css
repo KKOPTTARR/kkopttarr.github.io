@@ -1,0 +1,309 @@
+/* ===== 拖拽 Ghost ===== */
+.drag-ghost {
+  position: fixed; pointer-events: none; z-index: 8999; opacity: .88;
+  border-radius: 6px; overflow: hidden;
+  border: 2px solid var(--gold);
+  box-shadow: 0 6px 28px rgba(0,0,0,.8), 0 0 12px rgba(200,134,10,.4);
+  transform: translate(-50%, -50%);
+}
+/* ghost 内所有子元素禁止接收指针事件，防止干扰 elementFromPoint */
+.drag-ghost * { pointer-events: none; }
+
+/* ===== Tooltip ===== */
+.tooltip {
+  position: fixed; background: #1a1008; border: 1px solid var(--panel-border);
+  border-radius: 8px; padding: 10px 12px; min-width: 180px; max-width: 240px;
+  z-index: 8000; pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.7), inset 0 1px 0 rgba(200,134,10,.08);
+}
+.tooltip.hidden { display: none !important; }
+.tt-name  { font-size: 14px; font-weight: bold; color: var(--gold); margin-bottom: 4px; }
+.tt-tags  { font-size: 11px; color: var(--text-dim); margin-bottom: 6px; }
+.tt-stats { font-size: 12px; color: #d4b87c; line-height: 1.7; margin-bottom: 6px; }
+.tt-skill { font-size: 11px; color: var(--text-dim); font-style: italic;
+            border-top: 1px solid var(--panel-border); padding-top: 6px; }
+
+/* ===== 升星提示 Toast ===== */
+@keyframes merge-in {
+  0%   { transform: translate(-50%,-50%) scale(.4); opacity: 0; }
+  40%  { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+  80%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(.9); opacity: 0; }
+}
+.merge-toast {
+  position: fixed; top: 42%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: linear-gradient(135deg, #2a1808, #3a2010);
+  border: 2px solid var(--gold);
+  border-radius: 10px; padding: 10px 20px;
+  font-size: 14px; font-weight: bold; color: var(--gold);
+  box-shadow: 0 0 30px rgba(200,134,10,.5);
+  z-index: 5000; pointer-events: none; white-space: nowrap;
+  animation: merge-in 1.8s ease-out forwards;
+}
+
+/* ===== 合成动画 Overlay ===== */
+.merge-anim-overlay {
+  position: fixed; inset: 0; z-index: 9500;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.merge-anim-stage {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 光晕环（品级色） */
+.merge-glow-ring {
+  position: absolute;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: merge-glow-pulse 1.2s ease-in-out infinite;
+}
+.merge-glow-Bronze  { background: radial-gradient(circle, rgba(200,90,0,.50) 0%, transparent 70%); }
+.merge-glow-Silver  { background: radial-gradient(circle, rgba(200,220,255,.50) 0%, transparent 70%); }
+.merge-glow-Gold    { background: radial-gradient(circle, rgba(255,200,0,.55) 0%, transparent 70%); }
+.merge-glow-Diamond { background: radial-gradient(circle, rgba(0,200,255,.45) 0%, rgba(180,0,255,.30) 50%, transparent 70%); }
+@keyframes merge-glow-pulse {
+  0%,100% { transform: scale(1);   opacity: .8; }
+  50%      { transform: scale(1.1); opacity: 1;  }
+}
+
+/* 卡牌主体 */
+.merge-anim-card {
+  position: relative;
+  width: 180px; height: 257px;   /* 7:10 比例 */
+  border-radius: 10px; overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,.8);
+}
+.merge-anim-img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block;
+}
+
+/* 品级徽章 */
+.merge-anim-tier-pill {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 12px; font-weight: 900;
+  padding: 3px 8px; border-radius: 8px;
+  backdrop-filter: blur(4px);
+  border: 1px solid transparent;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+}
+.merge-tier-Bronze  { background: rgba(160,70,0,.80);  color: #ffb060; border-color: rgba(255,110,10,.5); }
+.merge-tier-Silver  { background: rgba(50,70,90,.80);  color: #d8e8f4; border-color: rgba(180,210,240,.4); }
+.merge-tier-Gold    { background: rgba(110,70,0,.80);  color: #ffd700; border-color: rgba(255,200,0,.5); }
+.merge-tier-Diamond { background: rgba(0,30,70,.80);   color: #80e8ff; border-color: rgba(0,180,255,.5); }
+
+/* 升级完成文字 */
+.merge-anim-label {
+  font-size: 18px; font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 16px rgba(200,134,10,.9), 0 2px 6px rgba(0,0,0,.9);
+  animation: merge-label-pop .4s cubic-bezier(.2,1.4,.5,1) forwards;
+  white-space: nowrap;
+}
+@keyframes merge-label-pop {
+  0%   { transform: scale(.4); opacity: 0; }
+  70%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* 卡牌动画 keyframes（合成 + 骰子共用）*/
+@keyframes ma-enter {
+  0%   { transform: perspective(600px) scale(.15) rotateY(-25deg); opacity: 0; }
+  65%  { transform: perspective(600px) scale(1.08) rotateY(4deg);  opacity: 1; }
+  100% { transform: perspective(600px) scale(1) rotateY(0deg);     opacity: 1; }
+}
+@keyframes ma-flip-out {
+  from { transform: perspective(600px) rotateY(0deg); }
+  to   { transform: perspective(600px) rotateY(-90deg); }
+}
+@keyframes ma-flip-in {
+  from { transform: perspective(600px) rotateY(90deg); }
+  to   { transform: perspective(600px) rotateY(0deg); }
+}
+@keyframes ma-shake {
+  0%   { transform: translateX(0)     rotate(0deg);  }
+  15%  { transform: translateX(-12px) rotate(-4deg); }
+  30%  { transform: translateX(12px)  rotate(4deg);  }
+  45%  { transform: translateX(-10px) rotate(-3deg); }
+  60%  { transform: translateX(10px)  rotate(3deg);  }
+  75%  { transform: translateX(-6px)  rotate(-2deg); }
+  90%  { transform: translateX(6px)   rotate(2deg);  }
+  100% { transform: translateX(0)     rotate(0deg);  }
+}
+@keyframes ma-exit {
+  0%   { transform: scale(1);    opacity: 1; }
+  25%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(0);    opacity: 0; }
+}
+
+.merge-anim-card.ma-enter   { animation: ma-enter    .45s cubic-bezier(.2,1.2,.5,1) forwards; }
+.merge-anim-card.ma-flip-out{ animation: ma-flip-out .25s ease-in  forwards; }
+.merge-anim-card.ma-flip-in { animation: ma-flip-in  .25s ease-out forwards; }
+.merge-anim-card.ma-shake   { animation: ma-shake    .35s ease-in-out; }
+.merge-anim-card.ma-exit    { animation: ma-exit     .50s ease-in  forwards; }
+
+/* ===== 骰子动画 Overlay ===== */
+.dice-anim-overlay {
+  position: fixed; inset: 0; z-index: 9500;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 24px;
+  background: rgba(0,0,0,.80);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.dice-anim-stage {
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 18px;
+}
+
+/* 光晕环 */
+.dice-glow-ring {
+  position: absolute;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: merge-glow-pulse 1.2s ease-in-out infinite;
+}
+.dice-glow-default { background: radial-gradient(circle, rgba(200,134,10,.40) 0%, transparent 68%); }
+.dice-glow-win     { background: radial-gradient(circle, rgba(200,160,0,.55)  0%, transparent 68%); }
+.dice-glow-lose    { background: radial-gradient(circle, rgba(200,60,40,.55)  0%, transparent 68%); }
+.dice-glow-destroy { background: radial-gradient(circle, rgba(200,60,40,.55)  0%, transparent 68%); }
+
+/* 骰子 emoji */
+.dice-emoji {
+  font-size: 80px; line-height: 1; display: block;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,.8));
+  position: relative; z-index: 1;
+}
+.dice-emoji.dice-spinning { animation: dice-tumble .18s linear infinite; }
+.dice-emoji.dice-land     { animation: dice-bounce .38s cubic-bezier(.2,1.4,.5,1) forwards; }
+.dice-emoji.dice-win      {
+  animation: dice-win-pop .5s cubic-bezier(.2,1.4,.5,1) forwards;
+  filter: drop-shadow(0 0 20px rgba(220,170,0,.9));
+}
+.dice-emoji.dice-lose     {
+  animation: dice-lose-shake .45s ease-in-out forwards;
+  filter: drop-shadow(0 0 18px rgba(200,60,40,.85));
+}
+
+/* 物品卡牌 */
+.dice-anim-card {
+  position: relative;
+  width: 160px; height: 228px;
+  border-radius: 10px; overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,.8);
+}
+.dice-result-win  .dice-anim-card { box-shadow: 0 8px 40px rgba(200,160,0,.40); }
+.dice-result-lose .dice-anim-card,
+.dice-result-destroy .dice-anim-card { box-shadow: 0 8px 40px rgba(200,60,40,.35); }
+.dice-anim-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dice-anim-tier-pill {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 12px; font-weight: 900;
+  padding: 3px 8px; border-radius: 8px;
+  backdrop-filter: blur(4px); border: 1px solid transparent;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+}
+
+.dice-anim-card.ma-enter    { animation: ma-enter    .45s cubic-bezier(.2,1.2,.5,1) forwards; }
+.dice-anim-card.ma-flip-out { animation: ma-flip-out .25s ease-in  forwards; }
+.dice-anim-card.ma-flip-in  { animation: ma-flip-in  .25s ease-out forwards; }
+.dice-anim-card.ma-shake    { animation: ma-shake    .35s ease-in-out; }
+.dice-anim-card.ma-exit     { animation: ma-exit     .50s ease-in  forwards; }
+
+/* 结果文字 */
+.dice-anim-label {
+  font-size: 18px; font-weight: 900;
+  text-shadow: 0 2px 6px rgba(0,0,0,.9);
+  animation: merge-label-pop .4s cubic-bezier(.2,1.4,.5,1) forwards;
+  white-space: nowrap;
+}
+.dice-result-win .dice-anim-label {
+  color: #f0c040;
+  text-shadow: 0 0 16px rgba(200,134,10,.9), 0 2px 6px rgba(0,0,0,.9);
+}
+.dice-result-lose .dice-anim-label,
+.dice-result-destroy .dice-anim-label {
+  color: #e05040;
+  text-shadow: 0 0 14px rgba(200,60,40,.8), 0 2px 6px rgba(0,0,0,.9);
+}
+
+/* 骰子专属 keyframes */
+@keyframes dice-tumble {
+  0%   { transform: rotate(0deg)   scale(1);    }
+  25%  { transform: rotate(90deg)  scale(1.08); }
+  50%  { transform: rotate(180deg) scale(0.94); }
+  75%  { transform: rotate(270deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1);    }
+}
+@keyframes dice-bounce {
+  0%   { transform: scale(1.25) translateY(-8px); }
+  55%  { transform: scale(0.88) translateY(4px);  }
+  80%  { transform: scale(1.04) translateY(0);    }
+  100% { transform: scale(1)    translateY(0);    }
+}
+@keyframes dice-win-pop {
+  0%   { transform: scale(1);                   }
+  40%  { transform: scale(1.4) rotate(14deg);   }
+  70%  { transform: scale(0.92) rotate(-4deg);  }
+  100% { transform: scale(1.1) rotate(0deg);    }
+}
+@keyframes dice-lose-shake {
+  0%,100% { transform: translateX(0)    rotate(0);     }
+  15%     { transform: translateX(-14px) rotate(-8deg); }
+  30%     { transform: translateX(14px)  rotate(8deg);  }
+  45%     { transform: translateX(-10px) rotate(-5deg); }
+  60%     { transform: translateX(10px)  rotate(5deg);  }
+  75%     { transform: translateX(-5px)  rotate(-2deg); }
+  90%     { transform: translateX(5px)   rotate(2deg);  }
+}
+
+/* ===== 战利品飞入动画 Overlay ===== */
+.reward-anim-overlay {
+  position: fixed; inset: 0; z-index: 9600;
+  background: rgba(0,0,0,.78); backdrop-filter: blur(6px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+}
+.reward-anim-title {
+  font-size: 18px; font-weight: bold; color: var(--gold); letter-spacing: 1px;
+}
+.reward-anim-cards {
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 340px;
+}
+.reward-anim-card {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: 64px;
+}
+.reward-anim-img {
+  width: 64px; height: 64px; border-radius: 8px; object-fit: cover;
+  border: 2px solid rgba(255,255,255,.15);
+}
+.reward-anim-tier {
+  position: absolute; top: -6px; right: -6px;
+  font-size: 10px; font-weight: bold;
+  padding: 1px 5px; border-radius: 8px;
+}
+.reward-anim-name {
+  font-size: 10px; color: var(--text-dim); text-align: center;
+  max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@keyframes rw-show {
+  0%   { opacity: 0; transform: scale(.3) translateY(-20px); }
+  100% { opacity: 1; transform: scale(1)  translateY(0); }
+}
+@keyframes rw-fly {
+  0%   { opacity: 1; transform: translateY(0)     scale(1); }
+  100% { opacity: 0; transform: translateY(160px) scale(.35); }
+}
+.rw-show { animation: rw-show .35s ease-out forwards; }
+.rw-fly  { animation: rw-fly  .5s  ease-in  forwards; }

@@ -7,42 +7,47 @@
       "工具"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "工具",
+      "ms": 600
+    },
+    "burnScaleDamage": 0.5,
     "tiers": {
       "Bronze": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 5,
+        "burn": 4,
         "poison": 0,
-        "skill_cn": "每3秒造成5灼烧"
+        "skill_cn": "每3秒4灼烧；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时充能0.6s"
       },
       "Silver": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 7,
+        "burn": 6,
         "poison": 0,
-        "skill_cn": "每3秒造成7灼烧"
+        "skill_cn": "每3秒6灼烧；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时充能0.6s"
       },
       "Gold": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 9,
+        "burn": 8,
         "poison": 0,
-        "skill_cn": "每3秒造成9灼烧"
+        "skill_cn": "每3秒8灼烧；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时充能0.6s"
       },
       "Diamond": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 16,
+        "burn": 14,
         "poison": 0,
-        "skill_cn": "每3秒16灼烧"
+        "skill_cn": "每3秒14灼烧；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时充能0.6s"
       }
     }
   },
@@ -55,45 +60,49 @@
       "伙伴"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "伙伴",
+      "ms": 500
+    },
+    "bloodthirst": true,
     "tiers": {
       "Bronze": {
-        "cooldown": 6000,
-        "damage": 5,
+        "cooldown": 3000,
+        "damage": 10,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒造成5伤害；敌方HP低于50%时伤害翻倍"
+        "skill_cn": "每3秒10伤害；敌方HP<50%时伤害翻倍；伙伴类触发时充能0.5s"
       },
       "Silver": {
-        "cooldown": 6000,
-        "damage": 7,
+        "cooldown": 3000,
+        "damage": 15,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒造成7伤害；敌方HP低于50%时伤害翻倍"
+        "skill_cn": "每3秒15伤害；敌方HP<50%时伤害翻倍；伙伴类触发时充能0.5s"
       },
       "Gold": {
-        "cooldown": 6000,
-        "damage": 9,
+        "cooldown": 3000,
+        "damage": 20,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒造成9伤害；敌方HP低于50%时伤害翻倍"
+        "skill_cn": "每3秒20伤害；敌方HP<50%时伤害翻倍；伙伴类触发时充能0.5s"
       },
       "Diamond": {
-        "cooldown": 6000,
-        "damage": 16,
+        "cooldown": 3000,
+        "damage": 25,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒16伤害；敌方HP低于50%时伤害翻倍"
+        "skill_cn": "每3秒25伤害；敌方HP<50%时伤害翻倍；伙伴类触发时充能0.5s"
       }
-    },
-    "bloodthirst": true
+    }
   },
   {
     "id": 3,
@@ -104,6 +113,11 @@
       "防具"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "防具",
+      "ms": 800
+    },
+    "waterCharge": 2000,
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -112,7 +126,7 @@
         "shield": 10,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得10护盾；水系物品触发时充能2秒"
+        "skill_cn": "每7秒10护盾；水系触发时充能2s；防具类触发时充能0.8s"
       },
       "Silver": {
         "cooldown": 7000,
@@ -121,7 +135,7 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得15护盾；水系物品触发时充能2秒"
+        "skill_cn": "每7秒15护盾；水系触发时充能2s；防具类触发时充能0.8s"
       },
       "Gold": {
         "cooldown": 7000,
@@ -130,19 +144,18 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得20护盾；水系物品触发时充能2秒"
+        "skill_cn": "每7秒20护盾；水系触发时充能2s；防具类触发时充能0.8s"
       },
       "Diamond": {
         "cooldown": 7000,
         "damage": 0,
         "heal": 0,
-        "shield": 36,
+        "shield": 25,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得36护盾；水系物品触发时充能2秒"
+        "skill_cn": "每7秒25护盾；水系触发时充能2s；防具类触发时充能0.8s"
       }
-    },
-    "waterCharge": 2000
+    }
   },
   {
     "id": 4,
@@ -153,6 +166,10 @@
       "食物"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "食物",
+      "ms": 1000
+    },
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -161,8 +178,8 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗5生命；水系触发时治疗+5",
-        "waterBoostHeal": 5
+        "waterBoostHeal": 5,
+        "skill_cn": "每7秒治疗5；水系触发后本次额外治疗5；食物类触发时充能1s"
       },
       "Silver": {
         "cooldown": 7000,
@@ -171,28 +188,28 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗10生命；水系触发时治疗+10",
-        "waterBoostHeal": 10
+        "waterBoostHeal": 10,
+        "skill_cn": "每7秒治疗10；水系触发后本次额外治疗10；食物类触发时充能1s"
       },
       "Gold": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 15,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "waterBoostHeal": 15,
+        "skill_cn": "每7秒治疗15；水系触发后本次额外治疗15；食物类触发时充能1s"
+      },
+      "Diamond": {
         "cooldown": 7000,
         "damage": 0,
         "heal": 20,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗20生命；水系触发时治疗+15",
-        "waterBoostHeal": 15
-      },
-      "Diamond": {
-        "cooldown": 7000,
-        "damage": 0,
-        "heal": 36,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每7秒治疗36生命；水系触发时治疗+20",
-        "waterBoostHeal": 20
+        "waterBoostHeal": 20,
+        "skill_cn": "每7秒治疗20；水系触发后本次额外治疗20；食物类触发时充能1s"
       }
     }
   },
@@ -205,6 +222,11 @@
       "伙伴"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "伙伴",
+      "ms": 1000
+    },
+    "lowHpPoisonBoost": 0.6,
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -213,7 +235,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 5,
-        "skill_cn": "每7秒施加5层剧毒"
+        "skill_cn": "每7秒5层剧毒；玩家HP<60%时剧毒翻倍；伙伴类触发时充能1s"
       },
       "Silver": {
         "cooldown": 7000,
@@ -221,8 +243,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 7,
-        "skill_cn": "每7秒施加7层剧毒"
+        "poison": 10,
+        "skill_cn": "每7秒10层剧毒；玩家HP<60%时剧毒翻倍；伙伴类触发时充能1s"
       },
       "Gold": {
         "cooldown": 7000,
@@ -230,8 +252,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 9,
-        "skill_cn": "每7秒施加9层剧毒"
+        "poison": 15,
+        "skill_cn": "每7秒15层剧毒；玩家HP<60%时剧毒翻倍；伙伴类触发时充能1s"
       },
       "Diamond": {
         "cooldown": 7000,
@@ -239,8 +261,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 16,
-        "skill_cn": "每7秒16层剧毒"
+        "poison": 20,
+        "skill_cn": "每7秒20层剧毒；玩家HP<60%时剧毒翻倍；伙伴类触发时充能1s"
       }
     }
   },
@@ -253,46 +275,49 @@
       "枪械"
     ],
     "price": 3,
+    "cylinderSize": 6,
     "tiers": {
       "Bronze": {
+        "cooldown": 5000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "cylinderAccel": 500,
+        "skill_cn": "每5秒8伤害；每6发后触发时间减0.5s；可叠加，最快1s"
+      },
+      "Silver": {
+        "cooldown": 4000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "cylinderAccel": 1000,
+        "skill_cn": "每4秒8伤害；每6发后触发时间减1s；可叠加，最快1s"
+      },
+      "Gold": {
         "cooldown": 3000,
         "damage": 8,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每3秒造成8伤害；第1发及每6发暴击（2倍伤害）"
-      },
-      "Silver": {
-        "cooldown": 3000,
-        "damage": 10,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每3秒造成10伤害；第1发及每6发暴击（2倍伤害）"
-      },
-      "Gold": {
-        "cooldown": 3000,
-        "damage": 12,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每3秒造成12伤害；第1发及每6发暴击（2倍伤害）"
+        "cylinderAccel": 1500,
+        "skill_cn": "每3秒8伤害；每6发后触发时间减1.5s；可叠加，最快1s"
       },
       "Diamond": {
         "cooldown": 3000,
-        "damage": 22,
+        "damage": 8,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每3秒22伤害；每3发暴击（2倍伤害）"
+        "cylinderAccel": 2000,
+        "skill_cn": "每3秒8伤害；每6发后触发时间减2s；可叠加，最快1s"
       }
-    },
-    "cylinderSize": 3,
-    "cylinderCrit": 2
+    }
   },
   {
     "id": 7,
@@ -302,45 +327,49 @@
       "武器"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "武器",
+      "ms": 600
+    },
+    "randomWeaponTrigger": true,
     "tiers": {
       "Bronze": {
         "cooldown": 5000,
-        "damage": 10,
+        "damage": 8,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒10伤害；触发时随机触发一件其他武器"
+        "skill_cn": "每5秒8伤害；触发时随机触发另一件武器；武器类触发时充能0.6s"
       },
       "Silver": {
         "cooldown": 5000,
-        "damage": 16,
+        "damage": 14,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒16伤害；触发时随机触发一件其他武器"
+        "skill_cn": "每5秒14伤害；触发时随机触发另一件武器；武器类触发时充能0.6s"
       },
       "Gold": {
         "cooldown": 5000,
-        "damage": 28,
+        "damage": 24,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒28伤害；触发时随机触发一件其他武器"
+        "skill_cn": "每5秒24伤害；触发时随机触发另一件武器；武器类触发时充能0.6s"
       },
       "Diamond": {
         "cooldown": 5000,
-        "damage": 50,
+        "damage": 42,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒50伤害；触发时随机触发一件其他武器"
+        "skill_cn": "每5秒42伤害；触发时随机触发另一件武器；武器类触发时充能0.6s"
       }
-    },
-    "randomWeaponTrigger": true
+    }
   },
   {
     "id": 8,
@@ -350,45 +379,49 @@
       "武器"
     ],
     "price": 4,
+    "tagCharge": {
+      "tag": "武器",
+      "ms": 600
+    },
+    "adjacentCharge": 2000,
     "tiers": {
       "Bronze": {
-        "cooldown": 5000,
+        "cooldown": 7000,
+        "damage": 30,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒30伤害；触发时相邻物品充能2s；武器类触发时充能0.6s"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 40,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒40伤害；触发时相邻物品充能2s；武器类触发时充能0.6s"
+      },
+      "Gold": {
+        "cooldown": 7000,
         "damage": 50,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒50伤害；触发时给相邻物品充能2秒"
-      },
-      "Silver": {
-        "cooldown": 5000,
-        "damage": 80,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每5秒80伤害；触发时给相邻物品充能2秒"
-      },
-      "Gold": {
-        "cooldown": 5000,
-        "damage": 140,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每5秒140伤害；触发时给相邻物品充能2秒"
+        "skill_cn": "每7秒50伤害；触发时相邻物品充能2s；武器类触发时充能0.6s"
       },
       "Diamond": {
-        "cooldown": 5000,
-        "damage": 252,
+        "cooldown": 7000,
+        "damage": 60,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒252伤害；触发时给相邻物品充能2秒"
+        "skill_cn": "每7秒60伤害；触发时相邻物品充能2s；武器类触发时充能0.6s"
       }
-    },
-    "adjacentCharge": 2000
+    }
   },
   {
     "id": 9,
@@ -401,43 +434,46 @@
     "price": 4,
     "tiers": {
       "Bronze": {
-        "cooldown": 5000,
+        "cooldown": 6000,
+        "damage": 20,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeFromAdjacentWeapon": 500,
+        "skill_cn": "每6秒20伤害；相邻武器每次触发时为自身充能0.5s"
+      },
+      "Silver": {
+        "cooldown": 6000,
         "damage": 30,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒30伤害；每次触发冷却永久-0.5秒"
-      },
-      "Silver": {
-        "cooldown": 5000,
-        "damage": 48,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每5秒48伤害；每次触发冷却永久-0.5秒"
+        "chargeFromAdjacentWeapon": 1000,
+        "skill_cn": "每6秒30伤害；相邻武器每次触发时为自身充能1s"
       },
       "Gold": {
-        "cooldown": 5000,
-        "damage": 84,
+        "cooldown": 6000,
+        "damage": 40,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒84伤害；每次触发冷却永久-0.5秒"
+        "chargeFromAdjacentWeapon": 1500,
+        "skill_cn": "每6秒40伤害；相邻武器每次触发时为自身充能1.5s"
       },
       "Diamond": {
-        "cooldown": 5000,
-        "damage": 151,
+        "cooldown": 6000,
+        "damage": 50,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒151伤害；每次触发冷却永久-0.5秒"
+        "chargeFromAdjacentWeapon": 2000,
+        "skill_cn": "每6秒50伤害；相邻武器每次触发时为自身充能2s"
       }
-    },
-    "momentumReduction": 500
+    }
   },
   {
     "id": 10,
@@ -448,6 +484,11 @@
       "伙伴"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "伙伴",
+      "ms": 500
+    },
+    "poisonToShield": true,
     "tiers": {
       "Bronze": {
         "cooldown": 8000,
@@ -455,8 +496,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 10,
-        "skill_cn": "每8秒10剧毒"
+        "poison": 8,
+        "skill_cn": "每8秒8层剧毒；同时获得等量护盾；伙伴类触发时充能0.5s"
       },
       "Silver": {
         "cooldown": 8000,
@@ -464,8 +505,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 16,
-        "skill_cn": "每8秒16剧毒"
+        "poison": 12,
+        "skill_cn": "每8秒12层剧毒；同时获得等量护盾；伙伴类触发时充能0.5s"
       },
       "Gold": {
         "cooldown": 8000,
@@ -473,8 +514,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 28,
-        "skill_cn": "每8秒28剧毒"
+        "poison": 20,
+        "skill_cn": "每8秒20层剧毒；同时获得等量护盾；伙伴类触发时充能0.5s"
       },
       "Diamond": {
         "cooldown": 8000,
@@ -482,8 +523,8 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 50,
-        "skill_cn": "每8秒50层剧毒"
+        "poison": 36,
+        "skill_cn": "每8秒36层剧毒；同时获得等量护盾；伙伴类触发时充能0.5s"
       }
     }
   },
@@ -496,42 +537,47 @@
       "水系"
     ],
     "price": 4,
+    "tagCharge": {
+      "tag": "伙伴",
+      "ms": 500
+    },
+    "chargeReadiest": 3000,
     "tiers": {
       "Bronze": {
         "cooldown": 8000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 10,
+        "burn": 8,
         "poison": 0,
-        "skill_cn": "每8秒10灼烧"
+        "skill_cn": "每8秒8层灼烧；触发时为进度最高的其他物品充能3s；伙伴类触发时充能0.5s"
       },
       "Silver": {
         "cooldown": 8000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 16,
+        "burn": 12,
         "poison": 0,
-        "skill_cn": "每8秒16灼烧"
+        "skill_cn": "每8秒12层灼烧；触发时为进度最高的其他物品充能3s；伙伴类触发时充能0.5s"
       },
       "Gold": {
         "cooldown": 8000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 28,
+        "burn": 20,
         "poison": 0,
-        "skill_cn": "每8秒28灼烧"
+        "skill_cn": "每8秒20层灼烧；触发时为进度最高的其他物品充能3s；伙伴类触发时充能0.5s"
       },
       "Diamond": {
         "cooldown": 8000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 50,
+        "burn": 36,
         "poison": 0,
-        "skill_cn": "每8秒50灼烧"
+        "skill_cn": "每8秒36层灼烧；触发时为进度最高的其他物品充能3s；伙伴类触发时充能0.5s"
       }
     }
   },
@@ -543,45 +589,49 @@
       "伙伴"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "伙伴",
+      "ms": 500
+    },
+    "companionCharge": 1000,
     "tiers": {
       "Bronze": {
-        "cooldown": 8000,
+        "cooldown": 6000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "skill_cn": "每8秒3灼烧；触发时给其他所有伙伴充能1秒"
+        "skill_cn": "每6秒3灼烧；触发时所有伙伴充能1s；伙伴类触发时充能0.5s"
       },
       "Silver": {
-        "cooldown": 8000,
+        "cooldown": 6000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
         "burn": 5,
         "poison": 0,
-        "skill_cn": "每8秒5灼烧；触发时给其他所有伙伴充能1秒"
+        "skill_cn": "每6秒5灼烧；触发时所有伙伴充能1s；伙伴类触发时充能0.5s"
       },
       "Gold": {
-        "cooldown": 8000,
+        "cooldown": 6000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
         "burn": 8,
         "poison": 0,
-        "skill_cn": "每8秒8灼烧；触发时给其他所有伙伴充能1秒"
+        "skill_cn": "每6秒8灼烧；触发时所有伙伴充能1s；伙伴类触发时充能0.5s"
       },
       "Diamond": {
-        "cooldown": 8000,
+        "cooldown": 6000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
         "burn": 14,
         "poison": 0,
-        "skill_cn": "每8秒14灼烧；触发时给其他所有伙伴充能1秒"
+        "skill_cn": "每6秒14灼烧；触发时所有伙伴充能1s；伙伴类触发时充能0.5s"
       }
-    },
-    "companionCharge": 1000
+    }
   },
   {
     "id": 13,
@@ -592,45 +642,49 @@
       "防具"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "防具",
+      "ms": 800
+    },
+    "strikeShield": 15,
     "tiers": {
       "Bronze": {
         "cooldown": 10000,
         "damage": 0,
         "heal": 0,
-        "shield": 25,
+        "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得25护盾；每次触发护盾量+5"
+        "skill_cn": "每10秒20护盾；触发时破除敌方15点护盾；防具类触发时充能0.8s"
       },
       "Silver": {
         "cooldown": 10000,
         "damage": 0,
         "heal": 0,
-        "shield": 40,
+        "shield": 32,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得40护盾；每次触发护盾量+5"
+        "skill_cn": "每10秒32护盾；触发时破除敌方15点护盾；防具类触发时充能0.8s"
       },
       "Gold": {
         "cooldown": 10000,
         "damage": 0,
         "heal": 0,
-        "shield": 70,
+        "shield": 56,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得70护盾；每次触发护盾量+5"
+        "skill_cn": "每10秒56护盾；触发时破除敌方15点护盾；防具类触发时充能0.8s"
       },
       "Diamond": {
         "cooldown": 10000,
         "damage": 0,
         "heal": 0,
-        "shield": 126,
+        "shield": 100,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得126护盾；每次触发护盾量+5"
+        "skill_cn": "每10秒100护盾；触发时破除敌方15点护盾；防具类触发时充能0.8s"
       }
-    },
-    "shieldGrowth": 5
+    }
   },
   {
     "id": 14,
@@ -642,42 +696,50 @@
       "防具"
     ],
     "price": 5,
+    "tagCharge": {
+      "tag": "防具",
+      "ms": 800
+    },
     "tiers": {
       "Bronze": {
-        "cooldown": 6000,
+        "cooldown": 10000,
         "damage": 0,
         "heal": 0,
-        "shield": 50,
+        "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得50护盾"
+        "shieldGrowth": 5,
+        "skill_cn": "每10秒20护盾；每次触发护盾量+5（战斗内累积）；防具类触发时充能0.8s"
       },
       "Silver": {
-        "cooldown": 6000,
+        "cooldown": 9000,
         "damage": 0,
         "heal": 0,
-        "shield": 80,
+        "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得80护盾"
+        "shieldGrowth": 10,
+        "skill_cn": "每9秒20护盾；每次触发护盾量+10（战斗内累积）；防具类触发时充能0.8s"
       },
       "Gold": {
-        "cooldown": 6000,
+        "cooldown": 8000,
         "damage": 0,
         "heal": 0,
-        "shield": 140,
+        "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得140护盾"
+        "shieldGrowth": 15,
+        "skill_cn": "每8秒20护盾；每次触发护盾量+15（战斗内累积）；防具类触发时充能0.8s"
       },
       "Diamond": {
-        "cooldown": 6000,
+        "cooldown": 7000,
         "damage": 0,
         "heal": 0,
-        "shield": 252,
+        "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得252护盾"
+        "shieldGrowth": 20,
+        "skill_cn": "每7秒20护盾；每次触发护盾量+20（战斗内累积）；防具类触发时充能0.8s"
       }
     }
   },
@@ -687,45 +749,50 @@
     "name_en": "Coral",
     "tags": [
       "水系",
-      "遗物"
+      "食物"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "食物",
+      "ms": 1000
+    },
+    "overhealToShield": true,
     "tiers": {
       "Bronze": {
         "cooldown": 6000,
         "damage": 0,
-        "heal": 20,
+        "heal": 10,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒治疗20生命"
+        "skill_cn": "每6秒治疗10；HP已满时超量治疗转为护盾；食物类触发时充能1s"
       },
       "Silver": {
         "cooldown": 6000,
         "damage": 0,
-        "heal": 32,
+        "heal": 16,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒治疗32生命"
+        "skill_cn": "每6秒治疗16；HP已满时超量治疗转为护盾；食物类触发时充能1s"
       },
       "Gold": {
         "cooldown": 6000,
         "damage": 0,
-        "heal": 56,
+        "heal": 28,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒治疗56生命"
+        "skill_cn": "每6秒治疗28；HP已满时超量治疗转为护盾；食物类触发时充能1s"
       },
       "Diamond": {
         "cooldown": 6000,
         "damage": 0,
-        "heal": 101,
+        "heal": 48,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒治疗101生命"
+        "skill_cn": "每6秒治疗48；HP已满时超量治疗转为护盾；食物类触发时充能1s"
       }
     }
   },
@@ -737,45 +804,49 @@
       "工具"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "工具",
+      "ms": 600
+    },
+    "globalCharge": 1000,
     "tiers": {
       "Bronze": {
-        "cooldown": 7000,
+        "cooldown": 9000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 4,
-        "poison": 0,
-        "skill_cn": "每7秒4灼烧；触发时给所有其他物品充能1秒"
+        "burn": 3,
+        "poison": 3,
+        "skill_cn": "每9秒3灼烧+3剧毒；触发时所有物品充能1s；工具类触发时充能0.6s"
       },
       "Silver": {
-        "cooldown": 7000,
+        "cooldown": 9000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 6,
-        "poison": 0,
-        "skill_cn": "每7秒6灼烧；触发时给所有其他物品充能1秒"
+        "burn": 5,
+        "poison": 5,
+        "skill_cn": "每9秒5灼烧+5剧毒；触发时所有物品充能1s；工具类触发时充能0.6s"
       },
       "Gold": {
-        "cooldown": 7000,
+        "cooldown": 9000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 11,
-        "poison": 0,
-        "skill_cn": "每7秒11灼烧；触发时给所有其他物品充能1秒"
+        "burn": 9,
+        "poison": 9,
+        "skill_cn": "每9秒9灼烧+9剧毒；触发时所有物品充能1s；工具类触发时充能0.6s"
       },
       "Diamond": {
-        "cooldown": 7000,
+        "cooldown": 9000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 20,
-        "poison": 0,
-        "skill_cn": "每7秒20灼烧；触发时给所有其他物品充能1秒"
+        "burn": 16,
+        "poison": 16,
+        "skill_cn": "每9秒16灼烧+16剧毒；触发时所有物品充能1s；工具类触发时充能0.6s"
       }
-    },
-    "globalCharge": 1000
+    }
   },
   {
     "id": 17,
@@ -786,42 +857,50 @@
       "食物"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "食物",
+      "ms": 1000
+    },
     "tiers": {
       "Bronze": {
         "cooldown": 5000,
         "damage": 0,
-        "heal": 8,
+        "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒治疗8生命"
+        "globalCritBonus": 0.07,
+        "skill_cn": "每5秒我方其他物品暴击率+7%（可叠加）"
       },
       "Silver": {
         "cooldown": 5000,
         "damage": 0,
-        "heal": 13,
+        "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒治疗13生命"
+        "globalCritBonus": 0.08,
+        "skill_cn": "每5秒我方其他物品暴击率+8%（可叠加）"
       },
       "Gold": {
         "cooldown": 5000,
         "damage": 0,
-        "heal": 22,
+        "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒治疗22生命"
+        "globalCritBonus": 0.09,
+        "skill_cn": "每5秒我方其他物品暴击率+9%（可叠加）"
       },
       "Diamond": {
         "cooldown": 5000,
         "damage": 0,
-        "heal": 40,
+        "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒治疗40生命"
+        "globalCritBonus": 0.1,
+        "skill_cn": "每5秒我方其他物品暴击率+10%（可叠加）"
       }
     }
   },
@@ -832,45 +911,51 @@
     "tags": [
       "水系",
       "工具",
-      "服饰"
+      "服饰",
+      "防具"
     ],
     "price": 4,
+    "tagCharge": {
+      "tag": "防具",
+      "ms": 800
+    },
+    "chargeWaterItems": 2000,
     "tiers": {
       "Bronze": {
-        "cooldown": 6000,
+        "cooldown": 10000,
         "damage": 0,
         "heal": 0,
-        "shield": 25,
+        "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得25护盾"
+        "skill_cn": "每10秒15护盾；触发时为所有水系物品充能2s；防具类触发时充能0.8s"
       },
       "Silver": {
-        "cooldown": 6000,
+        "cooldown": 9000,
         "damage": 0,
         "heal": 0,
-        "shield": 40,
+        "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得40护盾"
+        "skill_cn": "每9秒15护盾；触发时为所有水系物品充能2s；防具类触发时充能0.8s"
       },
       "Gold": {
-        "cooldown": 6000,
+        "cooldown": 8000,
         "damage": 0,
         "heal": 0,
-        "shield": 70,
+        "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得70护盾"
+        "skill_cn": "每8秒15护盾；触发时为所有水系物品充能2s；防具类触发时充能0.8s"
       },
       "Diamond": {
-        "cooldown": 6000,
+        "cooldown": 7000,
         "damage": 0,
         "heal": 0,
-        "shield": 126,
+        "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒获得126护盾"
+        "skill_cn": "每7秒15护盾；触发时为所有水系物品充能2s；防具类触发时充能0.8s"
       }
     }
   },
@@ -888,89 +973,533 @@
     "tiers": {
       "Bronze": {
         "cooldown": 5000,
-        "damage": 20,
+        "damage": 10,
         "heal": 0,
-        "shield": 0,
+        "shield": 10,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒20伤害；触发时获得等量护盾"
+        "skill_cn": "每5秒10伤害和10护盾"
       },
       "Silver": {
         "cooldown": 5000,
-        "damage": 32,
+        "damage": 20,
         "heal": 0,
-        "shield": 0,
+        "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒32伤害；触发时获得等量护盾"
+        "skill_cn": "每5秒20伤害和20护盾"
       },
       "Gold": {
         "cooldown": 5000,
-        "damage": 56,
+        "damage": 30,
         "heal": 0,
-        "shield": 0,
+        "shield": 30,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒56伤害；触发时获得等量护盾"
+        "skill_cn": "每5秒30伤害和30护盾"
       },
       "Diamond": {
         "cooldown": 5000,
-        "damage": 101,
+        "damage": 40,
         "heal": 0,
-        "shield": 0,
+        "shield": 40,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒101伤害；触发时获得等量护盾"
+        "skill_cn": "每5秒40伤害和40护盾"
       }
-    },
-    "damageToShield": true
+    }
   },
   {
     "id": 20,
     "name_cn": "燃烧响炮",
     "name_en": "Pop Snappers",
     "tags": [
-      "玩具"
+      "工具"
     ],
     "price": 3,
+    "tagCharge": {
+      "tag": "工具",
+      "ms": 600
+    },
+    "burnBoostIfBurning": 0.5,
     "tiers": {
       "Bronze": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 4,
+        "burn": 3,
         "poison": 0,
-        "skill_cn": "每3秒4灼烧；敌方有灼烧时本次+50%"
+        "skill_cn": "每3秒3灼烧；敌方有灼烧时本次+50%；工具类触发时充能0.6s"
       },
       "Silver": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 6,
+        "burn": 5,
         "poison": 0,
-        "skill_cn": "每3秒6灼烧；敌方有灼烧时本次+50%"
+        "skill_cn": "每3秒5灼烧；敌方有灼烧时本次+50%；工具类触发时充能0.6s"
       },
       "Gold": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 11,
+        "burn": 9,
         "poison": 0,
-        "skill_cn": "每3秒11灼烧；敌方有灼烧时本次+50%"
+        "skill_cn": "每3秒9灼烧；敌方有灼烧时本次+50%；工具类触发时充能0.6s"
       },
       "Diamond": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 20,
+        "burn": 16,
         "poison": 0,
-        "skill_cn": "每3秒20灼烧；敌方有灼烧时本次+50%"
+        "skill_cn": "每3秒16灼烧；敌方有灼烧时本次+50%；工具类触发时充能0.6s"
       }
-    },
-    "burnBoostIfBurning": 0.5
+    }
+  },
+  {
+    "id": 21,
+    "name_cn": "燧发枪",
+    "name_en": "Flintlock",
+    "tags": ["武器", "枪械"],
+    "price": 3,
+    "tagCharge": { "tag": "武器", "ms": 600 },
+    "alwaysCrit": true,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 7000,
+        "damage": 10,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "critBurnStacks": 4,
+        "skill_cn": "每7秒必定暴击（×1.5）造成15伤害，并施加4层灼烧；武器类触发时充能0.6s"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 14,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "critBurnStacks": 6,
+        "skill_cn": "每6秒必定暴击（×1.5）造成21伤害，并施加6层灼烧；武器类触发时充能0.6s"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 20,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "critBurnStacks": 9,
+        "skill_cn": "每5秒必定暴击（×1.5）造成30伤害，并施加9层灼烧；武器类触发时充能0.6s"
+      },
+      "Diamond": {
+        "cooldown": 4000,
+        "damage": 28,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "critBurnStacks": 16,
+        "skill_cn": "每4秒必定暴击（×1.5）造成42伤害，并施加16层灼烧；武器类触发时充能0.6s"
+      }
+    }
+  },
+  {
+    "id": 22,
+    "name_cn": "散弹枪",
+    "name_en": "Blunderbuss",
+    "tags": ["武器", "枪械"],
+    "price": 4,
+    "tagCharge": { "tag": "武器", "ms": 600 },
+    "strikeShield": 20,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 8000,
+        "damage": 35,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每8秒35伤害；触发时破除敌方20点护盾；武器类触发时充能0.6s"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 50,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每7秒50伤害；触发时破除敌方20点护盾；武器类触发时充能0.6s"
+      },
+      "Gold": {
+        "cooldown": 6000,
+        "damage": 72,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每6秒72伤害；触发时破除敌方20点护盾；武器类触发时充能0.6s"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 100,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每5秒100伤害；触发时破除敌方20点护盾；武器类触发时充能0.6s"
+      }
+    }
+  },
+  {
+    "id": 23,
+    "name_cn": "舰炮",
+    "name_en": "Broadside Cannon",
+    "tags": ["武器", "枪械"],
+    "price": 5,
+    "adjacentCharge": 3000,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 11000,
+        "damage": 60,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每11秒60伤害；触发时相邻物品充能3s"
+      },
+      "Silver": {
+        "cooldown": 10000,
+        "damage": 80,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每10秒80伤害；触发时相邻物品充能3s"
+      },
+      "Gold": {
+        "cooldown": 9000,
+        "damage": 110,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每9秒110伤害；触发时相邻物品充能3s"
+      },
+      "Diamond": {
+        "cooldown": 8000,
+        "damage": 150,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": "每8秒150伤害；触发时相邻物品充能3s"
+      }
+    }
+  },
+  {
+    "id": 24,
+    "name_cn": "独桅帆船",
+    "name_en": "Corsair Sloop",
+    "tags": ["载具", "武器"],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 7000,
+        "damage": 12,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeWeaponItems": 1000,
+        "skill_cn": "每7秒12伤害；触发时所有武器充能1s"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 18,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeWeaponItems": 1500,
+        "skill_cn": "每6秒18伤害；触发时所有武器充能1.5s"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 25,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeWeaponItems": 2000,
+        "skill_cn": "每5秒25伤害；触发时所有武器充能2s"
+      },
+      "Diamond": {
+        "cooldown": 4000,
+        "damage": 35,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeWeaponItems": 2500,
+        "skill_cn": "每4秒35伤害；触发时所有武器充能2.5s"
+      }
+    }
+  },
+  {
+    "id": 25,
+    "name_cn": "热气球",
+    "name_en": "Hot Air Balloon",
+    "tags": ["载具"],
+    "price": 3,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 12000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 25,
+        "burn": 0,
+        "poison": 0,
+        "battleStartShield": 20,
+        "skill_cn": "战斗开始时获得20护盾；每12秒25护盾"
+      },
+      "Silver": {
+        "cooldown": 10000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 35,
+        "burn": 0,
+        "poison": 0,
+        "battleStartShield": 35,
+        "skill_cn": "战斗开始时获得35护盾；每10秒35护盾"
+      },
+      "Gold": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 50,
+        "burn": 0,
+        "poison": 0,
+        "battleStartShield": 60,
+        "skill_cn": "战斗开始时获得60护盾；每8秒50护盾"
+      },
+      "Diamond": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 70,
+        "burn": 0,
+        "poison": 0,
+        "battleStartShield": 100,
+        "skill_cn": "战斗开始时获得100护盾；每6秒70护盾"
+      }
+    }
+  },
+  {
+    "id": 26,
+    "name_cn": "蒸汽装甲舰",
+    "name_en": "Steam Ironclad",
+    "tags": ["载具", "武器", "科技"],
+    "price": 5,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 8000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 15,
+        "burn": 0,
+        "poison": 0,
+        "damageGrowth": 5,
+        "shieldGrowth": 5,
+        "skill_cn": "每8秒15伤害和15护盾；每次触发伤害与护盾量均+5（战斗内累积）"
+      },
+      "Silver": {
+        "cooldown": 7000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 15,
+        "burn": 0,
+        "poison": 0,
+        "damageGrowth": 8,
+        "shieldGrowth": 8,
+        "skill_cn": "每7秒15伤害和15护盾；每次触发伤害与护盾量均+8（战斗内累积）"
+      },
+      "Gold": {
+        "cooldown": 6000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 15,
+        "burn": 0,
+        "poison": 0,
+        "damageGrowth": 12,
+        "shieldGrowth": 12,
+        "skill_cn": "每6秒15伤害和15护盾；每次触发伤害与护盾量均+12（战斗内累积）"
+      },
+      "Diamond": {
+        "cooldown": 5000,
+        "damage": 15,
+        "heal": 0,
+        "shield": 15,
+        "burn": 0,
+        "poison": 0,
+        "damageGrowth": 18,
+        "shieldGrowth": 18,
+        "skill_cn": "每5秒15伤害和15护盾；每次触发伤害与护盾量均+18（战斗内累积）"
+      }
+    }
+  },
+  {
+    "id": 27,
+    "name_cn": "自动炮台",
+    "name_en": "Auto Turret",
+    "tags": ["科技", "武器"],
+    "price": 4,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 10000,
+        "damage": 45,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeFromWeapon": 500,
+        "skill_cn": "每10秒45伤害；场上每件武器每次触发时为自身充能0.5s"
+      },
+      "Silver": {
+        "cooldown": 10000,
+        "damage": 60,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeFromWeapon": 800,
+        "skill_cn": "每10秒60伤害；场上每件武器每次触发时为自身充能0.8s"
+      },
+      "Gold": {
+        "cooldown": 10000,
+        "damage": 80,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeFromWeapon": 1000,
+        "skill_cn": "每10秒80伤害；场上每件武器每次触发时为自身充能1s"
+      },
+      "Diamond": {
+        "cooldown": 10000,
+        "damage": 110,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "chargeFromWeapon": 1500,
+        "skill_cn": "每10秒110伤害；场上每件武器每次触发时为自身充能1.5s"
+      }
+    }
+  },
+  {
+    "id": 28,
+    "name_cn": "磁力护盾",
+    "name_en": "Magnetic Shield",
+    "tags": ["科技", "防具"],
+    "price": 4,
+    "tagCharge": { "tag": "防具", "ms": 800 },
+    "tiers": {
+      "Bronze": {
+        "cooldown": 9000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 25,
+        "burn": 0,
+        "poison": 0,
+        "shieldOnDamaged": 3,
+        "skill_cn": "每9秒25护盾；每次受到伤害时获得3护盾；防具类触发时充能0.8s"
+      },
+      "Silver": {
+        "cooldown": 8000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 35,
+        "burn": 0,
+        "poison": 0,
+        "shieldOnDamaged": 5,
+        "skill_cn": "每8秒35护盾；每次受到伤害时获得5护盾；防具类触发时充能0.8s"
+      },
+      "Gold": {
+        "cooldown": 7000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 50,
+        "burn": 0,
+        "poison": 0,
+        "shieldOnDamaged": 8,
+        "skill_cn": "每7秒50护盾；每次受到伤害时获得8护盾；防具类触发时充能0.8s"
+      },
+      "Diamond": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 70,
+        "burn": 0,
+        "poison": 0,
+        "shieldOnDamaged": 12,
+        "skill_cn": "每6秒70护盾；每次受到伤害时获得12护盾；防具类触发时充能0.8s"
+      }
+    }
+  },
+  {
+    "id": 29,
+    "name_cn": "毒气弹",
+    "name_en": "Toxin Canister",
+    "tags": ["科技", "工具"],
+    "price": 3,
+    "tagCharge": { "tag": "工具", "ms": 600 },
+    "poisonBurnScaleDamage": 0.5,
+    "tiers": {
+      "Bronze": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 4,
+        "poison": 4,
+        "skill_cn": "每6秒4灼烧+4剧毒；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时充能0.6s"
+      },
+      "Silver": {
+        "cooldown": 6000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 6,
+        "poison": 6,
+        "skill_cn": "每6秒6灼烧+6剧毒；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时充能0.6s"
+      },
+      "Gold": {
+        "cooldown": 5000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 10,
+        "poison": 10,
+        "skill_cn": "每5秒10灼烧+10剧毒；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时充能0.6s"
+      },
+      "Diamond": {
+        "cooldown": 4000,
+        "damage": 0,
+        "heal": 0,
+        "shield": 0,
+        "burn": 16,
+        "poison": 16,
+        "skill_cn": "每4秒16灼烧+16剧毒；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时充能0.6s"
+      }
+    }
   }
 ]

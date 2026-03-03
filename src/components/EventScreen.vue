@@ -11,7 +11,8 @@
           class="event-choice"
           @click="$emit('choice', opt.id)"
         >
-          <span class="choice-icon">{{ opt.icon }}</span>
+          <img v-if="opt.img" :src="opt.img" class="choice-icon-img" draggable="false" />
+          <span v-else class="choice-icon">{{ opt.icon }}</span>
           <span class="choice-label">{{ opt.label }}</span>
           <span class="choice-desc">{{ opt.desc }}</span>
         </button>
@@ -90,7 +91,12 @@ defineEmits(['choice'])
 }
 .event-choice:active { transform: translateY(0); }
 
-.choice-icon  { font-size: 30px; }
+.choice-icon     { font-size: 30px; }
+.choice-icon-img {
+  width: 72px; height: 72px;
+  border-radius: 10px; object-fit: cover;
+  border: 1px solid rgba(255,255,255,.12);
+}
 .choice-label { font-size: 15px; font-weight: 700; }
 .choice-desc  { font-size: 11px; color: #9e8060; text-align: center; line-height: 1.4; }
 </style>

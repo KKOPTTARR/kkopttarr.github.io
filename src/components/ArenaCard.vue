@@ -69,11 +69,12 @@ const isCharging = computed(() => {
 // 主要数值
 const statType = computed(() => {
   const i = props.item
-  if (i.damage  > 0) return 'damage'
-  if (i.heal    > 0) return 'heal'
-  if (i.shield  > 0) return 'shield'
-  if (i.burn    > 0) return 'burn'
-  if (i.poison  > 0) return 'poison'
+  if (i.damage        > 0) return 'damage'
+  if (i.heal          > 0) return 'heal'
+  if (i.shield        > 0) return 'shield'
+  if (i.burn          > 0) return 'burn'
+  if (i.poison        > 0) return 'poison'
+  if (i.globalCritBonus)   return 'crit'
   return 'none'
 })
 
@@ -86,11 +87,12 @@ function onCardClick(e) {
 
 const mainStat = computed(() => {
   const i = props.item
-  if (i.damage  > 0) return i.damage
-  if (i.heal    > 0) return `+${i.heal}`
-  if (i.shield  > 0) return i.shield
-  if (i.burn    > 0) return i.burn
-  if (i.poison  > 0) return i.poison
+  if (i.damage        > 0) return i.damage
+  if (i.heal          > 0) return `+${i.heal}`
+  if (i.shield        > 0) return i.shield
+  if (i.burn          > 0) return i.burn
+  if (i.poison        > 0) return i.poison
+  if (i.globalCritBonus)   return `+${Math.round(i.globalCritBonus * 100)}%`
   return ''
 })
 </script>
@@ -140,7 +142,7 @@ const mainStat = computed(() => {
 .card-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  object-fit: cover; object-position: center;
+  object-fit: contain; object-position: center;
   display: block;
 }
 
@@ -199,6 +201,7 @@ const mainStat = computed(() => {
 .stat-poison { background: rgba(20,100,30,.9); }
 .stat-heal   { background: rgba(40,170,60,.9); }
 .stat-shield { background: rgba(180,140,0,.9); }
+.stat-crit   { background: rgba(160,100,0,.9); }
 
 /* 底部渐变叠层 */
 .card-bottom {

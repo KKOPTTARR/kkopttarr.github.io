@@ -4,7 +4,7 @@
     <!-- 顶部状态行：生命 + 战局 + 金币 -->
     <div class="panel-status">
       <div class="status-lives">
-        <span v-for="i in maxLives" :key="i" class="heart-icon">{{ i <= lives ? '❤️' : '🖤' }}</span>
+        <span v-for="i in maxLives" :key="i" class="heart-icon">{{ i <= lives ? '⚡' : '○' }}</span>
       </div>
       <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/5 ⭐</div>
       <div class="status-gold">💰 {{ gold }}</div>
@@ -28,7 +28,8 @@
         <GridBoard
           :items="backpackItems" zone="backpack"
           :is-enemy="false" :is-battle="false"
-          :compact="false" :cell-size="113" :cell-height="175"
+          :compact="false" :cell-size="113"
+          :rows="BP_ROWS" :unlocked-cols="BP_COLS"
         />
         <div v-if="backpackItems.length === 0" class="backpack-empty">空背包 · 可从商店拖入或购买后溢出</div>
       </div>
@@ -46,7 +47,7 @@
     <GridBoard
       :items="playerItems" zone="player"
       :is-enemy="false" :is-battle="false"
-      :compact="false" :cell-size="113" :cell-height="175"
+      :compact="false" :cell-size="113"
       :rows="1" :unlocked-cols="unlockedCols"
     />
     <div class="sell-zone" :class="{ 'drag-over-sell': dragState.overSellZone }">
@@ -59,6 +60,9 @@
 import ShopSection from './ShopSection.vue'
 import GridBoard   from './GridBoard.vue'
 import { dragState } from '../composables/useDrag.js'
+import { BP_ROWS, BP_COLS } from '../composables/useInventory.js'
+import { useLayout } from '../composables/useLayout.js'
+useLayout({ skillBar: true })
 
 defineProps({
   lives:       Number,
@@ -137,12 +141,17 @@ defineEmits(['update:showBackpack', 'reroll', 'startBattle'])
 
 /* ── 背包视图 ── */
 .backpack-view {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
   width: 100%;
 }
 .backpack-empty {
+  position: absolute;
+  bottom: -24px;
+  left: 0; right: 0;
   color: var(--text-dim); font-size: 11px;
-  padding: 12px; text-align: center; opacity: .7;
+  text-align: center; opacity: .7;
+  pointer-events: none;
 }
 
 /* ── 下方阵容区（占半屏）── */

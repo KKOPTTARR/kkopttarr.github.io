@@ -1,6 +1,5 @@
 <template>
   <div class="battle-arena" id="battlefield">
-    <canvas ref="pixiCanvas" class="pixi-overlay"></canvas>
     <div class="arena-bg"></div>
 
     <!-- ══ 敌方展示区（插画 + 技能列表）══ -->
@@ -124,7 +123,6 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import ArenaCard from './ArenaCard.vue'
 import {
   initPixi, destroyPixi,
-  registerSprites, syncPositions, setItems,
   spawnProjectile, spawnFloatingTextAt, spawnSpecialBurst,
 } from '../composables/usePixiBattle.js'
 
@@ -140,7 +138,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['deploy-complete'])
-const pixiCanvas = ref(null)
 
 const portraitUrl = computed(() =>
   props.enemyPortrait ? `${import.meta.env.BASE_URL}${props.enemyPortrait}` : ''
@@ -164,10 +161,17 @@ function buildEmptyCells(items, ucols) {
 }
 const emptyPlayerCells = computed(() => buildEmptyCells(props.playerItems, props.unlockedCols))
 
-// 动态 arena-grid 样式（行高由 aspect-ratio 自动决定）
-const arenaGridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${props.unlockedCols}, 1fr)`,
-}))
+// 动态 arena-grid 样式（响应式列宽，防止多列时溢出容器）
+const arenaGridStyle = computed(() => {
+  const cols = props.unlockedCols
+  const maxW  = cols * 72 + (cols - 1) * 6
+  return {
+    gridTemplateColumns: `repeat(${cols}, minmax(0, 72px))`,
+    width: '100%',
+    maxWidth: `${maxW}px`,
+    margin: '0 auto',
+  }
+})
 
 // ── 技能冷却条颜色 ─────────────────────────────────────────
 function cdColor(ab) {
@@ -260,8 +264,7 @@ function flashSpecialCard(instanceId) {
 }
 
 function shakeTarget(isEnemy) {
-  if (isEnemy) return   // 仅敌方受击时震动，玩家区不震
-  const el = document.querySelector('.enemy-portrait-wrap')
+  const el = document.querySelector(isEnemy ? '.player-section' : '.enemy-portrait-wrap')
   if (!el) return
   el.classList.remove('elem-shake')
   void el.offsetWidth
@@ -279,12 +282,7 @@ onMounted(() => { _initPixiAsync() })
 
 async function _initPixiAsync() {
   try {
-    await initPixi(pixiCanvas.value)
-    if (props.playerItems.length) {
-      await registerSprites(props.playerItems)
-      syncPositions(props.playerItems)
-      setItems(props.playerItems)
-    }
+    await initPixi()
   } catch (e) { console.warn('[PIXI] init failed', e) }
 }
 
@@ -295,11 +293,8 @@ onUnmounted(() => {
 })
 
 function startBattleDeploy(_s, _d) { emit('deploy-complete') }
-function onBattleStart() {
-  setItems(props.playerItems)
-  syncPositions(props.playerItems)
-}
-defineExpose({ startBattleDeploy, onBattleStart, syncPositions })
+function onBattleStart() {}
+defineExpose({ startBattleDeploy, onBattleStart })
 
 function fxLabel(fx) {
   const map = { damage: `⚔️${fx.value}`, heal: `+${fx.value}`, shield: `🛡+${fx.value}`,
@@ -313,11 +308,6 @@ function fxLabel(fx) {
   position: relative; flex: 1;
   display: flex; flex-direction: column;
   min-height: 0; overflow: hidden;
-}
-.pixi-overlay {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none; z-index: 5;
 }
 .arena-bg {
   position: absolute; inset: 0; pointer-events: none;
@@ -476,6 +466,7 @@ function fxLabel(fx) {
   justify-content: center;
 }
 .empty-slot {
+  aspect-ratio: 3 / 4;
   background: rgba(0,0,0,.25);
   border: 1px dashed rgba(255,255,255,.10);
   border-radius: 6px;

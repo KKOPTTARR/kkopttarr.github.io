@@ -3,6 +3,7 @@
     class="item-card"
     :class="[
       chargeClass,
+      `tier-${item.tier}`,
       {
         dragging:        isDragging,
         triggering:      item.triggering,
@@ -14,6 +15,9 @@
     ]"
     :style="cardStyle"
     :data-instance="item.instanceId"
+    :data-grid="shopMode ? undefined : (isEnemy ? 'enemy' : (zone === 'backpack' ? 'backpack' : 'player'))"
+    :data-col="shopMode ? undefined : gridCol"
+    :data-row="shopMode ? undefined : gridRow"
     @pointerdown.prevent="onPointerDown"
     @mouseenter="emit('hover-enter', item)"
     @mouseleave="emit('hover-leave')"
@@ -77,6 +81,7 @@ const props = defineProps({
   shopMode:          { type: Boolean, default: false },
   neighborHighlight: { type: Boolean, default: false },
   stack:             { type: Number,  default: 1 },   // 同名物品数量，2 时显示 ×2
+  zone:              { type: String,  default: 'player' }, // 'player' | 'backpack'
 })
 
 const emit = defineEmits(['hover-enter', 'hover-leave'])
@@ -94,22 +99,24 @@ const fallbackEmoji = computed(() => {
 
 const statType = computed(() => {
   const i = props.item
-  if (i.damage  > 0) return 'damage'
-  if (i.heal    > 0) return 'heal'
-  if (i.shield  > 0) return 'shield'
-  if (i.burn    > 0) return 'burn'
-  if (i.poison  > 0) return 'poison'
+  if (i.damage        > 0) return 'damage'
+  if (i.heal          > 0) return 'heal'
+  if (i.shield        > 0) return 'shield'
+  if (i.burn          > 0) return 'burn'
+  if (i.poison        > 0) return 'poison'
+  if (i.globalCritBonus)   return 'crit'
   return 'damage'
 })
 
 // compact 模式下显示最关键的一个数值
 const mainStat = computed(() => {
   const i = props.item
-  if (i.damage  > 0) return i.damage
-  if (i.heal    > 0) return `+${i.heal}`
-  if (i.shield  > 0) return i.shield
-  if (i.burn    > 0) return i.burn
-  if (i.poison  > 0) return i.poison
+  if (i.damage        > 0) return i.damage
+  if (i.heal          > 0) return `+${i.heal}`
+  if (i.shield        > 0) return i.shield
+  if (i.burn          > 0) return i.burn
+  if (i.poison        > 0) return i.poison
+  if (i.globalCritBonus)   return `+${Math.round(i.globalCritBonus * 100)}%`
   return null
 })
 
@@ -117,13 +124,17 @@ const C = computed(() => props.cellSize)
 const G = computed(() => props.cellGap)
 
 // 2行×4列网格，每格 1×1
+const effectiveHeight = computed(() =>
+  props.cellHeight > 0 ? props.cellHeight : Math.round(C.value * 4 / 3)
+)
+
 const cardStyle = computed(() => {
   if (props.shopMode) return {}
-  const C_ = C.value, G_ = G.value
-  const H_ = props.cellHeight > 0 ? props.cellHeight : C_
+  const C_ = C.value, G_ = G.value, H_ = effectiveHeight.value
+  const rowStep = props.compact ? H_ + G_ : H_ + 14 + G_
   return {
     left:   props.gridCol * (C_ + G_) + 'px',
-    top:    props.gridRow * (H_ + G_) + 'px',
+    top:    props.gridRow * rowStep + 'px',
     width:  C_ + 'px',
     height: H_ + 'px',
   }
@@ -131,11 +142,9 @@ const cardStyle = computed(() => {
 
 const iconWrapStyle = computed(() => {
   if (props.shopMode) return {}
-  const C_ = C.value
-  const H_ = props.cellHeight > 0 ? props.cellHeight : C_
-  const nameH = props.compact ? 0 : 14
-  const cdH   = props.isBattle ? (props.compact ? 3 : 4) : 0
-  return { height: (H_ - nameH - cdH) + 'px' }
+  const H_ = effectiveHeight.value
+  const cdH = props.isBattle ? (props.compact ? 3 : 4) : 0
+  return { height: (H_ - cdH) + 'px' }
 })
 
 const cooldownPct = computed(() =>
@@ -163,7 +172,8 @@ const isDragging = computed(() =>
 
 function onPointerDown(e) {
   if (props.isEnemy || props.isBattle || props.shopMode) return
-  startDrag(e, props.item, 'grid', props.item.instanceId)
+  const srcType = props.zone === 'backpack' ? 'backpack' : 'grid'
+  startDrag(e, props.item, srcType, props.item.instanceId)
 }
 </script>
 
@@ -182,6 +192,7 @@ function onPointerDown(e) {
 .compact-stat.stat-poison { background: rgba(20,100,30,.9); }
 .compact-stat.stat-heal   { background: rgba(40,170,60,.9); }
 .compact-stat.stat-shield { background: rgba(180,140,0,.9); }
+.compact-stat.stat-crit   { background: rgba(160,100,0,.9); }
 /* compact 冷却条更细 */
 .cd-compact { height: 3px; }
 </style>

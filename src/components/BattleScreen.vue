@@ -48,6 +48,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import BattleArena from './BattleArena.vue'
+import { useLayout } from '../composables/useLayout.js'
+useLayout({ skillBar: true })
 
 const props = defineProps({
   playerStat:          Object,

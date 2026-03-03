@@ -1,8 +1,8 @@
 <template>
   <div class="identity-screen">
     <div class="identity-header">
-      <div class="identity-title">⚓ 选择你的身份</div>
-      <div class="identity-sub">不同的出身，不同的命运</div>
+      <div class="identity-title">⚓ 接受馈赠</div>
+      <div class="identity-sub">选择一位赠予者，踏上你的旅途</div>
     </div>
 
     <div class="identity-cards">
@@ -16,10 +16,13 @@
         <div class="card-name">{{ identity.name }}</div>
         <div class="card-flavor">{{ identity.flavor }}</div>
         <div class="card-divider"></div>
-        <div class="card-items-label">初始物品</div>
+        <div class="card-items-label">馈赠之物</div>
         <div class="card-items">
           <span v-for="item in identity.itemNames" :key="item" class="card-item-tag">{{ item }}</span>
         </div>
+        <div class="card-divider"></div>
+        <div class="card-items-label">获得技能</div>
+        <div class="card-skill">{{ identity.skill?.desc }}</div>
       </div>
     </div>
   </div>
@@ -147,5 +150,12 @@ defineEmits(['choose'])
   border: 1px solid rgba(200,140,40,.3);
   border-radius: 10px;
   color: #d4a060;
+}
+.card-skill {
+  font-size: 11px;
+  color: #a0c8e0;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0 4px;
 }
 </style>

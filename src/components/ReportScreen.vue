@@ -10,7 +10,8 @@
       </div>
       <div class="result-progress">
         <span class="progress-wins">{{ wins }}/5 胜</span>
-        <span class="progress-lives">{{ livesText }}</span>
+        <span class="progress-lives">士气 {{ livesText }}</span>
+        <span v-if="isFirstLoss" class="progress-hint">士气耗尽则游戏结束</span>
       </div>
     </div>
 
@@ -56,6 +57,20 @@
       <span>未部署任何物品</span>
     </div>
 
+    <!-- 战利品预览 -->
+    <div class="reward-preview" v-if="rewardItems.length">
+      <div class="stats-title">🎁 战利品（继续后发放）</div>
+      <div class="reward-row">
+        <div v-for="(item, i) in rewardItems" :key="i" class="reward-thumb">
+          <img :src="getIconUrl(item.name_en, item.tier)" class="reward-thumb-img" draggable="false" />
+          <div class="reward-thumb-tier" :class="`merge-tier-${item.tier}`">
+            {{ { Bronze:'铜', Silver:'银', Gold:'金' }[item.tier] }}
+          </div>
+          <span class="reward-thumb-name">{{ item.name_cn }}</span>
+        </div>
+      </div>
+    </div>
+
     <!-- 按钮 -->
     <div class="report-actions">
       <button class="btn btn-primary next-btn" @click="$emit('next')">
@@ -74,9 +89,11 @@ const props = defineProps({
   result:      { type: String, required: true },  // 'win' | 'lose' | 'clear' | 'gameover'
   battleCount: { type: Number, required: true },
   wins:        { type: Number, required: true },
-  lives:      { type: Number, required: true },
-  enemyName:  { type: String, default: '对手' },
-  itemStats:  { type: Array,  default: () => [] }, // 来自 useBattle
+  lives:       { type: Number, required: true },
+  maxLives:    { type: Number, default: 3 },
+  enemyName:   { type: String, default: '对手' },
+  itemStats:   { type: Array,  default: () => [] }, // 来自 useBattle
+  rewardItems: { type: Array,  default: () => [] }, // 即将发放的战利品
 })
 defineEmits(['next'])
 
@@ -84,8 +101,9 @@ const isWin     = computed(() => props.result === 'win' || props.result === 'cle
 const isEndGame = computed(() => props.result === 'clear' || props.result === 'gameover')
 
 const livesText = computed(() =>
-  '❤️'.repeat(props.lives) + '🖤'.repeat(Math.max(0, 2 - props.lives))
+  '⚡'.repeat(props.lives) + '○'.repeat(Math.max(0, props.maxLives - props.lives))
 )
+const isFirstLoss = computed(() => props.result === 'lose' && props.lives === props.maxLives - 1)
 
 // 按伤害降序排列
 const sortedStats = computed(() =>
@@ -138,6 +156,7 @@ function tierLabel(t) {
 .result-progress { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .progress-wins   { font-size: 13px; font-weight: bold; color: var(--gold); }
 .progress-lives  { font-size: 14px; }
+.progress-hint   { font-size: 10px; color: #e07050; opacity: .85; }
 
 /* ── 战绩列表 ── */
 .stats-section { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -178,6 +197,27 @@ function tierLabel(t) {
 .total-hel { font-weight: bold; color: #5ad070; }
 
 .no-items { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 13px; }
+
+/* ── 战利品预览 ── */
+.reward-preview { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+.reward-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.reward-thumb {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  width: 52px; position: relative;
+}
+.reward-thumb-img {
+  width: 52px; height: 52px; border-radius: 7px; object-fit: cover;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.reward-thumb-tier {
+  position: absolute; top: -4px; right: -4px;
+  font-size: 9px; font-weight: bold;
+  padding: 1px 4px; border-radius: 6px;
+}
+.reward-thumb-name {
+  font-size: 9px; color: var(--text-dim); text-align: center;
+  max-width: 52px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 /* ── 按钮 ── */
 .report-actions {

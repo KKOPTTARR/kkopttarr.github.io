@@ -1,38 +1,67 @@
 [
   {
     "id": "samurai",
-    "icon": "🗡️",
+    "icon": "☠️",
     "portrait": "identities/samurai.jpg",
-    "name": "武士",
-    "flavor": "一刀定胜负，以快制敌",
+    "name": "独眼剑客",
+    "flavor": "「这刀跟了我三十年」",
     "startItems": [7],
-    "itemNames": ["弯刀"]
+    "startTag": "武器",
+    "itemNames": ["弯刀", "+ 2件随机武器类"],
+    "skill": {
+      "type": "tag_cooldown_reduce",
+      "tag": "武器",
+      "threshold": 3,
+      "ms": 1000,
+      "desc": "场上武器类道具≥3时，武器触发时间-1秒"
+    }
   },
   {
     "id": "gunner",
-    "icon": "🔫",
+    "icon": "💣",
     "portrait": "identities/gunner.jpg",
-    "name": "枪手",
-    "flavor": "双枪齐发，弹无虚发",
+    "name": "军火商人",
+    "flavor": "「好枪配好手」",
     "startItems": [6],
-    "itemNames": ["左轮手枪"]
+    "startTag": "枪械",
+    "itemNames": ["左轮手枪", "+ 2件随机枪械类"],
+    "skill": {
+      "type": "gun_charge",
+      "ms": 1000,
+      "desc": "枪械类道具每次触发后充能自身1秒"
+    }
   },
   {
     "id": "tamer",
-    "icon": "🐠",
+    "icon": "⚓",
     "portrait": "identities/tamer.jpg",
-    "name": "海底人",
-    "flavor": "与海洋生灵共同战斗",
+    "name": "深海渔翁",
+    "flavor": "「海生之物凶猛忠诚」",
     "startItems": [2],
-    "itemNames": ["食人鱼"]
+    "startTag": "水系",
+    "itemNames": ["食人鱼", "+ 2件随机水系类"],
+    "skill": {
+      "type": "tag_cooldown_reduce",
+      "tag": "水系",
+      "threshold": 3,
+      "ms": 1000,
+      "desc": "场上水系伙伴≥3时，水系触发时间-1秒"
+    }
   },
   {
     "id": "alchemist",
-    "icon": "🔥",
+    "icon": "⚗️",
     "portrait": "identities/alchemist.jpg",
-    "name": "炼金士",
-    "flavor": "以灼烧为道，炼化一切",
+    "name": "流浪炼金士",
+    "flavor": "「烧掉的都是该烧的」",
     "startItems": [1],
-    "itemNames": ["打火机"]
+    "startTag": "工具",
+    "itemNames": ["打火机", "+ 2件随机工具类"],
+    "skill": {
+      "type": "burn_poison_double",
+      "tag": "工具",
+      "threshold": 3,
+      "desc": "场上工具类道具≥3时，燃烧、剧毒效果伤害翻倍"
+    }
   }
 ]
