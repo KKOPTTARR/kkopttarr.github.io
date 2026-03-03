@@ -125,6 +125,7 @@ import {
   initPixi, destroyPixi,
   spawnProjectile, spawnFloatingTextAt, spawnSpecialBurst,
 } from '../composables/usePixiBattle.js'
+import { getBattleSpeed } from '../composables/useBattle.js'
 
 const props = defineProps({
   playerItems:    { type: Array,  default: () => [] },
@@ -233,7 +234,7 @@ function processNext() {
     shakeTarget(info.isEnemy)
   })
 
-  const t = setTimeout(() => { currentAttack.value = null; processNext() }, 650)
+  const t = setTimeout(() => { currentAttack.value = null; processNext() }, Math.max(60, Math.round(500 / getBattleSpeed())))
   activeTimers.push(t)
 }
 
@@ -273,7 +274,7 @@ function shakeTarget(isEnemy) {
 
 watch(() => props.latestAttack, (info) => {
   if (!info) return
-  attackQueue.push(info)
+  if (attackQueue.length < 10) attackQueue.push(info)
   if (!processingAttack) processNext()
 })
 
