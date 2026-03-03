@@ -63,7 +63,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒造成5伤害"
+        "skill_cn": "每6秒造成5伤害；敌方HP低于50%时伤害翻倍"
       },
       "Silver": {
         "cooldown": 6000,
@@ -72,7 +72,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒造成7伤害"
+        "skill_cn": "每6秒造成7伤害；敌方HP低于50%时伤害翻倍"
       },
       "Gold": {
         "cooldown": 6000,
@@ -81,7 +81,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒造成9伤害"
+        "skill_cn": "每6秒造成9伤害；敌方HP低于50%时伤害翻倍"
       },
       "Diamond": {
         "cooldown": 6000,
@@ -90,9 +90,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每6秒16伤害"
+        "skill_cn": "每6秒16伤害；敌方HP低于50%时伤害翻倍"
       }
-    }
+    },
+    "bloodthirst": true
   },
   {
     "id": 3,
@@ -111,7 +112,7 @@
         "shield": 10,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得10护盾"
+        "skill_cn": "每7秒获得10护盾；水系物品触发时充能2秒"
       },
       "Silver": {
         "cooldown": 7000,
@@ -120,7 +121,7 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得15护盾"
+        "skill_cn": "每7秒获得15护盾；水系物品触发时充能2秒"
       },
       "Gold": {
         "cooldown": 7000,
@@ -129,7 +130,7 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得20护盾"
+        "skill_cn": "每7秒获得20护盾；水系物品触发时充能2秒"
       },
       "Diamond": {
         "cooldown": 7000,
@@ -138,9 +139,10 @@
         "shield": 36,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒获得36护盾"
+        "skill_cn": "每7秒获得36护盾；水系物品触发时充能2秒"
       }
-    }
+    },
+    "waterCharge": 2000
   },
   {
     "id": 4,
@@ -159,7 +161,8 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗5生命"
+        "skill_cn": "每7秒治疗5生命；水系触发时治疗+5",
+        "waterBoostHeal": 5
       },
       "Silver": {
         "cooldown": 7000,
@@ -168,7 +171,8 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗10生命"
+        "skill_cn": "每7秒治疗10生命；水系触发时治疗+10",
+        "waterBoostHeal": 10
       },
       "Gold": {
         "cooldown": 7000,
@@ -177,7 +181,8 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗20生命"
+        "skill_cn": "每7秒治疗20生命；水系触发时治疗+15",
+        "waterBoostHeal": 15
       },
       "Diamond": {
         "cooldown": 7000,
@@ -186,7 +191,8 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每7秒治疗36生命"
+        "skill_cn": "每7秒治疗36生命；水系触发时治疗+20",
+        "waterBoostHeal": 20
       }
     }
   },
@@ -255,7 +261,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每3秒造成8伤害"
+        "skill_cn": "每3秒造成8伤害；第1发及每6发暴击（2倍伤害）"
       },
       "Silver": {
         "cooldown": 3000,
@@ -264,7 +270,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每3秒造成10伤害"
+        "skill_cn": "每3秒造成10伤害；第1发及每6发暴击（2倍伤害）"
       },
       "Gold": {
         "cooldown": 3000,
@@ -273,7 +279,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每3秒造成12伤害"
+        "skill_cn": "每3秒造成12伤害；第1发及每6发暴击（2倍伤害）"
       },
       "Diamond": {
         "cooldown": 3000,
@@ -282,9 +288,11 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每3秒22伤害"
+        "skill_cn": "每3秒22伤害；每3发暴击（2倍伤害）"
       }
-    }
+    },
+    "cylinderSize": 3,
+    "cylinderCrit": 2
   },
   {
     "id": 7,
@@ -302,7 +310,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒10伤害"
+        "skill_cn": "每5秒10伤害；触发时随机触发一件其他武器"
       },
       "Silver": {
         "cooldown": 5000,
@@ -311,7 +319,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒16伤害"
+        "skill_cn": "每5秒16伤害；触发时随机触发一件其他武器"
       },
       "Gold": {
         "cooldown": 5000,
@@ -320,7 +328,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒28伤害"
+        "skill_cn": "每5秒28伤害；触发时随机触发一件其他武器"
       },
       "Diamond": {
         "cooldown": 5000,
@@ -329,9 +337,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒50伤害"
+        "skill_cn": "每5秒50伤害；触发时随机触发一件其他武器"
       }
-    }
+    },
+    "randomWeaponTrigger": true
   },
   {
     "id": 8,
@@ -349,7 +358,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒50伤害"
+        "skill_cn": "每5秒50伤害；触发时给相邻物品充能2秒"
       },
       "Silver": {
         "cooldown": 5000,
@@ -358,7 +367,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒80伤害"
+        "skill_cn": "每5秒80伤害；触发时给相邻物品充能2秒"
       },
       "Gold": {
         "cooldown": 5000,
@@ -367,7 +376,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒140伤害"
+        "skill_cn": "每5秒140伤害；触发时给相邻物品充能2秒"
       },
       "Diamond": {
         "cooldown": 5000,
@@ -376,9 +385,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒252伤害"
+        "skill_cn": "每5秒252伤害；触发时给相邻物品充能2秒"
       }
-    }
+    },
+    "adjacentCharge": 2000
   },
   {
     "id": 9,
@@ -397,7 +407,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒30伤害"
+        "skill_cn": "每5秒30伤害；每次触发冷却永久-0.5秒"
       },
       "Silver": {
         "cooldown": 5000,
@@ -406,7 +416,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒48伤害"
+        "skill_cn": "每5秒48伤害；每次触发冷却永久-0.5秒"
       },
       "Gold": {
         "cooldown": 5000,
@@ -415,7 +425,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒84伤害"
+        "skill_cn": "每5秒84伤害；每次触发冷却永久-0.5秒"
       },
       "Diamond": {
         "cooldown": 5000,
@@ -424,9 +434,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒151伤害"
+        "skill_cn": "每5秒151伤害；每次触发冷却永久-0.5秒"
       }
-    }
+    },
+    "momentumReduction": 500
   },
   {
     "id": 10,
@@ -526,7 +537,7 @@
   },
   {
     "id": 12,
-    "name_cn": "鹦鹉皮特",
+    "name_cn": "鹦鹉",
     "name_en": "Pesky Pete",
     "tags": [
       "伙伴"
@@ -540,7 +551,7 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "skill_cn": "每8秒3灼烧"
+        "skill_cn": "每8秒3灼烧；触发时给其他所有伙伴充能1秒"
       },
       "Silver": {
         "cooldown": 8000,
@@ -549,7 +560,7 @@
         "shield": 0,
         "burn": 5,
         "poison": 0,
-        "skill_cn": "每8秒5灼烧"
+        "skill_cn": "每8秒5灼烧；触发时给其他所有伙伴充能1秒"
       },
       "Gold": {
         "cooldown": 8000,
@@ -558,7 +569,7 @@
         "shield": 0,
         "burn": 8,
         "poison": 0,
-        "skill_cn": "每8秒8灼烧"
+        "skill_cn": "每8秒8灼烧；触发时给其他所有伙伴充能1秒"
       },
       "Diamond": {
         "cooldown": 8000,
@@ -567,9 +578,10 @@
         "shield": 0,
         "burn": 14,
         "poison": 0,
-        "skill_cn": "每8秒14灼烧"
+        "skill_cn": "每8秒14灼烧；触发时给其他所有伙伴充能1秒"
       }
-    }
+    },
+    "companionCharge": 1000
   },
   {
     "id": 13,
@@ -588,7 +600,7 @@
         "shield": 25,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得25护盾"
+        "skill_cn": "每10秒获得25护盾；每次触发护盾量+5"
       },
       "Silver": {
         "cooldown": 10000,
@@ -597,7 +609,7 @@
         "shield": 40,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得40护盾"
+        "skill_cn": "每10秒获得40护盾；每次触发护盾量+5"
       },
       "Gold": {
         "cooldown": 10000,
@@ -606,7 +618,7 @@
         "shield": 70,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得70护盾"
+        "skill_cn": "每10秒获得70护盾；每次触发护盾量+5"
       },
       "Diamond": {
         "cooldown": 10000,
@@ -615,9 +627,10 @@
         "shield": 126,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每10秒获得126护盾"
+        "skill_cn": "每10秒获得126护盾；每次触发护盾量+5"
       }
-    }
+    },
+    "shieldGrowth": 5
   },
   {
     "id": 14,
@@ -732,7 +745,7 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "skill_cn": "每7秒4灼烧"
+        "skill_cn": "每7秒4灼烧；触发时给所有其他物品充能1秒"
       },
       "Silver": {
         "cooldown": 7000,
@@ -741,7 +754,7 @@
         "shield": 0,
         "burn": 6,
         "poison": 0,
-        "skill_cn": "每7秒6灼烧"
+        "skill_cn": "每7秒6灼烧；触发时给所有其他物品充能1秒"
       },
       "Gold": {
         "cooldown": 7000,
@@ -750,7 +763,7 @@
         "shield": 0,
         "burn": 11,
         "poison": 0,
-        "skill_cn": "每7秒11灼烧"
+        "skill_cn": "每7秒11灼烧；触发时给所有其他物品充能1秒"
       },
       "Diamond": {
         "cooldown": 7000,
@@ -759,9 +772,10 @@
         "shield": 0,
         "burn": 20,
         "poison": 0,
-        "skill_cn": "每7秒20灼烧"
+        "skill_cn": "每7秒20灼烧；触发时给所有其他物品充能1秒"
       }
-    }
+    },
+    "globalCharge": 1000
   },
   {
     "id": 17,
@@ -879,7 +893,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒20伤害"
+        "skill_cn": "每5秒20伤害；触发时获得等量护盾"
       },
       "Silver": {
         "cooldown": 5000,
@@ -888,7 +902,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒32伤害"
+        "skill_cn": "每5秒32伤害；触发时获得等量护盾"
       },
       "Gold": {
         "cooldown": 5000,
@@ -897,7 +911,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒56伤害"
+        "skill_cn": "每5秒56伤害；触发时获得等量护盾"
       },
       "Diamond": {
         "cooldown": 5000,
@@ -906,9 +920,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每5秒101伤害"
+        "skill_cn": "每5秒101伤害；触发时获得等量护盾"
       }
-    }
+    },
+    "damageToShield": true
   },
   {
     "id": 20,
@@ -926,7 +941,7 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "skill_cn": "每3秒4灼烧"
+        "skill_cn": "每3秒4灼烧；敌方有灼烧时本次+50%"
       },
       "Silver": {
         "cooldown": 3000,
@@ -935,7 +950,7 @@
         "shield": 0,
         "burn": 6,
         "poison": 0,
-        "skill_cn": "每3秒6灼烧"
+        "skill_cn": "每3秒6灼烧；敌方有灼烧时本次+50%"
       },
       "Gold": {
         "cooldown": 3000,
@@ -944,7 +959,7 @@
         "shield": 0,
         "burn": 11,
         "poison": 0,
-        "skill_cn": "每3秒11灼烧"
+        "skill_cn": "每3秒11灼烧；敌方有灼烧时本次+50%"
       },
       "Diamond": {
         "cooldown": 3000,
@@ -953,8 +968,9 @@
         "shield": 0,
         "burn": 20,
         "poison": 0,
-        "skill_cn": "每3秒20灼烧"
+        "skill_cn": "每3秒20灼烧；敌方有灼烧时本次+50%"
       }
-    }
+    },
+    "burnBoostIfBurning": 0.5
   }
 ]

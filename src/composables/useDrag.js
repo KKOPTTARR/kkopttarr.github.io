@@ -26,18 +26,18 @@ export const dragState = reactive({
 let onDropToGrid        = null
 let onDropToSell        = null
 let onDropToBackpack    = null
-let onClickBuy          = null
+let onClickItem         = null
 let getGridState        = null
 let getBackpackState    = null
 let getFormationLimits  = null   // () => { cols, rows }
 
-export function setDragCallbacks({ dropToGrid, dropToSell, dropToBackpack, gridState, backpackGridState, clickBuy, formationLimits }) {
+export function setDragCallbacks({ dropToGrid, dropToSell, dropToBackpack, gridState, backpackGridState, clickItem, formationLimits }) {
   onDropToGrid       = dropToGrid
   onDropToSell       = dropToSell
   onDropToBackpack   = dropToBackpack ?? null
   getGridState       = gridState
   getBackpackState   = backpackGridState ?? null
-  onClickBuy         = clickBuy ?? null
+  onClickItem        = clickItem ?? null
   getFormationLimits = formationLimits ?? null
 }
 
@@ -66,6 +66,9 @@ function findTargetAt(x, y) {
       slot = { col: parseInt(cur.dataset.col), row: parseInt(cur.dataset.row) }
       targetZone = 'backpack'
     }
+    // 区域级检测：即使没落在具体格子上，也能识别所在区域（供商店物品模糊放置）
+    if (!targetZone && cur.classList?.contains('formation-panel')) targetZone = 'formation'
+    if (!targetZone && cur.classList?.contains('backpack-view'))   targetZone = 'backpack'
     if (!inSellZone && cur.classList?.contains('sell-zone'))
       inSellZone = true
     if (slot && inSellZone) break
@@ -123,7 +126,10 @@ function onPointerMove(e) {
     // 根据目标区域选取对应 gridState，同区域内移动时临时移除源格子
     const isBackpackTarget = targetZone === 'backpack'
     const getState = isBackpackTarget ? getBackpackState : getGridState
-    if (getState) {
+    // 商店来源：落点合法性完全由 App.vue 购买逻辑处理，任何格子都视为有效
+    if (dragState.sourceType === 'shop') {
+      dragState.hoverValid = true
+    } else if (getState) {
       let state = getState()
       const sameZone = (isBackpackTarget && dragState.sourceType === 'backpack') ||
                        (!isBackpackTarget && dragState.sourceType === 'grid')
@@ -141,6 +147,11 @@ function onPointerMove(e) {
     } else {
       dragState.hoverValid = false
     }
+  } else if (dragState.sourceType === 'shop' && targetZone !== null) {
+    // 商店物品悬停在阵容/背包区域（未精确命中格子）→ 同样视为可放置，auto-place 由 tryBuyItem 处理
+    dragState.hoverCol = -1
+    dragState.hoverRow = -1
+    dragState.hoverValid = true
   } else {
     dragState.hoverCol = -1
     dragState.hoverRow = -1
@@ -157,7 +168,8 @@ function onPointerUp(e) {
 
   if (dragState.overSellZone && (dragState.sourceType === 'grid' || dragState.sourceType === 'backpack')) {
     onDropToSell?.(dragState.sourceInstanceId)
-  } else if (!isClick && dragState.hoverCol >= 0 && dragState.hoverValid) {
+  } else if (!isClick && dragState.hoverValid &&
+             (dragState.hoverCol >= 0 || dragState.sourceType === 'shop')) {
     if (dragState.targetZone === 'backpack') {
       onDropToBackpack?.(
         dragState.item, dragState.hoverCol, dragState.hoverRow,
@@ -169,8 +181,8 @@ function onPointerUp(e) {
         dragState.sourceType, dragState.sourceInstanceId, dragState.sourceShopSlot,
       )
     }
-  } else if (isClick && dragState.sourceType === 'shop') {
-    onClickBuy?.(dragState.item, dragState.sourceShopSlot)
+  } else if (isClick && (dragState.sourceType === 'shop' || dragState.sourceType === 'grid')) {
+    onClickItem?.(dragState.item, e.clientX, e.clientY)
   }
 
   Object.assign(dragState, {

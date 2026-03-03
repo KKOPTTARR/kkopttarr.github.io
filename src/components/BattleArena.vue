@@ -53,6 +53,7 @@
           <span class="log-icon">{{ entry.icon }}</span>
           <span class="log-text">{{ entry.text }}</span>
           <span class="log-val" :class="`log-${entry.type}`">{{ entry.val }}</span>
+          <span v-if="entry.special" class="log-special">{{ entry.special }}</span>
         </div>
       </TransitionGroup>
     </div>
@@ -111,6 +112,7 @@
           <span class="log-icon">{{ entry.icon }}</span>
           <span class="log-text">{{ entry.text }}</span>
           <span class="log-val" :class="`log-${entry.type}`">{{ entry.val }}</span>
+          <span v-if="entry.special" class="log-special">{{ entry.special }}</span>
         </div>
       </TransitionGroup>
     </div>
@@ -123,7 +125,7 @@ import ArenaCard from './ArenaCard.vue'
 import {
   initPixi, destroyPixi,
   registerSprites, syncPositions, setItems,
-  triggerAttackFlash, spawnProjectile, spawnFloatingTextAt,
+  spawnProjectile, spawnFloatingTextAt, spawnSpecialBurst,
 } from '../composables/usePixiBattle.js'
 
 const props = defineProps({
@@ -191,9 +193,9 @@ function pushLog(info) {
   const fx = info.effects[0]
   if (!fx) return
   const icons = { damage:'⚔️', heal:'💚', shield:'🛡', burn:'🔥', poison:'☠️', dot:'💧' }
-  const vals  = { damage:`-${fx.value}`, heal:`+${fx.value}`, shield:`🛡+${fx.value}`,
-                  burn:`🔥${fx.value}层`, poison:`☠${fx.value}层`, dot:`-${fx.value}` }
-  const entry = { id: ++logCounter, icon: icons[fx.type] ?? '·', text: info.name, val: vals[fx.type] ?? String(fx.value), type: fx.type }
+  const vals  = { damage:`⚔️${fx.value}`, heal:`+${fx.value}`, shield:`🛡+${fx.value}`,
+                  burn:`🔥${fx.value}层`, poison:`☠${fx.value}层`, dot:`⚔️${fx.value}` }
+  const entry = { id: ++logCounter, icon: icons[fx.type] ?? '·', text: info.name, val: vals[fx.type] ?? String(fx.value), type: fx.type, special: info.specialLabel || null }
   if (info.isEnemy) {
     enemyLog.value.push(entry)
     if (enemyLog.value.length > LOG_MAX) enemyLog.value.shift()
@@ -210,14 +212,17 @@ function processNext() {
   if (info.isDot) { processNext(); return }
   currentAttack.value = info
   pushLog(info)
-  if (info.instanceId) triggerAttackFlash(info.instanceId)
-
   // 投射物飞行 → 落点触发浮字 + 目标抖动
   const effectType = info.effects?.[0]?.type || 'damage'
+  if (info.specialLabel && !info.isEnemy) {
+    spawnSpecialBurst(info.instanceId)
+    flashSpecialCard(info.instanceId)
+    spawnDomLabel(info.instanceId, info.specialLabel)
+  }
   spawnProjectile(info.instanceId, info.isEnemy, effectType, (impactX, impactY) => {
     for (const fx of (info.effects || [])) {
       if (fx.type === 'damage' || fx.type === 'heal' || fx.type === 'shield') {
-        const text = fx.type === 'damage' ? `-${fx.value}` : fx.type === 'heal' ? `+${fx.value}` : `🛡+${fx.value}`
+        const text = fx.type === 'damage' ? `⚔️${fx.value}` : fx.type === 'heal' ? `+${fx.value}` : `🛡+${fx.value}`
         spawnFloatingTextAt(impactX, impactY, text, fx.type)
       }
     }
@@ -228,9 +233,35 @@ function processNext() {
   activeTimers.push(t)
 }
 
+const _specialTimers = new Map()
+
+function spawnDomLabel(instanceId, text) {
+  const el = document.querySelector(`[data-instance="${instanceId}"]`)
+  if (!el) return
+  const r = el.getBoundingClientRect()
+  const label = document.createElement('div')
+  label.className = 'special-label'
+  label.textContent = text
+  label.style.left = (r.left + r.width / 2) + 'px'
+  label.style.top  = r.top + 'px'
+  document.body.appendChild(label)
+  label.addEventListener('animationend', () => label.remove())
+}
+
+function flashSpecialCard(instanceId) {
+  const el = document.querySelector(`[data-instance="${instanceId}"]`)
+  if (!el) return
+  el.classList.add('card-special')
+  clearTimeout(_specialTimers.get(instanceId))
+  _specialTimers.set(instanceId, setTimeout(() => {
+    el.classList.remove('card-special')
+    _specialTimers.delete(instanceId)
+  }, 2000))
+}
+
 function shakeTarget(isEnemy) {
-  const selector = isEnemy ? '.player-section' : '.enemy-portrait-wrap'
-  const el = document.querySelector(selector)
+  if (isEnemy) return   // 仅敌方受击时震动，玩家区不震
+  const el = document.querySelector('.enemy-portrait-wrap')
   if (!el) return
   el.classList.remove('elem-shake')
   void el.offsetWidth
@@ -257,7 +288,11 @@ async function _initPixiAsync() {
   } catch (e) { console.warn('[PIXI] init failed', e) }
 }
 
-onUnmounted(() => { activeTimers.forEach(clearTimeout); destroyPixi() })
+onUnmounted(() => {
+  activeTimers.forEach(clearTimeout)
+  _specialTimers.forEach(clearTimeout)
+  destroyPixi()
+})
 
 function startBattleDeploy(_s, _d) { emit('deploy-complete') }
 function onBattleStart() {
@@ -267,8 +302,8 @@ function onBattleStart() {
 defineExpose({ startBattleDeploy, onBattleStart, syncPositions })
 
 function fxLabel(fx) {
-  const map = { damage: `-${fx.value}`, heal: `+${fx.value}`, shield: `🛡+${fx.value}`,
-                burn: `🔥${fx.value}`, poison: `☠${fx.value}`, dot: `-${fx.value}` }
+  const map = { damage: `⚔️${fx.value}`, heal: `+${fx.value}`, shield: `🛡+${fx.value}`,
+                burn: `🔥${fx.value}`, poison: `☠${fx.value}`, dot: `⚔️${fx.value}` }
   return map[fx.type] ?? String(fx.value)
 }
 </script>
@@ -402,11 +437,12 @@ function fxLabel(fx) {
 .log-icon { font-size: 11px; flex-shrink: 0; }
 .log-text { color: var(--text-dim); white-space: nowrap; max-width: 72px; overflow: hidden; text-overflow: ellipsis; }
 .log-val  { font-weight: 700; white-space: nowrap; font-size: 12px; }
-.log-damage { color: #ff8060; }
-.log-heal   { color: #5ad070; }
-.log-shield { color: var(--freeze); }
-.log-burn   { color: var(--burn); }
-.log-poison { color: var(--poison); }
+.log-damage  { color: #ff8060; }
+.log-heal    { color: #5ad070; }
+.log-shield  { color: var(--freeze); }
+.log-burn    { color: var(--burn); }
+.log-poison  { color: var(--poison); }
+.log-special { color: #ffd060; font-size: 10px; font-weight: 900; margin-left: 2px; }
 
 /* ── 战斗分隔线 ── */
 .battle-divider {

@@ -12,11 +12,11 @@
         class="identity-card"
         @click="$emit('choose', identity.id)"
       >
-        <img class="card-portrait" :src="identity.portrait" :alt="identity.name" draggable="false" />
+        <img class="card-portrait" :src="`${baseUrl}${identity.portrait}`" :alt="identity.name" draggable="false" />
         <div class="card-name">{{ identity.name }}</div>
         <div class="card-flavor">{{ identity.flavor }}</div>
         <div class="card-divider"></div>
-        <div class="card-items-label">初始装备</div>
+        <div class="card-items-label">初始物品</div>
         <div class="card-items">
           <span v-for="item in identity.itemNames" :key="item" class="card-item-tag">{{ item }}</span>
         </div>
@@ -27,6 +27,8 @@
 
 <script setup>
 import { IDENTITY_POOL } from '../data/config.js'
+
+const baseUrl = import.meta.env.BASE_URL
 
 defineEmits(['choose'])
 </script>

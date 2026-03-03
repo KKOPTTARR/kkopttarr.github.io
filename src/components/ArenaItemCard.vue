@@ -1,15 +1,12 @@
 <template>
   <div
     class="arena-card"
-    :class="[
-      `tier-${item.tier}`,
-      {
-        'is-attacking':  isAttacking,
-        'is-triggering': item.triggering,
-        'is-charging':   cooldownPct >= 88,
-        'is-frozen':     item.frozenMs > 0,
-      }
-    ]"
+    :class="{
+      'is-attacking':  isAttacking,
+      'is-triggering': item.triggering,
+      'is-charging':   cooldownPct >= 88,
+      'is-frozen':     item.frozenMs > 0,
+    }"
     :style="cardStyle"
     :data-instance="item.instanceId"
   >
@@ -35,7 +32,7 @@
     </div>
 
     <!-- 关键数值 overlay -->
-    <div v-if="mainStat" class="stat-overlay">{{ mainStat }}</div>
+    <div v-if="mainStat" class="stat-overlay" :class="`stat-${statType}`">{{ mainStat }}</div>
 
     <!-- 状态徽章 -->
     <div v-if="hasStatus" class="status-badges">
@@ -61,7 +58,7 @@ const props = defineProps({
 
 const CELL_GAP = 4
 const imgErr   = ref(false)
-const iconUrl  = computed(() => getIconUrl(props.item.name_en))
+const iconUrl  = computed(() => getIconUrl(props.item.name_en, props.item.tier))
 
 const fallbackEmoji = computed(() => {
   const t = props.item.tags?.[0] || ''
@@ -96,13 +93,23 @@ const cdColor = computed(() => {
   return 'linear-gradient(90deg,#1a5276,#2e86c1)'
 })
 
+const statType = computed(() => {
+  const i = props.item
+  if (i.damage  > 0) return 'damage'
+  if (i.heal    > 0) return 'heal'
+  if (i.shield  > 0) return 'shield'
+  if (i.burn    > 0) return 'burn'
+  if (i.poison  > 0) return 'poison'
+  return 'damage'
+})
+
 const mainStat = computed(() => {
   const i = props.item
   if (i.damage  > 0) return i.damage
   if (i.heal    > 0) return `+${i.heal}`
-  if (i.shield  > 0) return `🛡${i.shield}`
-  if (i.burn    > 0) return `🔥${i.burn}`
-  if (i.poison  > 0) return `☠${i.poison}`
+  if (i.shield  > 0) return i.shield
+  if (i.burn    > 0) return i.burn
+  if (i.poison  > 0) return i.poison
   return null
 })
 
@@ -118,19 +125,13 @@ const hasStatus = computed(() =>
 .arena-card {
   position: absolute;
   border-radius: 6px; overflow: visible;
-  border: 2px solid transparent;
+  border: 5px solid transparent;
   display: flex; flex-direction: column; align-items: stretch;
   background: #0a1828;
   cursor: default;
   transition: transform .1s, box-shadow .15s;
   will-change: transform;
 }
-
-/* 品级边框 */
-.arena-card.tier-Bronze  { border-color: var(--bronze); }
-.arena-card.tier-Silver  { border-color: var(--silver); }
-.arena-card.tier-Gold    { border-color: var(--gold);    box-shadow: 0 0 6px rgba(255,215,0,.25); }
-.arena-card.tier-Diamond { border-color: var(--diamond); box-shadow: 0 0 8px rgba(185,242,255,.35); }
 
 /* 图标区 */
 .card-icon-wrap {
@@ -155,11 +156,18 @@ const hasStatus = computed(() =>
 
 /* 关键数值 */
 .stat-overlay {
-  position: absolute; bottom: 4px; right: 3px;
-  font-size: 10px; font-weight: 900; color: #ff8080;
-  text-shadow: 0 1px 3px rgba(0,0,0,.9);
-  pointer-events: none; z-index: 5; line-height: 1;
+  position: absolute; top: 3px;
+  left: 50%; transform: translateX(-50%);
+  padding: 1px 5px; border-radius: 4px;
+  font-size: 10px; font-weight: 900; color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  white-space: nowrap; pointer-events: none; z-index: 5; line-height: 1.3;
 }
+.stat-overlay.stat-damage { background: rgba(200,30,30,.9); }
+.stat-overlay.stat-burn   { background: rgba(200,30,30,.9); }
+.stat-overlay.stat-poison { background: rgba(20,100,30,.9); }
+.stat-overlay.stat-heal   { background: rgba(40,170,60,.9); }
+.stat-overlay.stat-shield { background: rgba(180,140,0,.9); }
 
 /* 状态徽章 */
 .status-badges {

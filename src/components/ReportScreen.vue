@@ -24,7 +24,7 @@
           class="stat-row"
         >
           <img
-            :src="getIconUrl(s.name_en)"
+            :src="getIconUrl(s.name_en, s.tier)"
             class="stat-icon"
             :alt="s.name_cn"
             draggable="false"
@@ -100,7 +100,7 @@ function noContrib(s) {
 }
 
 function tierLabel(t) {
-  return { Bronze: '铜', Silver: '⭐银', Gold: '⭐⭐金', Diamond: '⭐⭐⭐钻' }[t] || t
+  return { Bronze: '铜', Silver: '银', Gold: '金', Diamond: '钻' }[t] || t
 }
 </script>
 

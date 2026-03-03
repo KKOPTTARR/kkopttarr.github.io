@@ -120,7 +120,7 @@ html, body, #app {
 /* ===== 物品卡片（商店/编辑模式）===== */
 .item-card {
   position: absolute; border-radius: 6px; overflow: visible;
-  cursor: grab; border: 2px solid transparent;
+  cursor: grab;
   display: flex; flex-direction: column; align-items: stretch;
   background: #1a1008;
   pointer-events: all; z-index: 10;
@@ -129,29 +129,6 @@ html, body, #app {
 .item-card:hover:not(.is-enemy):not(.dragging) { transform: scale(1.06); z-index: 20; }
 .item-card.dragging { opacity: .2; }
 .item-card.is-enemy { cursor: default; }
-
-/* 品级边框 */
-.item-card.tier-Bronze  {
-  border-color: #a0622a;
-  box-shadow: 0 0 4px rgba(160,98,42,.3);
-}
-.item-card.tier-Silver  {
-  border-color: #c8c0b0;
-  box-shadow: 0 0 7px rgba(200,192,176,.45);
-}
-.item-card.tier-Gold    {
-  border-color: var(--gold);
-  box-shadow: 0 0 10px rgba(200,134,10,.55), inset 0 0 6px rgba(200,134,10,.1);
-}
-.item-card.tier-Diamond {
-  border-color: var(--gem);
-  box-shadow: 0 0 14px rgba(126,200,227,.7), inset 0 0 8px rgba(126,200,227,.12);
-  animation: diamond-pulse 2.4s ease-in-out infinite;
-}
-@keyframes diamond-pulse {
-  0%, 100% { box-shadow: 0 0 14px rgba(126,200,227,.7), inset 0 0 8px rgba(126,200,227,.12); }
-  50%       { box-shadow: 0 0 22px rgba(126,200,227,.9), inset 0 0 12px rgba(126,200,227,.2); }
-}
 
 /* 邻居高亮 */
 .item-card.neighbor-lit {
@@ -164,10 +141,7 @@ html, body, #app {
   0%,100% { box-shadow: 0 0 8px 3px rgba(200,134,10,.4); }
   50%      { box-shadow: 0 0 20px 8px rgba(200,134,10,.75); transform: scale(1.05); }
 }
-.item-card.charge-critical {
-  border-color: var(--gold) !important;
-  animation: charge-pulse-warm .45s ease-in-out infinite;
-}
+.item-card.charge-critical { animation: charge-pulse-warm .45s ease-in-out infinite; }
 .charge-aura {
   position: absolute; inset: -4px; border-radius: 8px; pointer-events: none;
   background: radial-gradient(circle, rgba(200,134,10,.1) 0%, transparent 70%);
@@ -212,12 +186,7 @@ html, body, #app {
 .haste-badge  { color: var(--haste); }
 .slow-badge   { color: var(--slow); }
 
-/* compact 数值 */
-.compact-stat {
-  position: absolute; bottom: 3px; right: 3px;
-  font-size: 10px; font-weight: 900; color: #ff8860;
-  text-shadow: 0 0 4px rgba(0,0,0,.9); pointer-events: none; z-index: 5; line-height: 1;
-}
+
 
 /* 触发动画 */
 @keyframes trigger-flash {
@@ -248,6 +217,31 @@ html, body, #app {
 .float-burn   { color: var(--burn); }
 .float-poison { color: #90c840; }
 
+@keyframes special-label-float {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1.3); }
+  25%  { opacity: 1; transform: translateX(-50%) translateY(-18px) scale(1.5); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-52px) scale(1.1); }
+}
+.special-label {
+  position: fixed; pointer-events: none; z-index: 9999;
+  font-size: 20px; font-weight: 900; white-space: nowrap;
+  color: #ffd060;
+  text-shadow: 0 0 10px rgba(255,200,50,.95), 0 2px 5px rgba(0,0,0,.9);
+  animation: special-label-float 0.85s ease-out forwards;
+}
+
+/* ===== 卡牌特殊触发高亮 ===== */
+@keyframes card-special-glow {
+  0%   { box-shadow: 0 0 0 rgba(255,210,50,0); }
+  15%  { box-shadow: 0 0 220px 80px rgba(255,210,50,.75), 0 0 80px 30px rgba(255,255,100,.5); border-color: #ffd700; }
+  65%  { box-shadow: 0 0 220px 80px rgba(255,210,50,.60), 0 0 80px 30px rgba(255,255,100,.4); border-color: #ffd700; }
+  100% { box-shadow: 0 0 60px 20px rgba(255,210,50,.15); border-color: transparent; }
+}
+.card-special {
+  animation: card-special-glow 2s ease-out forwards !important;
+  z-index: 25 !important;
+}
+
 /* ===== 拖拽 Ghost ===== */
 .drag-ghost {
   position: fixed; pointer-events: none; z-index: 8999; opacity: .88;
@@ -259,10 +253,10 @@ html, body, #app {
 
 /* ===== 出售区 ===== */
 .sell-zone {
-  margin-top: 6px; height: 34px;
+  margin-top: 10px; height: 56px; width: 100%;
   border: 2px dashed rgba(200,80,30,.40); border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  color: rgba(220,100,50,.6); font-size: 12px;
+  color: rgba(220,100,50,.6); font-size: 13px;
   background: rgba(6,3,1,.55);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -373,6 +367,129 @@ html, body, #app {
   z-index: 5000; pointer-events: none; white-space: nowrap;
   animation: merge-in 1.8s ease-out forwards;
 }
+
+/* ===== 合成动画 Overlay ===== */
+.merge-anim-overlay {
+  position: fixed; inset: 0; z-index: 9500;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.merge-anim-stage {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 光晕环（品级色） */
+.merge-glow-ring {
+  position: absolute;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: merge-glow-pulse 1.2s ease-in-out infinite;
+}
+.merge-glow-Bronze  { background: radial-gradient(circle, rgba(200,90,0,.50) 0%, transparent 70%); }
+.merge-glow-Silver  { background: radial-gradient(circle, rgba(200,220,255,.50) 0%, transparent 70%); }
+.merge-glow-Gold    { background: radial-gradient(circle, rgba(255,200,0,.55) 0%, transparent 70%); }
+.merge-glow-Diamond { background: radial-gradient(circle, rgba(0,200,255,.45) 0%, rgba(180,0,255,.30) 50%, transparent 70%); }
+@keyframes merge-glow-pulse {
+  0%,100% { transform: scale(1);   opacity: .8; }
+  50%      { transform: scale(1.1); opacity: 1;  }
+}
+
+/* 卡牌主体 */
+.merge-anim-card {
+  position: relative;
+  width: 180px; height: 257px;   /* 7:10 比例 */
+  border-radius: 10px; overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,.8);
+}
+.merge-anim-img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block;
+}
+
+/* 品级徽章 */
+.merge-anim-tier-pill {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 12px; font-weight: 900;
+  padding: 3px 8px; border-radius: 8px;
+  backdrop-filter: blur(4px);
+  border: 1px solid transparent;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+}
+.merge-tier-Bronze  { background: rgba(160,70,0,.80);  color: #ffb060; border-color: rgba(255,110,10,.5); }
+.merge-tier-Silver  { background: rgba(50,70,90,.80);  color: #d8e8f4; border-color: rgba(180,210,240,.4); }
+.merge-tier-Gold    { background: rgba(110,70,0,.80);  color: #ffd700; border-color: rgba(255,200,0,.5); }
+.merge-tier-Diamond { background: rgba(0,30,70,.80);   color: #80e8ff; border-color: rgba(0,180,255,.5); }
+
+/* 升级完成文字 */
+.merge-anim-label {
+  font-size: 18px; font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 16px rgba(200,134,10,.9), 0 2px 6px rgba(0,0,0,.9);
+  animation: merge-label-pop .4s cubic-bezier(.2,1.4,.5,1) forwards;
+  white-space: nowrap;
+}
+@keyframes merge-label-pop {
+  0%   { transform: scale(.4); opacity: 0; }
+  70%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* ── 卡牌动画 keyframes ── */
+@keyframes ma-enter {
+  0%   { transform: perspective(600px) scale(.15) rotateY(-25deg); opacity: 0; }
+  65%  { transform: perspective(600px) scale(1.08) rotateY(4deg);  opacity: 1; }
+  100% { transform: perspective(600px) scale(1) rotateY(0deg);     opacity: 1; }
+}
+@keyframes ma-flip-out {
+  from { transform: perspective(600px) rotateY(0deg); }
+  to   { transform: perspective(600px) rotateY(-90deg); }
+}
+@keyframes ma-flip-in {
+  from { transform: perspective(600px) rotateY(90deg); }
+  to   { transform: perspective(600px) rotateY(0deg); }
+}
+@keyframes ma-shake {
+  0%   { transform: translateX(0)     rotate(0deg);  }
+  15%  { transform: translateX(-12px) rotate(-4deg); }
+  30%  { transform: translateX(12px)  rotate(4deg);  }
+  45%  { transform: translateX(-10px) rotate(-3deg); }
+  60%  { transform: translateX(10px)  rotate(3deg);  }
+  75%  { transform: translateX(-6px)  rotate(-2deg); }
+  90%  { transform: translateX(6px)   rotate(2deg);  }
+  100% { transform: translateX(0)     rotate(0deg);  }
+}
+@keyframes ma-exit {
+  0%   { transform: scale(1);    opacity: 1; }
+  25%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(0);    opacity: 0; }
+}
+
+/* 动画类应用 */
+.merge-anim-card.ma-enter   { animation: ma-enter    .45s cubic-bezier(.2,1.2,.5,1) forwards; }
+.merge-anim-card.ma-flip-out{ animation: ma-flip-out .25s ease-in  forwards; }
+.merge-anim-card.ma-flip-in { animation: ma-flip-in  .25s ease-out forwards; }
+.merge-anim-card.ma-shake   { animation: ma-shake    .35s ease-in-out; }
+.merge-anim-card.ma-exit    { animation: ma-exit     .50s ease-in  forwards; }
+
+/* ===== 状态栏（商店/整理/升级/交换 共用）===== */
+.panel-status {
+  flex-shrink: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px 4px;
+  background: rgba(6,4,1,.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.status-lives { display: flex; gap: 1px; font-size: 13px; }
+.heart-icon   { line-height: 1; }
+.status-info  { font-size: 11px; color: var(--text-dim); }
+.status-gold  { font-size: 15px; font-weight: bold; color: var(--gold); }
 
 /* ===== 响应式 ===== */
 @media (max-width: 430px) { :root { --cell-size: 54px; } }

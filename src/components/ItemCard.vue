@@ -2,7 +2,6 @@
   <div
     class="item-card"
     :class="[
-      `tier-${item.tier}`,
       chargeClass,
       {
         dragging:        isDragging,
@@ -16,8 +15,8 @@
     :style="cardStyle"
     :data-instance="item.instanceId"
     @pointerdown.prevent="onPointerDown"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
+    @mouseenter="emit('hover-enter', item)"
+    @mouseleave="emit('hover-leave')"
   >
     <!-- 图标区 -->
     <div class="item-icon-wrap" :style="iconWrapStyle">
@@ -50,8 +49,8 @@
       <span v-if="item.frozenMs     > 0" class="badge freeze-badge">❄️</span>
     </div>
 
-    <!-- compact 模式下的伤害数字 overlay -->
-    <div v-if="compact && mainStat" class="compact-stat">{{ mainStat }}</div>
+    <!-- 主数值 overlay（顶部居中） -->
+    <div v-if="mainStat" class="compact-stat" :class="`stat-${statType}`">{{ mainStat }}</div>
 
     <!-- 充能光环 -->
     <div v-if="chargeClass === 'charge-critical'" class="charge-aura"></div>
@@ -83,7 +82,7 @@ const props = defineProps({
 const emit = defineEmits(['hover-enter', 'hover-leave'])
 
 const imgError = ref(false)
-const iconUrl  = computed(() => getIconUrl(props.item.name_en))
+const iconUrl  = computed(() => getIconUrl(props.item.name_en, props.item.tier))
 
 const fallbackEmoji = computed(() => {
   const t = props.item.tags?.[0] || ''
@@ -93,14 +92,24 @@ const fallbackEmoji = computed(() => {
   return '📦'
 })
 
+const statType = computed(() => {
+  const i = props.item
+  if (i.damage  > 0) return 'damage'
+  if (i.heal    > 0) return 'heal'
+  if (i.shield  > 0) return 'shield'
+  if (i.burn    > 0) return 'burn'
+  if (i.poison  > 0) return 'poison'
+  return 'damage'
+})
+
 // compact 模式下显示最关键的一个数值
 const mainStat = computed(() => {
   const i = props.item
   if (i.damage  > 0) return i.damage
   if (i.heal    > 0) return `+${i.heal}`
-  if (i.shield  > 0) return `🛡${i.shield}`
-  if (i.burn    > 0) return `🔥${i.burn}`
-  if (i.poison  > 0) return `☠${i.poison}`
+  if (i.shield  > 0) return i.shield
+  if (i.burn    > 0) return i.burn
+  if (i.poison  > 0) return i.poison
   return null
 })
 
@@ -156,42 +165,23 @@ function onPointerDown(e) {
   if (props.isEnemy || props.isBattle || props.shopMode) return
   startDrag(e, props.item, 'grid', props.item.instanceId)
 }
-
-function onMouseEnter(e) { emit('hover-enter', props.item); showTooltip(e) }
-function onMouseLeave()   { emit('hover-leave'); document.getElementById('item-tooltip')?.classList.add('hidden') }
-
-function showTooltip(e) {
-  const tooltip = document.getElementById('item-tooltip')
-  if (!tooltip) return
-  const item = props.item
-  tooltip.querySelector('.tt-name').textContent  = item.name_cn
-  tooltip.querySelector('.tt-tags').textContent  = item.tags?.join(' · ') || ''
-  const stats = []
-  if (item.damage)  stats.push(`⚔️ ${item.damage}`)
-  if (item.heal)    stats.push(`💚 ${item.heal}`)
-  if (item.shield)  stats.push(`🛡 ${item.shield}`)
-  if (item.burn)    stats.push(`🔥 ${item.burn}`)
-  if (item.poison)  stats.push(`☠ ${item.poison}`)
-  stats.push(`⏱ ${item.cooldown / 1000}s`)
-  tooltip.querySelector('.tt-stats').textContent = stats.join('  ')
-  tooltip.querySelector('.tt-skill').textContent = item.skill_cn || ''
-  tooltip.classList.remove('hidden')
-  const m = 10, W = window.innerWidth, H = window.innerHeight
-  let x = e.clientX + m, y = e.clientY + m
-  if (x + tooltip.offsetWidth  > W - m) x = e.clientX - tooltip.offsetWidth  - m
-  if (y + tooltip.offsetHeight > H - m) y = e.clientY - tooltip.offsetHeight - m
-  tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px'
-}
 </script>
 
 <style scoped>
 /* compact 模式下的 stat overlay */
 .compact-stat {
-  position: absolute; bottom: 3px; right: 3px;
-  font-size: 10px; font-weight: 900; color: #ff6868;
-  text-shadow: 0 0 4px rgba(0,0,0,.8);
-  line-height: 1; pointer-events: none; z-index: 5;
+  position: absolute; top: 3px;
+  left: 50%; transform: translateX(-50%);
+  padding: 1px 5px; border-radius: 4px;
+  font-size: 10px; font-weight: 900; color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  white-space: nowrap; pointer-events: none; z-index: 5; line-height: 1.3;
 }
+.compact-stat.stat-damage { background: rgba(200,30,30,.9); }
+.compact-stat.stat-burn   { background: rgba(200,30,30,.9); }
+.compact-stat.stat-poison { background: rgba(20,100,30,.9); }
+.compact-stat.stat-heal   { background: rgba(40,170,60,.9); }
+.compact-stat.stat-shield { background: rgba(180,140,0,.9); }
 /* compact 冷却条更细 */
 .cd-compact { height: 3px; }
 </style>

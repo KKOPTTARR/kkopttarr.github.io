@@ -1,0 +1,7 @@
+{
+  "projectile": {
+    "duration":    0.32,
+    "trailSteps":  40,
+    "trailReach":  0.75
+  }
+}

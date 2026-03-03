@@ -1,9 +1,10 @@
 import rawItems from '../../config/items.json'
 
 // ===== 物品图标路径 =====
-export function getIconUrl(name_en) {
+export function getIconUrl(name_en, tier) {
   const slug = name_en.toLowerCase().replace(/ /g, '-')
-  return `${import.meta.env.BASE_URL}items/${slug}.webp`
+  const t = (tier || 'bronze').toLowerCase()
+  return `${import.meta.env.BASE_URL}items/${t}/${slug}.webp`
 }
 
 // ===== 从 config/items.json 构建物品池 =====
