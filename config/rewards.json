@@ -1,5 +1,5 @@
 {
-  "normal":  { "count": 3, "Bronze": 100, "Silver":  0, "Gold":  0 },
-  "elite":   { "count": 4, "Bronze":  50, "Silver": 50, "Gold":  0 },
-  "radiant": { "count": 5, "Bronze":   0, "Silver": 75, "Gold": 25 }
+  "normal":  { "count": 1, "Bronze": 100, "Silver":  0, "Gold":  0 },
+  "elite":   { "count": 2, "Bronze":  75, "Silver": 25, "Gold":  0 },
+  "radiant": { "count": 2, "Bronze":   0, "Silver": 75, "Gold": 25 }
 }
