@@ -34,7 +34,7 @@ let _pixiSpeed = 1
 export function setPixiSpeed(s) { _pixiSpeed = s }
 
 const _floats      = []
-const _projectiles = []
+const _arcs        = []
 const _particles   = []
 const _rings       = []
 const _stars       = []
@@ -61,13 +61,41 @@ export async function initPixi() {
 export function destroyPixi() {
   if (_app) { _app.destroy(true); _app = null }
   if (_canvas) { _canvas.remove(); _canvas = null }
-  _floats.length = _projectiles.length = _particles.length = _rings.length = _stars.length = 0
+  _floats.length = _arcs.length = _particles.length = _rings.length = _stars.length = 0
 }
 
 // ── 浮字（canvas 坐标，落点专用）─────────────────────────────
 export function spawnFloatingTextAt(x, y, text, type) {
   if (!_app) return
   _addFloat(x, y, text, type)
+}
+
+// ── DoT 命中粒子（在受击方位置散射小粒子）────────────────────
+export function spawnDotHit(isEnemy, type) {
+  if (!_app) return
+  const cr  = _app.canvas.getBoundingClientRect()
+  const sel = isEnemy
+    ? '.enemy-portrait-wrap'
+    : '.arena-grid'
+  const el = document.querySelector(sel)
+  if (!el) return
+  const r   = el.getBoundingClientRect()
+  const cx  = r.left + r.width  * (0.3 + Math.random() * 0.4) - cr.left
+  const cy  = r.top  + r.height * (0.2 + Math.random() * 0.6) - cr.top
+  const fx  = FX_PIXI[type] ?? FX_PIXI.dot
+  const cnt = 5 + Math.floor(Math.random() * 4)
+  for (let i = 0; i < cnt; i++) {
+    const angle = Math.random() * Math.PI * 2
+    const spd   = 1.2 + Math.random() * 2.2
+    const sz    = 1 + Math.random() * 2
+    const g     = new Graphics()
+    g.circle(0, 0, sz).fill({ color: fx.main })
+    g.x = cx + (Math.random() - 0.5) * 14
+    g.y = cy + (Math.random() - 0.5) * 14
+    _app.stage.addChild(g)
+    const life = 0.35 + Math.random() * 0.25
+    _particles.push({ obj: g, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd - 0.8, life, maxLife: life })
+  }
 }
 
 function _addFloat(x, y, text, type) {
@@ -84,39 +112,36 @@ function _addFloat(x, y, text, type) {
   _floats.push({ obj: t, vy: 2.2, life: 1.0 })
 }
 
-// ── 投射物 ────────────────────────────────────────────────────
+// ── 攻击光弧 ──────────────────────────────────────────────────
 /**
+ * 从攻击源向目标划出快速消散的彩色光弧，onImpact 在弧线峰值时触发
  * @param {string|null} instanceId  玩家卡牌 instanceId（isEnemy=false 时使用）
- * @param {boolean}     isEnemy     true = 敌方攻击，false = 玩家攻击
- * @param {string}      type        效果类型 damage/burn/poison/heal/shield
+ * @param {boolean}     isEnemy     true = 敌方攻击
+ * @param {string}      type        damage/burn/poison/heal/shield
  * @param {function}    onImpact    落点回调 (toX, toY) => void
  */
-export function spawnProjectile(instanceId, isEnemy, type, onImpact) {
+export function spawnAttackArc(instanceId, isEnemy, type, onImpact) {
   if (!_app) return
   const cr = _app.canvas.getBoundingClientRect()
   let fromX, fromY, toX, toY
 
   if (!isEnemy) {
-    // 玩家卡牌 → 敌方插画
     const src = instanceId ? document.querySelector(`[data-instance="${instanceId}"]`) : null
     if (!src) return
     const sr = src.getBoundingClientRect()
     fromX = sr.left + sr.width  / 2 - cr.left
     fromY = sr.top  + sr.height / 2 - cr.top
-
     const dst = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
     if (!dst) return
     const dr = dst.getBoundingClientRect()
     toX = dr.left + dr.width  / 2 - cr.left
     toY = dr.top  + dr.height / 2 - cr.top
   } else {
-    // 敌方插画 → 玩家格子（随机落点增加变化感）
     const src = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
     if (!src) return
     const sr = src.getBoundingClientRect()
     fromX = sr.left + sr.width  / 2 - cr.left
     fromY = sr.top  + sr.height / 2 - cr.top
-
     const dst = document.querySelector('.arena-grid')
     if (!dst) return
     const dr = dst.getBoundingClientRect()
@@ -124,28 +149,30 @@ export function spawnProjectile(instanceId, isEnemy, type, onImpact) {
     toY = dr.top  + dr.height * (0.2  + Math.random() * 0.6) - cr.top
   }
 
-  // bezier 弧线控制点（轻微偏移增加弧度感）
-  const cx = (fromX + toX) / 2 + (Math.random() - 0.5) * 40
-  const cy = Math.min(fromY, toY) - 30
+  const fx  = FX_PIXI[type] ?? FX_PIXI.damage
+  const cpx = (fromX + toX) / 2 + (Math.random() - 0.5) * 50
+  const cpy = Math.min(fromY, toY) - 40 - Math.random() * 20
 
-  const trailG = new Graphics()
-  _app.stage.addChild(trailG)          // 先加，渲染在投射物下方
+  // 外晕弧（粗、低透明度）
+  const glow = new Graphics()
+  glow.moveTo(fromX, fromY).quadraticCurveTo(cpx, cpy, toX, toY)
+  glow.stroke({ color: fx.main, width: 10, alpha: 0.28 })
+  _app.stage.addChild(glow)
 
-  const proj = _makeComet(type)
-  proj.x = fromX; proj.y = fromY
-  _app.stage.addChild(proj)
-  _projectiles.push({ obj: proj, trailG, fromX, fromY, toX, toY, cx, cy, t: 0, duration: PROJ.duration, type, onImpact })
-}
+  // 主弧线（细、高亮）
+  const line = new Graphics()
+  line.moveTo(fromX, fromY).quadraticCurveTo(cpx, cpy, toX, toY)
+  line.stroke({ color: fx.subs[0], width: 2.5, alpha: 0.95 })
+  _app.stage.addChild(line)
 
-// 彗星弹头：同心圆发光核（外晕 → 中晕 → 亮核 → 白热点）
-function _makeComet(type) {
-  const g  = new Graphics()
-  const fx = FX_PIXI[type] ?? FX_PIXI.damage
-  g.circle(0, 0, 18).fill({ color: fx.main,    alpha: 0.15 })  // 软外晕
-  g.circle(0, 0, 10).fill({ color: fx.main,    alpha: 0.45 })  // 中晕
-  g.circle(0, 0,  5).fill({ color: fx.subs[0], alpha: 0.92 })  // 亮核
-  g.circle(0, 0,  2).fill({ color: 0xffffff,   alpha: 0.85 })  // 白热点
-  return g
+  _arcs.push({ glow, line, life: 1.0 })
+
+  // 落点效果稍微延迟，让弧线先出现
+  const delay = Math.round(80 / _pixiSpeed)
+  setTimeout(() => {
+    _burst(toX, toY, type)
+    onImpact?.(toX, toY)
+  }, delay)
 }
 
 // ── 特殊效果：星形爆发 ────────────────────────────────────────
@@ -184,6 +211,40 @@ export function spawnSpecialBurst(instanceId) {
       vy: Math.sin(angle) * speed,
       vr: (Math.random() - 0.5) * 0.28,
       life: 0.75 + Math.random() * 0.35,
+    })
+  }
+}
+
+// ── 胜利爆发 ──────────────────────────────────────────────
+export function spawnVictoryBurst() {
+  if (!_app) return
+  const W = _app.canvas.width
+  const H = _app.canvas.height
+  // 分批多点爆炸
+  for (let i = 0; i < 10; i++) {
+    setTimeout(() => {
+      if (!_app) return
+      const x = W * (0.08 + Math.random() * 0.84)
+      const y = H * (0.08 + Math.random() * 0.55)
+      _burst(x, y, 'special')
+    }, i * 160 / _pixiSpeed)
+  }
+  // 从屏幕中心射出星星
+  const cx = W / 2, cy = H * 0.38
+  for (let i = 0; i < 28; i++) {
+    const angle = (i / 28) * Math.PI * 2 + Math.random() * 0.3
+    const speed = 3.5 + Math.random() * 7
+    const star  = _makeStar(5 + Math.random() * 8)
+    star.x = cx + (Math.random() - 0.5) * 100
+    star.y = cy + (Math.random() - 0.5) * 80
+    star.rotation = Math.random() * Math.PI * 2
+    _app.stage.addChild(star)
+    _stars.push({
+      obj: star,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      vr: (Math.random() - 0.5) * 0.32,
+      life: 1.4 + Math.random() * 1.0,
     })
   }
 }
@@ -230,34 +291,17 @@ function _tick(ticker) {
     if (f.life <= 0) { _app.stage.removeChild(f.obj); f.obj.destroy(); _floats.splice(i, 1) }
   }
 
-  // 投射物（quadratic bezier）
-  for (let i = _projectiles.length - 1; i >= 0; i--) {
-    const p  = _projectiles[i]
-    p.t = Math.min(p.t + dt / p.duration, 1)
-    const mt = 1 - p.t
-    p.obj.x = mt*mt*p.fromX + 2*mt*p.t*p.cx + p.t*p.t*p.toX
-    p.obj.y = mt*mt*p.fromY + 2*mt*p.t*p.cy + p.t*p.t*p.toY
-    // 彗星尾迹：在贝塞尔曲线上均匀采样，与速度/帧率完全无关
-    const TRAIL_STEPS = PROJ.trailSteps
-    const TRAIL_REACH = PROJ.trailReach
-    const fx = FX_PIXI[p.type] ?? FX_PIXI.damage
-    p.trailG.clear()
-    for (let j = 0; j <= TRAIL_STEPS; j++) {
-      const ts = p.t - (j / TRAIL_STEPS) * Math.min(p.t, TRAIL_REACH)
-      if (ts < 0) break
-      const ms = 1 - ts
-      const sx   = ms*ms*p.fromX + 2*ms*ts*p.cx + ts*ts*p.toX
-      const sy   = ms*ms*p.fromY + 2*ms*ts*p.cy + ts*ts*p.toY
-      const frac = 1 - j / TRAIL_STEPS   // 1=弹头端 → 0=尾尖
-      p.trailG.circle(sx, sy, frac * 20 + 1  ).fill({ color: fx.main,    alpha: frac * 0.18 })
-      p.trailG.circle(sx, sy, frac *  7 + 0.3).fill({ color: fx.subs[0], alpha: frac * 0.88 })
-    }
-    if (p.t >= 1) {
-      _app.stage.removeChild(p.obj); p.obj.destroy()
-      p.trailG.clear(); _app.stage.removeChild(p.trailG); p.trailG.destroy()
-      _burst(p.toX, p.toY, p.type)
-      p.onImpact?.(p.toX, p.toY)
-      _projectiles.splice(i, 1)
+  // 攻击光弧淡出
+  for (let i = _arcs.length - 1; i >= 0; i--) {
+    const a = _arcs[i]
+    a.life -= dt * 5.5
+    if (a.life <= 0) {
+      _app.stage.removeChild(a.glow); a.glow.destroy()
+      _app.stage.removeChild(a.line); a.line.destroy()
+      _arcs.splice(i, 1)
+    } else {
+      a.glow.alpha = a.life * 0.28
+      a.line.alpha = a.life
     }
   }
 

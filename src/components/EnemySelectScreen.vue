@@ -27,18 +27,30 @@
         <!-- 敌人名称 -->
         <div class="card-name" :class="`name-${enemy.difficulty}`">{{ enemy.name }}</div>
 
-        <!-- HP & 技能数 -->
+        <!-- HP -->
         <div class="card-stats">
           <span class="card-stat">❤️ {{ enemy.hp }}</span>
-          <span class="card-stat">⚡ {{ enemy.abilities.length }} 技能</span>
+        </div>
+
+        <!-- 技能列表 -->
+        <div class="ability-list">
+          <div v-for="ab in enemy.abilities" :key="ab.id" class="ab-item">
+            <span class="ab-name">{{ ab.name }}</span>
+            <span class="ab-desc">{{ ab.description }}</span>
+          </div>
         </div>
 
         <div class="card-divider"></div>
 
+        <!-- 掉落偏向 -->
+        <div v-if="enemy.dropBias?.length" class="drop-bias">
+          🎁 偏向：{{ enemy.dropBias.join(' · ') }}
+        </div>
+
         <!-- 奖励 -->
         <div class="card-reward-label">胜利奖励</div>
         <div class="card-reward-count" :class="`reward-color-${enemy.difficulty}`">
-          {{ REWARD_DESCS[enemy.difficulty] }}
+          {{ rewardDesc(enemy.difficulty) }}
         </div>
       </div>
     </div>
@@ -48,6 +60,7 @@
 
 <script setup>
 import { useLayout } from '../composables/useLayout.js'
+import REWARD_WEIGHTS from '../../config/rewards.json'
 useLayout({ skillBar: true })
 
 defineProps({
@@ -60,11 +73,14 @@ defineProps({
 })
 defineEmits(['select'])
 
-const DIFF_LABELS  = { normal: '普通', elite: '精英', radiant: '辉耀' }
-const REWARD_DESCS = {
-  normal:  '青铜随机物品 ×3',
-  elite:   '青铜～白银随机物品 ×4',
-  radiant: '白银～黄金随机物品 ×5',
+const DIFF_LABELS = { normal: '普通', elite: '精英', radiant: '辉耀' }
+const TIER_NAMES  = { Bronze: '青铜', Silver: '白银', Gold: '黄金' }
+
+function rewardDesc(diff) {
+  const cfg   = REWARD_WEIGHTS[diff]
+  if (!cfg) return ''
+  const tiers = ['Bronze', 'Silver', 'Gold'].filter(t => cfg[t] > 0).map(t => TIER_NAMES[t])
+  return tiers.join('～') + `物品 ×${cfg.count}`
 }
 </script>
 
@@ -176,6 +192,28 @@ const REWARD_DESCS = {
   width: 60%; height: 1px;
   background: rgba(200,140,40,.2);
   margin: 2px 0;
+}
+
+/* ── 技能列表 ── */
+.ability-list {
+  width: 100%; display: flex; flex-direction: column; gap: 4px;
+}
+.ab-item {
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 4px 6px; border-radius: 5px;
+  background: rgba(0,0,0,.25);
+  text-align: left;
+}
+.ab-name { font-size: 10px; font-weight: 700; color: #c8a060; }
+.ab-desc { font-size: 10px; color: #7a6848; line-height: 1.35; }
+
+/* ── 掉落偏向 ── */
+.drop-bias {
+  font-size: 10px; color: #8a9868;
+  background: rgba(80,100,40,.18);
+  border: 1px solid rgba(100,140,50,.25);
+  border-radius: 5px; padding: 3px 8px;
+  width: 100%; text-align: left;
 }
 
 /* ── 奖励 ── */

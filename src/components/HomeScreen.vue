@@ -4,7 +4,7 @@
     <h1 class="home-title">小巴扎</h1>
     <p class="home-sub">海盗贸易·卡牌自战</p>
     <div class="home-rules">
-      <span>赢得 10 场战斗即可通关</span>
+      <span>赢得 {{ GC.WINS_TO_CLEAR }} 场战斗即可通关</span>
       <span>每次失败消耗 1 点士气 ⚡，耗尽则游戏结束</span>
     </div>
     <button class="btn btn-primary home-btn" @click="$emit('start')">开始游戏</button>
@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+import GC from '../../config/gameConfig.json'
 defineEmits(['start'])
 </script>
 

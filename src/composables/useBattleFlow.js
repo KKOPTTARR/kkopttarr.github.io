@@ -7,8 +7,9 @@ import GC from '../../config/gameConfig.json'
 const { STORM_SHIELD, WINS_TO_CLEAR } = GC
 
 // ── 单例状态（供 App.vue template 监听）────────────────────
-export const battleFlash   = ref(false)
-export const latestAttack  = ref(null)
+export const battleFlash      = ref(false)
+export const latestAttack     = ref(null)
+export const battleEndResult  = ref(null)   // null | 'win' | 'lose'
 export const playerHitType = ref(null)
 export const enemyHitType  = ref(null)
 export const playerHitClass = computed(() => playerHitType.value ? `hit-${playerHitType.value}` : '')
@@ -19,7 +20,7 @@ export function useBattleFlow({
   phase, playerStat, enemyStat, playerItems, enemyAbilities,
   battleItemStats, stormBlessingActive, battleScreenRef, unlockedCols,
   wins, lives, pendingRewards, selectedDifficulty, resultType,
-  identitySkill,
+  identitySkill, currentEnemy,
 }) {
   function captureSourceRects() {
     const rects = {}
@@ -67,9 +68,13 @@ export function useBattleFlow({
     }
   }
 
-  function handleBattleEnd(result, stats = []) {
+  async function handleBattleEnd(result, stats = []) {
     stopBattle()
     battleItemStats.value = stats
+    battleEndResult.value = result
+
+    await sleep(result === 'win' ? 2000 : 1500)
+
     const isWin = result === 'win'
     if (isWin) {
       wins.value++
@@ -78,8 +83,9 @@ export function useBattleFlow({
       lives.value--
       resultType.value = lives.value <= 0 ? 'gameover' : 'lose'
     }
-    pendingRewards.value = rollRewardItems(selectedDifficulty.value, isWin)
+    pendingRewards.value = rollRewardItems(selectedDifficulty.value, isWin, currentEnemy.value.dropBias ?? [])
     phase.value = 'REPORT'
+    battleEndResult.value = null
   }
 
   async function startActualBattle() {

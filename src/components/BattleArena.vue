@@ -2,10 +2,14 @@
   <div class="battle-arena" id="battlefield">
     <div class="arena-bg"></div>
 
+    <!-- HP 伤害数字闪现 -->
+    <Transition name="hp-flash"><div v-if="enemyHpFlash"  class="hp-flash hp-flash-enemy"  :class="`hpf-${enemyHpFlash.type}`">{{ enemyHpFlash.text }}</div></Transition>
+    <Transition name="hp-flash"><div v-if="playerHpFlash" class="hp-flash hp-flash-player" :class="`hpf-${playerHpFlash.type}`">{{ playerHpFlash.text }}</div></Transition>
+
     <!-- ══ 敌方展示区（插画 + 技能列表）══ -->
     <div class="enemy-section">
       <!-- 敌人插画 -->
-      <div class="enemy-portrait-wrap">
+      <div class="enemy-portrait-wrap" :class="{ 'enemy-defeated': enemyDefeated }">
         <img :src="portraitUrl" class="enemy-portrait" :alt="enemyName" />
         <div class="portrait-vignette"></div>
         <!-- 状态 chips -->
@@ -57,32 +61,26 @@
       </TransitionGroup>
     </div>
 
-    <!-- ══ 中央战斗区（flex:1，攻击事件展示在此）══ -->
+    <!-- ══ 中央战斗区 ══ -->
     <div class="combat-area">
       <div class="battle-divider">
-        <template v-if="!currentAttack">
-          <span class="div-line"></span>
-          <span class="div-sword">⚔️</span>
-          <span class="div-line"></span>
-        </template>
-        <template v-else>
-          <div class="attack-event" :class="currentAttack.isEnemy ? 'from-top' : 'from-bottom'">
-            <div class="atk-header">
-              <span class="atk-name">{{ currentAttack.name }}</span>
-              </div>
-            <span class="atk-arrow">{{ currentAttack.isEnemy ? '▼' : '▲' }}</span>
-            <div class="atk-fxs">
-              <span
-                v-for="(fx, i) in currentAttack.effects"
-                :key="i"
-                class="atk-fx"
-                :class="`fx-${fx.type}`"
-              >{{ fxLabel(fx) }}</span>
-            </div>
-          </div>
-        </template>
+        <span class="div-line"></span>
+        <span class="div-sword">⚔️</span>
+        <span class="div-line"></span>
       </div>
     </div>
+
+    <!-- ══ 战斗结果覆盖层 ══ -->
+    <Transition name="battle-result">
+      <div
+        v-if="battleEndResult"
+        class="battle-result-overlay"
+        :class="battleEndResult === 'win' ? 'overlay-win' : 'overlay-lose'"
+      >
+        <div class="result-icon">{{ battleEndResult === 'win' ? '⚔️' : '💀' }}</div>
+        <div class="result-title">{{ battleEndResult === 'win' ? '胜利' : '败北' }}</div>
+      </div>
+    </Transition>
 
     <!-- ══ 玩家卡牌行 ══ -->
     <div class="player-section">
@@ -123,9 +121,9 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import ArenaCard from './ArenaCard.vue'
 import {
   initPixi, destroyPixi,
-  spawnProjectile, spawnFloatingTextAt, spawnSpecialBurst,
+  spawnAttackArc, spawnFloatingTextAt, spawnSpecialBurst, spawnVictoryBurst, spawnDotHit,
 } from '../composables/usePixiBattle.js'
-import { getBattleSpeed } from '../composables/useBattle.js'
+import { battleEndResult } from '../composables/useBattleFlow.js'
 
 const props = defineProps({
   playerItems:    { type: Array,  default: () => [] },
@@ -183,10 +181,22 @@ function cdColor(ab) {
 }
 
 // ── 攻击队列 ─────────────────────────────────────────────
-const attackQueue      = []
-const currentAttack    = ref(null)
-let   processingAttack = false
-const activeTimers     = []
+// HP 区伤害数字闪现
+const enemyHpFlash  = ref(null)   // { text, type }
+const playerHpFlash = ref(null)
+let _eHpTimer = null, _pHpTimer = null
+function showHpFlash(value, type, isEnemy) {
+  const text = type === 'damage' ? `-${value}` : type === 'heal' ? `+${value}` : type === 'shield' ? `🛡+${value}` : type === 'dot' ? `-${value}` : `${value}`
+  if (isEnemy) {
+    enemyHpFlash.value = { text, type }
+    clearTimeout(_eHpTimer)
+    _eHpTimer = setTimeout(() => { enemyHpFlash.value = null }, 1100)
+  } else {
+    playerHpFlash.value = { text, type }
+    clearTimeout(_pHpTimer)
+    _pHpTimer = setTimeout(() => { playerHpFlash.value = null }, 1100)
+  }
+}
 
 const LOG_MAX   = 3
 const enemyLog  = ref([])
@@ -210,32 +220,36 @@ function pushLog(info) {
   }
 }
 
-function processNext() {
-  if (!attackQueue.length) { processingAttack = false; currentAttack.value = null; return }
-  processingAttack = true
-  const info = attackQueue.shift()
-  if (info.isDot) { processNext(); return }
-  currentAttack.value = info
+function handleAttack(info) {
+  // DoT：HP 区数字 + 命中粒子
+  if (info.isDot) {
+    pushLog(info)
+    for (const fx of (info.effects || [])) {
+      showHpFlash(fx.value, 'dot', info.isEnemy)
+      spawnDotHit(info.isEnemy, fx.type === 'burn' ? 'burn' : 'poison')
+    }
+    return
+  }
+
   pushLog(info)
-  // 投射物飞行 → 落点触发浮字 + 目标抖动
   const effectType = info.effects?.[0]?.type || 'damage'
+
   if (info.specialLabel && !info.isEnemy) {
     spawnSpecialBurst(info.instanceId)
     flashSpecialCard(info.instanceId)
     spawnDomLabel(info.instanceId, info.specialLabel)
   }
-  spawnProjectile(info.instanceId, info.isEnemy, effectType, (impactX, impactY) => {
+
+  spawnAttackArc(info.instanceId, info.isEnemy, effectType, (impactX, impactY) => {
     for (const fx of (info.effects || [])) {
       if (fx.type === 'damage' || fx.type === 'heal' || fx.type === 'shield') {
-        const text = fx.type === 'damage' ? `⚔️${fx.value}` : fx.type === 'heal' ? `+${fx.value}` : `🛡+${fx.value}`
-        spawnFloatingTextAt(impactX, impactY, text, fx.type)
+        const label = fx.type === 'damage' ? `⚔️${fx.value}` : fx.type === 'heal' ? `+${fx.value}` : `🛡+${fx.value}`
+        spawnFloatingTextAt(impactX, impactY, label, fx.type)
+        showHpFlash(fx.value, fx.type, info.isEnemy)
       }
     }
     shakeTarget(info.isEnemy)
   })
-
-  const t = setTimeout(() => { currentAttack.value = null; processNext() }, Math.max(60, Math.round(500 / getBattleSpeed())))
-  activeTimers.push(t)
 }
 
 const _specialTimers = new Map()
@@ -274,22 +288,36 @@ function shakeTarget(isEnemy) {
 
 watch(() => props.latestAttack, (info) => {
   if (!info) return
-  if (attackQueue.length < 10) attackQueue.push(info)
-  if (!processingAttack) processNext()
+  handleAttack(info)
+})
+
+const enemyDefeated = ref(false)
+watch(battleEndResult, (r) => {
+  if (r === 'win') {
+    enemyDefeated.value = true
+    spawnVictoryBurst()
+    setTimeout(() => spawnVictoryBurst(), 700)
+  } else if (!r) {
+    enemyDefeated.value = false
+  }
 })
 
 // ── PIXI ──────────────────────────────────────────────────
-onMounted(() => { _initPixiAsync() })
+let _isMounted = false
+onMounted(() => { _isMounted = true; _initPixiAsync() })
 
 async function _initPixiAsync() {
   try {
     await initPixi()
+    // 组件在 Pixi 异步初始化期间已卸载时，立即清理孤立 canvas
+    if (!_isMounted) destroyPixi()
   } catch (e) { console.warn('[PIXI] init failed', e) }
 }
 
 onUnmounted(() => {
-  activeTimers.forEach(clearTimeout)
+  _isMounted = false
   _specialTimers.forEach(clearTimeout)
+  clearTimeout(_eHpTimer); clearTimeout(_pHpTimer)
   destroyPixi()
 })
 
@@ -297,11 +325,6 @@ function startBattleDeploy(_s, _d) { emit('deploy-complete') }
 function onBattleStart() {}
 defineExpose({ startBattleDeploy, onBattleStart })
 
-function fxLabel(fx) {
-  const map = { damage: `⚔️${fx.value}`, heal: `+${fx.value}`, shield: `🛡+${fx.value}`,
-                burn: `🔥${fx.value}`, poison: `☠${fx.value}`, dot: `⚔️${fx.value}` }
-  return map[fx.type] ?? String(fx.value)
-}
 </script>
 
 <style scoped>
@@ -445,20 +468,26 @@ function fxLabel(fx) {
 .div-line  { flex: 1; height: 1px; background: linear-gradient(90deg,transparent,rgba(200,134,10,.45),transparent); }
 .div-sword { font-size: 20px; opacity: .55; filter: drop-shadow(0 0 6px rgba(200,134,10,.6)); }
 
-.attack-event { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.from-bottom  { flex-direction: column-reverse; }
-.atk-header   { display: flex; align-items: center; gap: 5px; }
-.atk-name     { font-size: 11px; color: var(--text-dim); letter-spacing: 0.5px; }
-.atk-arrow    { font-size: 14px; color: var(--gold); opacity: .8; }
-.atk-fxs      { display: flex; gap: 4px; }
-.atk-fx { font-size: 26px; font-weight: 900; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,.8); animation: atk-pop .3s cubic-bezier(.3,1.5,.6,1) forwards; }
-@keyframes atk-pop { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
-.fx-damage { color: #ff7050; }
-.fx-heal   { color: #5ad070; }
-.fx-shield { color: var(--freeze); }
-.fx-burn   { color: var(--burn); }
-.fx-poison { color: var(--poison); }
-.fx-dot    { color: #e07050; font-size: 18px; }
+/* ── HP 数字闪现 ── */
+.hp-flash {
+  position: absolute; right: 14px; z-index: 10; pointer-events: none;
+  font-size: 20px; font-weight: 900; line-height: 1;
+  text-shadow: 0 2px 6px rgba(0,0,0,.8);
+}
+.hp-flash-enemy  { top: 10px; }
+.hp-flash-player { bottom: 10px; }
+.hpf-damage { color: #ff6050; }
+.hpf-heal   { color: #50dd80; }
+.hpf-shield { color: #70c8f0; }
+.hpf-dot    { color: #e08030; font-size: 16px; }
+.hp-flash-enter-active { animation: hpf-in .12s ease-out; }
+.hp-flash-leave-active { transition: opacity .3s ease .7s; }
+.hp-flash-leave-to     { opacity: 0; }
+@keyframes hpf-in {
+  from { opacity: 0; transform: scale(0.7) translateY(6px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
 
 /* ── 棋子网格（列数/行数由 inline style 动态注入）── */
 .arena-grid {
@@ -472,6 +501,56 @@ function fxLabel(fx) {
   border: 1px dashed rgba(255,255,255,.10);
   border-radius: 6px;
   backdrop-filter: blur(2px);
+}
+
+/* ── 战斗结果覆盖层 ── */
+.battle-result-overlay {
+  position: absolute; inset: 0; z-index: 20;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none; gap: 8px;
+}
+.overlay-win {
+  background: radial-gradient(ellipse at center,
+    rgba(255,200,50,.22) 0%, rgba(180,100,10,.10) 45%, transparent 70%);
+}
+.overlay-lose {
+  background: radial-gradient(ellipse at center,
+    rgba(200,30,20,.28) 0%, rgba(100,10,5,.10) 45%, transparent 70%);
+}
+.result-icon {
+  font-size: 52px; line-height: 1;
+  animation: result-icon-in 0.45s cubic-bezier(.36,1.6,.5,1) both;
+}
+.result-title {
+  font-size: 42px; font-weight: 900; letter-spacing: 8px;
+  text-shadow: 0 0 32px currentColor, 0 4px 14px rgba(0,0,0,.95);
+  animation: result-title-in 0.4s 0.14s cubic-bezier(.36,1.6,.5,1) both;
+}
+.overlay-win  .result-title { color: #ffd060; }
+.overlay-lose .result-title { color: #ff4444; }
+@keyframes result-icon-in {
+  from { opacity: 0; transform: scale(0.2) rotate(-25deg); }
+  to   { opacity: 1; transform: scale(1)   rotate(0deg); }
+}
+@keyframes result-title-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.75); }
+  to   { opacity: 1; transform: none; }
+}
+.battle-result-enter-active { animation: result-fade-in .25s ease-out; }
+.battle-result-leave-active { transition: opacity .35s ease; }
+.battle-result-leave-to     { opacity: 0; }
+@keyframes result-fade-in   { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── 敌方阵亡动画 ── */
+@keyframes enemy-death {
+  0%   { transform: scale(1);    filter: brightness(1) saturate(1); }
+  12%  { transform: scale(1.06); filter: brightness(3.5) saturate(0); }
+  45%  { transform: scale(0.92) rotate(4deg);  filter: brightness(0.4) saturate(0); opacity: .7; }
+  100% { transform: scale(0.82) rotate(-3deg); filter: brightness(0.1) saturate(0); opacity: .25; }
+}
+.enemy-portrait-wrap.enemy-defeated .enemy-portrait {
+  animation: enemy-death 0.9s 0.08s ease-out forwards;
 }
 
 /* ── 受击抖动（敌方插画 / 玩家区）── */

@@ -261,45 +261,28 @@ import {
 import { dragState, setDragCallbacks, registerGlobalListeners, cancelDrag } from './composables/useDrag.js'
 import { stopBattle, setBattleSpeed } from './composables/useBattle.js'
 import { setPixiSpeed } from './composables/usePixiBattle.js'
+import { useGameState } from './composables/useGameState.js'
 import { shuffle } from './utils.js'
 
 const { MAX_LIVES, GOLD_PER_DAY, SHOP_SLOTS } = GC
 
-const phase       = ref('HOME')
-const battleCount = ref(0)
-const wins        = ref(0)
-const lives       = ref(MAX_LIVES)
-const gold        = ref(GOLD_PER_DAY)
-const resultType  = ref('win')
-const mergeFlash  = ref('')
-
-const identitySkill        = ref(null)
-const identityIcon         = ref('')
-const skillTooltipVisible  = ref(false)
+const {
+  phase, battleCount, wins, lives, gold, resultType,
+  mergeFlash,
+  identitySkill, identityIcon, skillTooltipVisible, selectedIdentityName,
+  battleSpeed, battleItemStats, selectedDifficulty,
+  currentEnemy, selectEnemies,
+  playerItems, backpackItems, enemyAbilities, shopSlots,
+  playerStat, enemyStat,
+  pendingRewards, showBackpack, battleScreenRef, bubbleItem,
+  resetState,
+} = useGameState()
 
 const layoutState = reactive({ skillBar: false })
 provide('layout', {
   set(opts)  { Object.assign(layoutState, opts) },
   reset()    { layoutState.skillBar = false },
 })
-const battleSpeed          = ref(1)
-const battleItemStats      = ref([])
-const selectedIdentityName = ref('')
-
-const playerStat     = reactive({ hp: 500, maxHp: 500, shield: 0, burnStacks: 0, poisonStacks: 0 })
-const enemyStat      = reactive({ hp: 200, maxHp: 200, shield: 0, burnStacks: 0, poisonStacks: 0 })
-const playerItems    = reactive([])
-const backpackItems  = reactive([])
-const enemyAbilities = reactive([])
-const shopSlots      = reactive([])
-const currentEnemy   = ref({ name: '', hp: 0, abilities: [], portrait: '' })
-const showBackpack   = ref(false)
-const selectEnemies  = ref([])
-const selectedDifficulty = ref('normal')
-const pendingRewards     = ref([])
-
-const battleScreenRef = ref(null)
-const bubbleItem      = ref(null)   // { item, x, y }
 
 const unlockedCols = computed(() => Math.min(2 + battleCount.value, GRID_COLS))
 
@@ -339,7 +322,7 @@ const { startActualBattle, onDeployComplete } = useBattleFlow({
   phase, playerStat, enemyStat, playerItems, enemyAbilities,
   battleItemStats, stormBlessingActive, battleScreenRef, unlockedCols,
   wins, lives, pendingRewards, selectedDifficulty, resultType,
-  identitySkill,
+  identitySkill, currentEnemy,
 })
 
 onMounted(() => {
@@ -441,21 +424,10 @@ function onIdentityChoice(identityId) {
 
 function resetGame() {
   stopBattle()
-  battleCount.value = 0; wins.value = 0; lives.value = MAX_LIVES
-  selectedDifficulty.value = 'normal'
-  pendingRewards.value = []
-  playerStat.hp = playerStat.maxHp; playerStat.shield = 0
-  playerStat.burnStacks = 0; playerStat.poisonStacks = 0
-  playerItems.length = 0; backpackItems.length = 0
-  showBackpack.value = false
+  resetState()
   stormBlessingActive.value = false
   upgradeEventTag.value = null
   eventOptions.value = []
-  selectedIdentityName.value = ''
-  identitySkill.value = null
-  identityIcon.value = ''
-  skillTooltipVisible.value = false
-  phase.value = 'HOME'
 }
 
 function setSpeed(s) {

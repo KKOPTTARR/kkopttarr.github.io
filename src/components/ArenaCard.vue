@@ -1,7 +1,7 @@
 <template>
   <div
     class="arena-card"
-    :class="{ triggering: item.triggering }"
+    :class="[{ triggering: item.triggering }, item.triggering ? `glow-${statType}` : '']"
     :style="gridStyle"
     :data-instance="item.instanceId"
     @click="onCardClick"
@@ -109,14 +109,40 @@ const mainStat = computed(() => {
   aspect-ratio: 3 / 4;
 }
 .arena-card.triggering {
-  animation: card-trigger .35s ease-out;
+  animation: card-trigger-pulse .32s ease-out;
   z-index: 10;
 }
-@keyframes card-trigger {
-  0%   { transform: scale(1);    box-shadow: none; }
-  25%  { transform: scale(1.14); box-shadow: 0 0 18px 5px rgba(255,200,50,.7); }
-  60%  { transform: scale(0.96); box-shadow: 0 0 6px rgba(255,200,50,.3); }
-  100% { transform: scale(1);    box-shadow: none; }
+@keyframes card-trigger-pulse {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.12); }
+  65%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+/* 类型化发光边框 */
+.triggering.glow-damage {
+  box-shadow: 0 0 0 2px #ff5030, 0 0 14px 4px rgba(255,80,48,.65), 0 0 28px rgba(255,80,48,.25);
+  border-color: #ff5030;
+}
+.triggering.glow-heal {
+  box-shadow: 0 0 0 2px #40dd70, 0 0 14px 4px rgba(64,221,112,.65), 0 0 28px rgba(64,221,112,.25);
+  border-color: #40dd70;
+}
+.triggering.glow-shield {
+  box-shadow: 0 0 0 2px #60b8ff, 0 0 14px 4px rgba(96,184,255,.65), 0 0 28px rgba(96,184,255,.25);
+  border-color: #60b8ff;
+}
+.triggering.glow-burn {
+  box-shadow: 0 0 0 2px #ff8820, 0 0 14px 4px rgba(255,136,32,.65), 0 0 28px rgba(255,136,32,.25);
+  border-color: #ff8820;
+}
+.triggering.glow-poison {
+  box-shadow: 0 0 0 2px #80cc20, 0 0 14px 4px rgba(128,204,32,.65), 0 0 28px rgba(128,204,32,.25);
+  border-color: #80cc20;
+}
+.triggering.glow-crit {
+  box-shadow: 0 0 0 2px #ffd060, 0 0 14px 4px rgba(255,208,96,.65), 0 0 28px rgba(255,208,96,.25);
+  border-color: #ffd060;
 }
 
 .arena-card.card-special {

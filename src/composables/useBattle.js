@@ -318,7 +318,12 @@ function triggerItem(item) {
   // 左轮加速：每完成一弹仓（cylinderSize 发），触发时间永久缩短（战斗内）
   const cylinderComplete = item.cylinderAccel && item.cylinderSize && item.triggerCount > 0
     && item.triggerCount % item.cylinderSize === 0
-  if (cylinderComplete) item._cooldown = Math.max(COOLDOWN_FLOOR, item._cooldown - item.cylinderAccel)
+  let cylinderBoosted = false
+  if (cylinderComplete) {
+    const prevCd = item._cooldown
+    item._cooldown = Math.max(COOLDOWN_FLOOR, item._cooldown - item.cylinderAccel)
+    cylinderBoosted = item._cooldown < prevCd
+  }
 
   // 叠火（燃烧响炮）
   const burnBoosted = item.burnBoostIfBurning && _enemyStat.burnStacks > 0
@@ -349,7 +354,7 @@ function triggerItem(item) {
 
   const specialLabels = []
   if (isGlobalCrit)      specialLabels.push('暴击!')
-  if (cylinderComplete)  specialLabels.push('提速!')
+  if (cylinderBoosted)   specialLabels.push('提速!')
   if (bloodthirstActive) specialLabels.push('嗜血!')
   if (burnBoosted)       specialLabels.push('叠火!')
   if (lowHpPoison)       specialLabels.push('反扑!')
@@ -601,13 +606,13 @@ function applyStatDoT(stat, who) {
       burnAbsorbed = abs
     }
     if (burn > 0) { stat.hp = Math.max(0, stat.hp - burn); burnDmg = burn }
-    stat.burnStacks = Math.floor(stat.burnStacks * 0.5)
+    stat.burnStacks = Math.floor(stat.burnStacks * 0.6)
     onHpChange?.(who, stat.hp, stat.shield, 'damage')
   }
   if (stat.poisonStacks > 0) {
     poisonDmg = stat.poisonStacks * dotMult
     stat.hp = Math.max(0, stat.hp - poisonDmg)
-    stat.poisonStacks = Math.floor(stat.poisonStacks * 0.5)
+    stat.poisonStacks = Math.floor(stat.poisonStacks * 0.6)
     onHpChange?.(who, stat.hp, stat.shield, 'damage')
   }
 

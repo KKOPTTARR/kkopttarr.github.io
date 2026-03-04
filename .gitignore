@@ -5,6 +5,10 @@ dist
 
 logs
 
+android
+
+images
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

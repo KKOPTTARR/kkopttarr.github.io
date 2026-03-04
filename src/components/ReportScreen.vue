@@ -9,7 +9,7 @@
         <span class="result-sub">第 {{ battleCount + 1 }} 战 · 对手：{{ enemyName }}</span>
       </div>
       <div class="result-progress">
-        <span class="progress-wins">{{ wins }}/5 胜</span>
+        <span class="progress-wins">{{ wins }}/{{ GC.WINS_TO_CLEAR }} 胜</span>
         <span class="progress-lives">士气 {{ livesText }}</span>
         <span v-if="isFirstLoss" class="progress-hint">士气耗尽则游戏结束</span>
       </div>
@@ -84,6 +84,7 @@
 <script setup>
 import { computed } from 'vue'
 import { getIconUrl } from '../data/items.js'
+import GC from '../../config/gameConfig.json'
 
 const props = defineProps({
   result:      { type: String, required: true },  // 'win' | 'lose' | 'clear' | 'gameover'

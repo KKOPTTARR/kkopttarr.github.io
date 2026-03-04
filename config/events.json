@@ -9,14 +9,6 @@
     "condition": "hasUpgradeable"
   },
   {
-    "id": "shop",
-    "icon": "🏪",
-    "img": "/events/shop.png",
-    "label": "宝藏商店",
-    "desc": "购买指定类型的物品",
-    "pool": "rare"
-  },
-  {
     "id": "exchange",
     "icon": "🔀",
     "img": "/events/exchange.png",

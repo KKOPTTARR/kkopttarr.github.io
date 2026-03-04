@@ -4,7 +4,7 @@
       <div class="status-lives">
         <span v-for="i in maxLives" :key="i" class="heart-icon">{{ i <= lives ? '⚡' : '○' }}</span>
       </div>
-      <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/5 ⭐</div>
+      <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/{{ GC.WINS_TO_CLEAR }} ⭐</div>
       <div class="status-gold">💰 {{ gold }}</div>
     </div>
     <div class="upgrade-header">
@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+import GC from '../../config/gameConfig.json'
 import { getIconUrl, findItem } from '../data/items.js'
 
 const props = defineProps({

@@ -20,8 +20,8 @@
 .tt-name  { font-size: 14px; font-weight: bold; color: var(--gold); margin-bottom: 4px; }
 .tt-tags  { font-size: 11px; color: var(--text-dim); margin-bottom: 6px; }
 .tt-stats { font-size: 12px; color: #d4b87c; line-height: 1.7; margin-bottom: 6px; }
-.tt-skill { font-size: 11px; color: var(--text-dim); font-style: italic;
-            border-top: 1px solid var(--panel-border); padding-top: 6px; }
+.tt-skill { font-size: 13px; color: var(--text-dim); font-style: italic;
+            border-top: 1px solid var(--panel-border); padding-top: 6px; line-height: 1.65; }
 
 /* ===== 升星提示 Toast ===== */
 @keyframes merge-in {

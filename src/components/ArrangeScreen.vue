@@ -6,7 +6,7 @@
       <div class="status-lives">
         <span v-for="i in maxLives" :key="i" class="heart-icon">{{ i <= lives ? '⚡' : '○' }}</span>
       </div>
-      <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/5 ⭐</div>
+      <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/{{ GC.WINS_TO_CLEAR }} ⭐</div>
       <div class="status-gold">💰 {{ gold }}</div>
     </div>
     <div class="arrange-title-row">
@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import GC from '../../config/gameConfig.json'
 import GridBoard from './GridBoard.vue'
 import { dragState } from '../composables/useDrag.js'
 import { BP_ROWS, BP_COLS } from '../composables/useInventory.js'

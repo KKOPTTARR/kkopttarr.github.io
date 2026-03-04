@@ -16,7 +16,19 @@ function rollTier(cfg) {
   return 'Gold'
 }
 
-export function rollRewardItems(difficulty, isWin) {
+function weightedPick(items, biasTags) {
+  if (!biasTags?.length) return items[Math.floor(Math.random() * items.length)]
+  const weights = items.map(item => item.tags?.some(t => biasTags.includes(t)) ? 3 : 1)
+  const total   = weights.reduce((a, b) => a + b, 0)
+  let r = Math.random() * total
+  for (let i = 0; i < items.length; i++) {
+    r -= weights[i]
+    if (r <= 0) return items[i]
+  }
+  return items[items.length - 1]
+}
+
+export function rollRewardItems(difficulty, isWin, dropBias = []) {
   if (!isWin) {
     const pool = [...ITEM_POOL]; shuffle(pool)
     const base = pool[0]
@@ -27,8 +39,7 @@ export function rollRewardItems(difficulty, isWin) {
   for (let i = 0; i < cfg.count; i++) {
     const tier = rollTier(cfg)
     const candidates = ITEM_POOL.filter(item => item.tiers?.[tier])
-    const shuffled = [...candidates]; shuffle(shuffled)
-    const base = shuffled[i % shuffled.length]
+    const base = weightedPick(candidates, dropBias)
     result.push({ ...base, tier, ...base.tiers?.[tier] })
   }
   return result

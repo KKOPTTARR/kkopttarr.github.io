@@ -4,9 +4,9 @@
     "name": "鹦鹉船员",
     "portrait": "enemies/parrot.png",
     "hp": {
-      "normal": 108,
-      "elite": 144,
-      "radiant": 168
+      "normal": 140,
+      "elite": 187,
+      "radiant": 218
     },
     "normalAbilities": [
       {
@@ -18,7 +18,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3秒造成8伤害"
+        "description": "每3秒造成4伤害"
       }
     ],
     "eliteAbilities": [
@@ -31,7 +31,7 @@
         "shield": 0,
         "burn": 1,
         "poison": 0,
-        "description": "每9秒造成20伤害并附加2灼烧"
+        "description": "每9秒造成10伤害并附加1层灼烧"
       }
     ],
     "radiantAbilities": [
@@ -44,8 +44,11 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每5秒造成12伤害并附加5灼烧"
+        "description": "每5秒造成6伤害并附加3层灼烧"
       }
+    ],
+    "dropBias": [
+      "工具"
     ]
   },
   {
@@ -53,9 +56,9 @@
     "name": "毒鼠盗贼",
     "portrait": "enemies/rat.png",
     "hp": {
-      "normal": 144,
-      "elite": 180,
-      "radiant": 216
+      "normal": 187,
+      "elite": 234,
+      "radiant": 281
     },
     "normalAbilities": [
       {
@@ -67,7 +70,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3秒造成10伤害"
+        "description": "每3秒造成5伤害"
       }
     ],
     "eliteAbilities": [
@@ -80,7 +83,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 3,
-        "description": "每6秒造成10伤害并施加4层剧毒"
+        "description": "每6秒造成5伤害并施加2层剧毒"
       }
     ],
     "radiantAbilities": [
@@ -93,8 +96,11 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每5秒造成14伤害"
+        "description": "每5秒造成7伤害"
       }
+    ],
+    "dropBias": [
+      "工具"
     ]
   },
   {
@@ -102,9 +108,9 @@
     "name": "鲨鱼海盗",
     "portrait": "enemies/shark.png",
     "hp": {
-      "normal": 180,
-      "elite": 228,
-      "radiant": 276
+      "normal": 234,
+      "elite": 296,
+      "radiant": 359
     },
     "normalAbilities": [
       {
@@ -116,7 +122,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每4秒造成16伤害"
+        "description": "每4秒造成8伤害"
       }
     ],
     "eliteAbilities": [
@@ -129,7 +135,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每7秒造成22伤害"
+        "description": "每7秒造成11伤害"
       }
     ],
     "radiantAbilities": [
@@ -142,8 +148,11 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每5秒造成18伤害并附加5灼烧"
+        "description": "每5秒造成9伤害并附加3层灼烧"
       }
+    ],
+    "dropBias": [
+      "武器"
     ]
   },
   {
@@ -151,9 +160,9 @@
     "name": "噬骨蜘蛛",
     "portrait": "enemies/spider.png",
     "hp": {
-      "normal": 192,
-      "elite": 240,
-      "radiant": 288
+      "normal": 250,
+      "elite": 312,
+      "radiant": 374
     },
     "normalAbilities": [
       {
@@ -165,7 +174,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 4,
-        "description": "每3秒造成10伤害并施加6层剧毒"
+        "description": "每3秒造成5伤害并施加3层剧毒"
       }
     ],
     "eliteAbilities": [
@@ -178,7 +187,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 6,
-        "description": "每6秒造成14伤害并施加8层剧毒"
+        "description": "每6秒造成7伤害并施加4层剧毒"
       }
     ],
     "radiantAbilities": [
@@ -191,8 +200,11 @@
         "shield": 0,
         "burn": 0,
         "poison": 6,
-        "description": "每2.5秒造成12伤害并施加8层剧毒"
+        "description": "每2.5秒造成6伤害并施加4层剧毒"
       }
+    ],
+    "dropBias": [
+      "工具"
     ]
   },
   {
@@ -200,9 +212,9 @@
     "name": "深海灯笼鱼",
     "portrait": "enemies/anglerfish.png",
     "hp": {
-      "normal": 216,
-      "elite": 276,
-      "radiant": 324
+      "normal": 281,
+      "elite": 359,
+      "radiant": 421
     },
     "normalAbilities": [
       {
@@ -214,7 +226,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3.5秒造成14伤害"
+        "description": "每3.5秒造成7伤害"
       }
     ],
     "eliteAbilities": [
@@ -227,7 +239,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 4,
-        "description": "每9秒造成16伤害并施加6层剧毒"
+        "description": "每9秒造成8伤害并施加3层剧毒"
       }
     ],
     "radiantAbilities": [
@@ -240,8 +252,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 4,
-        "description": "每3秒造成16伤害并施加6层剧毒"
+        "description": "每3秒造成8伤害并施加3层剧毒"
       }
+    ],
+    "dropBias": [
+      "水系",
+      "工具"
     ]
   },
   {
@@ -249,9 +265,9 @@
     "name": "铁壳螃蟹将军",
     "portrait": "enemies/crab.png",
     "hp": {
-      "normal": 228,
-      "elite": 288,
-      "radiant": 336
+      "normal": 296,
+      "elite": 374,
+      "radiant": 437
     },
     "normalAbilities": [
       {
@@ -263,7 +279,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每5秒造成14伤害"
+        "description": "每5秒造成7伤害"
       }
     ],
     "eliteAbilities": [
@@ -276,7 +292,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每13秒造成36伤害"
+        "description": "每13秒造成18伤害"
       }
     ],
     "radiantAbilities": [
@@ -289,8 +305,11 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每4秒造成18伤害"
+        "description": "每4秒造成9伤害"
       }
+    ],
+    "dropBias": [
+      "防具"
     ]
   },
   {
@@ -298,9 +317,9 @@
     "name": "地狱猎犬",
     "portrait": "enemies/hellhound.png",
     "hp": {
-      "normal": 240,
-      "elite": 312,
-      "radiant": 372
+      "normal": 312,
+      "elite": 406,
+      "radiant": 484
     },
     "normalAbilities": [
       {
@@ -312,7 +331,7 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "description": "每3秒造成16伤害并附加4灼烧"
+        "description": "每3秒造成8伤害并附加2层灼烧"
       }
     ],
     "eliteAbilities": [
@@ -325,7 +344,7 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "description": "每6秒造成24伤害并附加4灼烧"
+        "description": "每6秒造成12伤害并附加2层灼烧"
       }
     ],
     "radiantAbilities": [
@@ -338,8 +357,12 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每3秒造成18伤害并附加6灼烧"
+        "description": "每3秒造成9伤害并附加3层灼烧"
       }
+    ],
+    "dropBias": [
+      "工具",
+      "武器"
     ]
   },
   {
@@ -347,9 +370,9 @@
     "name": "猫头鹰法师",
     "portrait": "enemies/owl.png",
     "hp": {
-      "normal": 204,
-      "elite": 264,
-      "radiant": 312
+      "normal": 265,
+      "elite": 343,
+      "radiant": 406
     },
     "normalAbilities": [
       {
@@ -361,7 +384,7 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "description": "每4秒造成12伤害并附加4灼烧"
+        "description": "每4秒造成6伤害并附加2层灼烧"
       }
     ],
     "eliteAbilities": [
@@ -374,7 +397,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每13秒造成40伤害"
+        "description": "每13秒造成20伤害"
       }
     ],
     "radiantAbilities": [
@@ -387,8 +410,12 @@
         "shield": 0,
         "burn": 6,
         "poison": 0,
-        "description": "每5秒造成14伤害并附加8灼烧"
+        "description": "每5秒造成7伤害并附加4层灼烧"
       }
+    ],
+    "dropBias": [
+      "工具",
+      "武器"
     ]
   },
   {
@@ -396,9 +423,9 @@
     "name": "九尾狐妖",
     "portrait": "enemies/fox.png",
     "hp": {
-      "normal": 240,
-      "elite": 300,
-      "radiant": 348
+      "normal": 312,
+      "elite": 390,
+      "radiant": 452
     },
     "normalAbilities": [
       {
@@ -410,7 +437,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3秒造成14伤害"
+        "description": "每3秒造成7伤害"
       }
     ],
     "eliteAbilities": [
@@ -423,7 +450,7 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "description": "每6秒造成22伤害并附加4灼烧"
+        "description": "每6秒造成11伤害并附加2层灼烧"
       }
     ],
     "radiantAbilities": [
@@ -436,8 +463,12 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每3秒造成16伤害并附加6灼烧"
+        "description": "每3秒造成8伤害并附加3层灼烧"
       }
+    ],
+    "dropBias": [
+      "武器",
+      "伙伴"
     ]
   },
   {
@@ -445,9 +476,9 @@
     "name": "狼影刺客",
     "portrait": "enemies/wolf.png",
     "hp": {
-      "normal": 240,
-      "elite": 312,
-      "radiant": 372
+      "normal": 312,
+      "elite": 406,
+      "radiant": 484
     },
     "normalAbilities": [
       {
@@ -459,7 +490,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3.5秒造成20伤害"
+        "description": "每3.5秒造成10伤害"
       }
     ],
     "eliteAbilities": [
@@ -472,7 +503,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每6秒造成26伤害"
+        "description": "每6秒造成13伤害"
       }
     ],
     "radiantAbilities": [
@@ -485,8 +516,11 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每4秒造成24伤害并附加6灼烧"
+        "description": "每4秒造成12伤害并附加3层灼烧"
       }
+    ],
+    "dropBias": [
+      "武器"
     ]
   },
   {
@@ -494,9 +528,9 @@
     "name": "堕落天使",
     "portrait": "enemies/angel.png",
     "hp": {
-      "normal": 264,
-      "elite": 324,
-      "radiant": 396
+      "normal": 343,
+      "elite": 421,
+      "radiant": 515
     },
     "normalAbilities": [
       {
@@ -508,7 +542,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每4秒造成18伤害"
+        "description": "每4秒造成9伤害"
       }
     ],
     "eliteAbilities": [
@@ -521,7 +555,7 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "description": "每12秒造成36伤害并附加4灼烧"
+        "description": "每12秒造成18伤害并附加2层灼烧"
       }
     ],
     "radiantAbilities": [
@@ -534,8 +568,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3.5秒造成20伤害"
+        "description": "每3.5秒造成10伤害"
       }
+    ],
+    "dropBias": [
+      "武器",
+      "防具"
     ]
   },
   {
@@ -543,9 +581,9 @@
     "name": "幽影忍者",
     "portrait": "enemies/armored-wolf.png",
     "hp": {
-      "normal": 264,
-      "elite": 324,
-      "radiant": 396
+      "normal": 343,
+      "elite": 421,
+      "radiant": 515
     },
     "normalAbilities": [
       {
@@ -557,7 +595,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每2.5秒造成12伤害"
+        "description": "每2.5秒造成6伤害"
       }
     ],
     "eliteAbilities": [
@@ -570,7 +608,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每5秒造成18伤害"
+        "description": "每5秒造成9伤害"
       }
     ],
     "radiantAbilities": [
@@ -583,8 +621,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 6,
-        "description": "每3秒造成12伤害并施加8层剧毒"
+        "description": "每3秒造成6伤害并施加4层剧毒"
       }
+    ],
+    "dropBias": [
+      "武器",
+      "工具"
     ]
   },
   {
@@ -592,9 +634,9 @@
     "name": "章鱼幻术师",
     "portrait": "enemies/octopus.png",
     "hp": {
-      "normal": 288,
-      "elite": 348,
-      "radiant": 420
+      "normal": 374,
+      "elite": 452,
+      "radiant": 546
     },
     "normalAbilities": [
       {
@@ -606,7 +648,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3秒造成12伤害"
+        "description": "每3秒造成6伤害"
       }
     ],
     "eliteAbilities": [
@@ -619,7 +661,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每9秒造成20伤害"
+        "description": "每9秒造成10伤害"
       }
     ],
     "radiantAbilities": [
@@ -632,8 +674,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 6,
-        "description": "每4秒造成16伤害并施加8层剧毒"
+        "description": "每4秒造成8伤害并施加4层剧毒"
       }
+    ],
+    "dropBias": [
+      "水系",
+      "伙伴"
     ]
   },
   {
@@ -641,9 +687,9 @@
     "name": "吸血鬼伯爵",
     "portrait": "enemies/vampire.png",
     "hp": {
-      "normal": 300,
-      "elite": 372,
-      "radiant": 456
+      "normal": 390,
+      "elite": 484,
+      "radiant": 593
     },
     "normalAbilities": [
       {
@@ -655,7 +701,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每4秒造成16伤害"
+        "description": "每4秒造成8伤害"
       }
     ],
     "eliteAbilities": [
@@ -668,7 +714,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每7秒造成20伤害"
+        "description": "每7秒造成10伤害"
       }
     ],
     "radiantAbilities": [
@@ -681,8 +727,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3秒造成18伤害"
+        "description": "每3.5秒造成9伤害"
       }
+    ],
+    "dropBias": [
+      "食物",
+      "伙伴"
     ]
   },
   {
@@ -690,9 +740,9 @@
     "name": "熊霸船长",
     "portrait": "enemies/bear.png",
     "hp": {
-      "normal": 300,
-      "elite": 372,
-      "radiant": 456
+      "normal": 390,
+      "elite": 484,
+      "radiant": 593
     },
     "normalAbilities": [
       {
@@ -704,7 +754,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每5秒造成24伤害"
+        "description": "每5秒造成12伤害"
       }
     ],
     "eliteAbilities": [
@@ -717,7 +767,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每14秒造成48伤害"
+        "description": "每14秒造成24伤害"
       }
     ],
     "radiantAbilities": [
@@ -730,8 +780,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每4秒造成28伤害"
+        "description": "每4秒造成14伤害"
       }
+    ],
+    "dropBias": [
+      "武器",
+      "防具"
     ]
   },
   {
@@ -739,9 +793,9 @@
     "name": "远古树精",
     "portrait": "enemies/treant.png",
     "hp": {
-      "normal": 324,
-      "elite": 396,
-      "radiant": 480
+      "normal": 421,
+      "elite": 515,
+      "radiant": 624
     },
     "normalAbilities": [
       {
@@ -753,7 +807,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每5秒造成18伤害"
+        "description": "每5秒造成9伤害"
       }
     ],
     "eliteAbilities": [
@@ -766,7 +820,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 3,
-        "description": "每13秒造成40伤害并施加4层剧毒"
+        "description": "每13秒造成20伤害并施加2层剧毒"
       }
     ],
     "radiantAbilities": [
@@ -779,8 +833,12 @@
         "shield": 0,
         "burn": 0,
         "poison": 4,
-        "description": "每4秒造成22伤害并施加6层剧毒"
+        "description": "每4秒造成11伤害并施加3层剧毒"
       }
+    ],
+    "dropBias": [
+      "水系",
+      "工具"
     ]
   },
   {
@@ -788,9 +846,9 @@
     "name": "不死骷髅舰长",
     "portrait": "enemies/skeleton.png",
     "hp": {
-      "normal": 336,
-      "elite": 420,
-      "radiant": 504
+      "normal": 437,
+      "elite": 546,
+      "radiant": 655
     },
     "normalAbilities": [
       {
@@ -802,7 +860,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每4.5秒造成22伤害"
+        "description": "每4.5秒造成11伤害"
       }
     ],
     "eliteAbilities": [
@@ -815,7 +873,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 7,
-        "description": "每13秒造成44伤害并施加10层剧毒"
+        "description": "每13秒造成22伤害并施加5层剧毒"
       }
     ],
     "radiantAbilities": [
@@ -828,8 +886,11 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每3.5秒造成26伤害"
+        "description": "每3.5秒造成13伤害"
       }
+    ],
+    "dropBias": [
+      "武器"
     ]
   },
   {
@@ -837,9 +898,9 @@
     "name": "暗夜石像鬼",
     "portrait": "enemies/gargoyle.png",
     "hp": {
-      "normal": 360,
-      "elite": 444,
-      "radiant": 540
+      "normal": 468,
+      "elite": 577,
+      "radiant": 702
     },
     "normalAbilities": [
       {
@@ -851,7 +912,7 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每4秒造成20伤害并附加6灼烧"
+        "description": "每4秒造成10伤害并附加3层灼烧"
       }
     ],
     "eliteAbilities": [
@@ -864,7 +925,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每10秒造成56伤害"
+        "description": "每10秒造成27伤害"
       }
     ],
     "radiantAbilities": [
@@ -877,8 +938,12 @@
         "shield": 0,
         "burn": 6,
         "poison": 0,
-        "description": "每3秒造成22伤害并附加8灼烧"
+        "description": "每3秒造成11伤害并附加4层灼烧"
       }
+    ],
+    "dropBias": [
+      "工具",
+      "武器"
     ]
   },
   {
@@ -886,9 +951,9 @@
     "name": "恶魔蝠王",
     "portrait": "enemies/lava-golem.png",
     "hp": {
-      "normal": 372,
-      "elite": 468,
-      "radiant": 564
+      "normal": 484,
+      "elite": 608,
+      "radiant": 733
     },
     "normalAbilities": [
       {
@@ -900,7 +965,7 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每4秒造成18伤害并附加6灼烧"
+        "description": "每4秒造成9伤害并附加3层灼烧"
       }
     ],
     "eliteAbilities": [
@@ -913,7 +978,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每10秒造成56伤害"
+        "description": "每10秒造成27伤害"
       }
     ],
     "radiantAbilities": [
@@ -926,8 +991,12 @@
         "shield": 0,
         "burn": 6,
         "poison": 0,
-        "description": "每3秒造成22伤害并附加8灼烧"
+        "description": "每3秒造成11伤害并附加4层灼烧"
       }
+    ],
+    "dropBias": [
+      "工具",
+      "武器"
     ]
   },
   {
@@ -935,9 +1004,9 @@
     "name": "海渊魔神",
     "portrait": "enemies/mimic.png",
     "hp": {
-      "normal": 456,
-      "elite": 564,
-      "radiant": 672
+      "normal": 593,
+      "elite": 733,
+      "radiant": 874
     },
     "normalAbilities": [
       {
@@ -949,7 +1018,7 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "description": "每4秒造成26伤害并附加5灼烧"
+        "description": "每4秒造成13伤害并附加3层灼烧"
       }
     ],
     "eliteAbilities": [
@@ -962,7 +1031,7 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "description": "每9秒造成72伤害"
+        "description": "每9秒造成35伤害"
       }
     ],
     "radiantAbilities": [
@@ -975,8 +1044,12 @@
         "shield": 0,
         "burn": 8,
         "poison": 0,
-        "description": "每3.5秒造成30伤害并附加12灼烧"
+        "description": "每3.5秒造成15伤害并附加6层灼烧"
       }
+    ],
+    "dropBias": [
+      "武器",
+      "工具"
     ]
   }
 ]

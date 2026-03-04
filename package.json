@@ -11,6 +11,9 @@
     "electron:build": "npm run build && electron-builder"
   },
   "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
     "pixi-filters": "^6.1.5",
     "pixi.js": "^8.16.0",
     "vue": "^3.4.0"

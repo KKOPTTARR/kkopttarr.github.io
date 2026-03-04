@@ -8,7 +8,7 @@ import GC from '../../config/gameConfig.json'
 
 const {
   EVENTS_PER_ROUND, EVENT_NORMAL_COUNT, EVENT_LAST_NORMAL_COUNT,
-  SHOP_ROUNDS, SHOP_SLOTS, STORM_SHIELD,
+  SHOP_SLOTS, STORM_SHIELD,
   TAVERN_COST, TAVERN_WIN_GOLD, BLACK_MARKET_COST,
 } = GC
 
@@ -129,15 +129,6 @@ export function useEventSystem({
       if (opt) result.push(opt)
     }
 
-    // 固定轮次商店：第4轮和第8轮的第一个事件必然出现商店选项
-    if (pendingEvents.value === EVENTS_PER_ROUND && SHOP_ROUNDS.includes(battleCount.value)) {
-      const shopEvent = EVENT_POOL.find(e => e.id === 'shop')
-      if (shopEvent) {
-        const opt = prepareEventOption(shopEvent)
-        if (opt) result.push(opt)
-      }
-    }
-
     if (isLastEvent) {
       EVENT_POOL
         .filter(e => e.pool === 'last' && e.guaranteed)
@@ -152,7 +143,6 @@ export function useEventSystem({
   function onEventChoice(eventId) {
     pendingEvents.value--
     if (eventId === 'upgrade')        { phase.value = 'UPGRADE'; return }
-    if (eventId === 'shop')           { showBackpack.value = false; pendingEvents.value = 0; phase.value = 'SHOP'; return }
     if (eventId === 'exchange')       { phase.value = 'EXCHANGE'; return }
     if (eventId === 'storm_blessing') { stormBlessingActive.value = true; afterEventAction(); return }
     if (eventId === 'wreck_search')   { phase.value = 'WRECK_SEARCH'; return }
