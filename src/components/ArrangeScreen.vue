@@ -27,7 +27,7 @@
       <GridBoard
         :items="backpackItems" zone="backpack"
         :is-enemy="false" :is-battle="false"
-        :compact="false" :cell-size="76"
+        :compact="false" :cell-size="cellSize"
         :rows="BP_ROWS" :unlocked-cols="BP_COLS"
       />
       <div v-if="backpackItems.length === 0" class="backpack-empty">空背包 · 可从阵容拖入</div>
@@ -38,7 +38,7 @@
       <GridBoard
         :items="playerItems" zone="player"
         :is-enemy="false" :is-battle="false"
-        :compact="false" :cell-size="76"
+        :compact="false" :cell-size="cellSize"
         :rows="1" :unlocked-cols="unlockedCols"
       />
     </div>
@@ -47,12 +47,20 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import GC from '../../config/gameConfig.json'
 import GridBoard from './GridBoard.vue'
 import { dragState } from '../composables/useDrag.js'
 import { BP_ROWS, BP_COLS } from '../composables/useInventory.js'
 import { useLayout } from '../composables/useLayout.js'
 useLayout({ skillBar: true })
+
+// 根据屏幕宽度动态计算格子尺寸，避免 5 列在窄屏上溢出
+// available = screenWidth - 水平内边距(20) - 间隙(4列×4px)
+const MAX_COLS = 5
+const cellSize = computed(() =>
+  Math.min(76, Math.floor((window.innerWidth - 20 - (MAX_COLS - 1) * 4) / MAX_COLS))
+)
 
 defineProps({
   lives:           Number,

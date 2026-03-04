@@ -1,8 +1,9 @@
 <template>
   <Transition name="bubble-fade">
     <div v-if="bubble" class="bubble" :style="bubbleStyle" @click.stop>
-      <div v-if="bubble.item.tags?.length" class="bubble-tags">
-        <span v-for="tag in bubble.item.tags" :key="tag" class="btag">{{ tag }}</span>
+      <div class="bubble-header">
+        <span class="bubble-name">{{ bubble.item.name_cn }}</span>
+        <span v-if="bubble.item.tags?.length" class="btag">{{ bubble.item.tags[0] }}</span>
       </div>
       <div class="bubble-stats">
         <span v-if="bubble.item.damage"  class="bpill dmg">⚔️ {{ bubble.item.damage }}</span>
@@ -13,8 +14,8 @@
         <span class="bpill cd">⏱ {{ ((bubble.item._cooldown ?? bubble.item.cooldown) / 1000).toFixed(1) }}s</span>
       </div>
 
-      <div v-if="bubble.item.skill_cn" class="bubble-divider" />
-      <div v-if="bubble.item.skill_cn" class="bubble-skill" v-html="parseSkill(bubble.item.skill_cn)" />
+      <div v-if="skillText" class="bubble-divider" />
+      <div v-if="skillText" class="bubble-skill" v-html="parseSkill(skillText)" />
 
       <div class="bubble-arrow" :style="{ left: arrowLeft }" />
     </div>
@@ -26,6 +27,22 @@ import { computed } from 'vue'
 
 const props = defineProps({ bubble: { type: Object, default: null } })
 defineEmits(['close'])
+
+const skillText = computed(() => {
+  const item = props.bubble?.item
+  if (!item) return ''
+  // 基础循环描述
+  const cd = +((item._cooldown ?? item.cooldown) / 1000).toFixed(1)
+  const parts = []
+  if (item.damage)  parts.push(`{dmg:${item.damage}伤害}`)
+  if (item.heal)    parts.push(`治疗{heal:${item.heal}}`)
+  if (item.shield)  parts.push(`{shield:${item.shield}护盾}`)
+  if (item.burn)    parts.push(`{burn:${item.burn}灼烧}`)
+  if (item.poison)  parts.push(`{poison:${item.poison}剧毒}`)
+  const cycleDesc = parts.length ? `每{val:${cd}}秒${parts.join('+')}` : ''
+  // 合并基础描述 + 特效描述
+  return [cycleDesc, item.skill_cn].filter(Boolean).join('；')
+})
 
 const SKILL_COLORS = {
   dmg:    '#ff6060',
@@ -90,11 +107,17 @@ const arrowLeft = computed(() => {
   pointer-events: auto;
 }
 
-/* ── 类型标签 ──────────────────────────────────────────── */
-.bubble-tags {
+/* ── 标题行（名称 + tag）──────────────────────────────── */
+.bubble-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.bubble-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f0e0c0;
 }
 .btag {
   font-size: 11px;

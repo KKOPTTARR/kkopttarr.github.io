@@ -187,7 +187,7 @@
     </div>
 
     <!-- 物品详情气泡 -->
-    <ItemBubble :bubble="bubbleItem" @close="bubbleItem = null" />
+    <ItemBubble :bubble="bubbleItem" @close="hideBubble()" />
 
     <!-- 升星提示（仅用于非合成消息，如空间已满） -->
     <Teleport to="body">
@@ -244,6 +244,7 @@ import { dragState, setDragCallbacks, registerGlobalListeners, cancelDrag } from
 import { stopBattle, setBattleSpeed } from './composables/useBattle.js'
 import { setPixiSpeed } from './composables/usePixiBattle.js'
 import { useGameState } from './composables/useGameState.js'
+import { bubbleItem, hideBubble } from './composables/useBubble.js'
 import { shuffle } from './utils.js'
 
 const { MAX_LIVES, GOLD_PER_DAY } = GC
@@ -256,7 +257,7 @@ const {
   currentEnemy, selectEnemies,
   playerItems, backpackItems, enemyAbilities,
   playerStat, enemyStat,
-  pendingRewards, showBackpack, battleScreenRef, bubbleItem,
+  pendingRewards, showBackpack, battleScreenRef,
   resetState,
 } = useGameState()
 
@@ -311,20 +312,13 @@ onMounted(() => {
   registerGlobalListeners()
   window.addEventListener('pointerdown', (e) => {
     if (!e.target.closest('.item-card') && !e.target.closest('.shop-card') && !e.target.closest('.bubble')) {
-      bubbleItem.value = null
+      hideBubble()
     }
   }, { capture: true })
   setDragCallbacks({
     dropToGrid:      handleDropToGrid,
     dropToSell:      handleDropToSell,
     dropToBackpack:  handleDropToBackpack,
-    clickItem: (item, cx, cy) => {
-      if (bubbleItem.value?.item === item) {
-        bubbleItem.value = null
-      } else {
-        bubbleItem.value = { item, x: cx, y: cy }
-      }
-    },
     formationLimits: () => ({ cols: unlockedCols.value, rows: 1 }),
   })
 })

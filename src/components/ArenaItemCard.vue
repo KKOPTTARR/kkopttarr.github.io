@@ -62,9 +62,13 @@ const iconUrl  = computed(() => getIconUrl(props.item.name_en, props.item.tier))
 
 const fallbackEmoji = computed(() => {
   const t = props.item.tags?.[0] || ''
-  if (t.includes('武器') || t.includes('枪')) return '⚔️'
+  if (t.includes('武器') || t.includes('枪械')) return '⚔️'
   if (t.includes('防具')) return '🛡'
-  if (t.includes('水系')) return '🐟'
+  if (t.includes('伙伴')) return '🐟'
+  if (t.includes('载具')) return '🚢'
+  if (t.includes('工具')) return '🔧'
+  if (t.includes('食物')) return '🍖'
+  if (t.includes('科技')) return '⚙️'
   return '📦'
 })
 

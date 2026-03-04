@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import { canPlace } from '../data/items.js'
 import { BP_ROWS, BP_COLS } from './useInventory.js'
+import { showBubble } from './useBubble.js'
 
 const CELL = 58   // 需与 CSS --cell-size 保持一致
 
@@ -26,14 +27,12 @@ export const dragState = reactive({
 let onDropToGrid        = null
 let onDropToSell        = null
 let onDropToBackpack    = null
-let onClickItem         = null
 let getFormationLimits  = null   // () => { cols, rows }
 
-export function setDragCallbacks({ dropToGrid, dropToSell, dropToBackpack, clickItem, formationLimits }) {
+export function setDragCallbacks({ dropToGrid, dropToSell, dropToBackpack, formationLimits }) {
   onDropToGrid       = dropToGrid
   onDropToSell       = dropToSell
   onDropToBackpack   = dropToBackpack ?? null
-  onClickItem        = clickItem ?? null
   getFormationLimits = formationLimits ?? null
 }
 
@@ -173,7 +172,7 @@ function onPointerUp(e) {
       )
     }
   } else if (isClick && (dragState.sourceType === 'shop' || dragState.sourceType === 'grid' || dragState.sourceType === 'backpack')) {
-    onClickItem?.(dragState.item, e.clientX, dragStartElTop)
+    showBubble(dragState.item, e.clientX, dragStartElTop)
   }
 
   ghostEl = null

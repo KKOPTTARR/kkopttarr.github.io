@@ -7,11 +7,6 @@
       "工具"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "工具",
-      "ms": 600
-    },
-    "burnScaleDamage": 0.5,
     "tiers": {
       "Bronze": {
         "cooldown": 3000,
@@ -20,7 +15,7 @@
         "shield": 0,
         "burn": 4,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:4灼烧}；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": ""
       },
       "Silver": {
         "cooldown": 3000,
@@ -29,7 +24,7 @@
         "shield": 0,
         "burn": 6,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:6灼烧}；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": ""
       },
       "Gold": {
         "cooldown": 3000,
@@ -38,16 +33,16 @@
         "shield": 0,
         "burn": 8,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:8灼烧}；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": ""
       },
       "Diamond": {
         "cooldown": 3000,
         "damage": 0,
         "heal": 0,
         "shield": 0,
-        "burn": 14,
+        "burn": 10,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:14灼烧}；额外造成敌方当前灼烧层×0.5点伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": ""
       }
     }
   },
@@ -56,51 +51,45 @@
     "name_cn": "食人鱼",
     "name_en": "Piranha",
     "tags": [
-      "水系",
       "伙伴"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "伙伴",
-      "ms": 500
-    },
-    "bloodthirst": true,
     "tiers": {
       "Bronze": {
+        "cooldown": 3000,
+        "damage": 6,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": ""
+      },
+      "Silver": {
+        "cooldown": 3000,
+        "damage": 8,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": ""
+      },
+      "Gold": {
         "cooldown": 3000,
         "damage": 10,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{dmg:10伤害}；敌方HP{val:<50%}时伤害翻倍；伙伴类触发时{charge:充能}{val:0.5s}"
-      },
-      "Silver": {
-        "cooldown": 3000,
-        "damage": 15,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每{val:3}秒{dmg:15伤害}；敌方HP{val:<50%}时伤害翻倍；伙伴类触发时{charge:充能}{val:0.5s}"
-      },
-      "Gold": {
-        "cooldown": 3000,
-        "damage": 20,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每{val:3}秒{dmg:20伤害}；敌方HP{val:<50%}时伤害翻倍；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": ""
       },
       "Diamond": {
         "cooldown": 3000,
-        "damage": 25,
+        "damage": 12,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{dmg:25伤害}；敌方HP{val:<50%}时伤害翻倍；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": ""
       }
     }
   },
@@ -109,15 +98,9 @@
     "name_cn": "珍珠",
     "name_en": "Pearl",
     "tags": [
-      "水系",
       "防具"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "防具",
-      "ms": 800
-    },
-    "waterCharge": 2000,
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -126,7 +109,10 @@
         "shield": 10,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{shield:10护盾}；水系触发时{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+2}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 2
+        }
       },
       "Silver": {
         "cooldown": 7000,
@@ -135,7 +121,10 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{shield:15护盾}；水系触发时{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+3}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 3
+        }
       },
       "Gold": {
         "cooldown": 7000,
@@ -144,7 +133,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{shield:20护盾}；水系触发时{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+4}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 4
+        }
       },
       "Diamond": {
         "cooldown": 7000,
@@ -153,7 +145,10 @@
         "shield": 25,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{shield:25护盾}；水系触发时{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+6}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 6
+        }
       }
     }
   },
@@ -162,14 +157,9 @@
     "name_cn": "海草",
     "name_en": "Seaweed",
     "tags": [
-      "水系",
       "食物"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "食物",
-      "ms": 1000
-    },
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -178,8 +168,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "waterBoostHeal": 5,
-        "skill_cn": "每{val:7}秒治疗{heal:5}；水系触发后本次额外治疗{heal:5}；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "每发治疗 {heal:+1}（本战）",
+        "onTrigger": {
+          "healGrowth": 1
+        }
       },
       "Silver": {
         "cooldown": 7000,
@@ -188,8 +180,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "waterBoostHeal": 10,
-        "skill_cn": "每{val:7}秒治疗{heal:10}；水系触发后本次额外治疗{heal:10}；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "每发治疗 {heal:+2}（本战）",
+        "onTrigger": {
+          "healGrowth": 2
+        }
       },
       "Gold": {
         "cooldown": 7000,
@@ -198,8 +192,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "waterBoostHeal": 15,
-        "skill_cn": "每{val:7}秒治疗{heal:15}；水系触发后本次额外治疗{heal:15}；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "每发治疗 {heal:+3}（本战）",
+        "onTrigger": {
+          "healGrowth": 3
+        }
       },
       "Diamond": {
         "cooldown": 7000,
@@ -208,8 +204,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "waterBoostHeal": 20,
-        "skill_cn": "每{val:7}秒治疗{heal:20}；水系触发后本次额外治疗{heal:20}；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "每发治疗 {heal:+4}（本战）",
+        "onTrigger": {
+          "healGrowth": 4
+        }
       }
     }
   },
@@ -218,15 +216,9 @@
     "name_cn": "水母",
     "name_en": "Jellyfish",
     "tags": [
-      "水系",
       "伙伴"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "伙伴",
-      "ms": 1000
-    },
-    "lowHpPoisonBoost": 0.6,
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -235,7 +227,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 5,
-        "skill_cn": "每{val:7}秒{poison:5层剧毒}；玩家HP{val:<60%}时剧毒翻倍；伙伴类触发时{charge:充能}{val:1s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Silver": {
         "cooldown": 7000,
@@ -244,7 +239,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 10,
-        "skill_cn": "每{val:7}秒{poison:10层剧毒}；玩家HP{val:<60%}时剧毒翻倍；伙伴类触发时{charge:充能}{val:1s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Gold": {
         "cooldown": 7000,
@@ -253,7 +251,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 15,
-        "skill_cn": "每{val:7}秒{poison:15层剧毒}；玩家HP{val:<60%}时剧毒翻倍；伙伴类触发时{charge:充能}{val:1s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Diamond": {
         "cooldown": 7000,
@@ -262,7 +263,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 20,
-        "skill_cn": "每{val:7}秒{poison:20层剧毒}；玩家HP{val:<60%}时剧毒翻倍；伙伴类触发时{charge:充能}{val:1s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       }
     }
   },
@@ -271,51 +275,45 @@
     "name_cn": "左轮手枪",
     "name_en": "Revolver",
     "tags": [
-      "武器",
       "枪械"
     ],
     "price": 3,
-    "cylinderSize": 3,
     "tiers": {
       "Bronze": {
-        "cooldown": 5000,
-        "damage": 8,
+        "cooldown": 3000,
+        "damage": 6,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "cylinderAccel": 500,
-        "skill_cn": "每{val:5}秒{dmg:8伤害}；每3发后触发时间减{val:0.5s}；可叠加，最快{val:0.5s}"
+        "skill_cn": ""
       },
       "Silver": {
-        "cooldown": 4000,
+        "cooldown": 3000,
         "damage": 8,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "cylinderAccel": 1000,
-        "skill_cn": "每{val:4}秒{dmg:8伤害}；每3发后触发时间减{val:1s}；可叠加，最快{val:0.5s}"
+        "skill_cn": ""
       },
       "Gold": {
         "cooldown": 3000,
-        "damage": 8,
+        "damage": 10,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "cylinderAccel": 1500,
-        "skill_cn": "每{val:3}秒{dmg:8伤害}；每3发后触发时间减{val:1.5s}；可叠加，最快{val:0.5s}"
+        "skill_cn": ""
       },
       "Diamond": {
         "cooldown": 3000,
-        "damage": 8,
+        "damage": 12,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "cylinderAccel": 2000,
-        "skill_cn": "每{val:3}秒{dmg:8伤害}；每3发后触发时间减{val:2s}；可叠加，最快{val:0.5s}"
+        "skill_cn": ""
       }
     }
   },
@@ -327,11 +325,6 @@
       "武器"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "武器",
-      "ms": 600
-    },
-    "randomWeaponTrigger": true,
     "tiers": {
       "Bronze": {
         "cooldown": 5000,
@@ -340,7 +333,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:8伤害}；触发时随机触发另一件武器；武器类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Silver": {
         "cooldown": 5000,
@@ -349,7 +345,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:14伤害}；触发时随机触发另一件武器；武器类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Gold": {
         "cooldown": 5000,
@@ -358,7 +357,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:24伤害}；触发时随机触发另一件武器；武器类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Diamond": {
         "cooldown": 5000,
@@ -367,7 +369,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:42伤害}；触发时随机触发另一件武器；武器类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       }
     }
   },
@@ -376,50 +381,45 @@
     "name_cn": "手雷",
     "name_en": "Grenade",
     "tags": [
-      "武器"
+      "枪械"
     ],
     "price": 4,
-    "tagCharge": {
-      "tag": "武器",
-      "ms": 600
-    },
-    "adjacentCharge": 2000,
     "tiers": {
       "Bronze": {
-        "cooldown": 7000,
-        "damage": 30,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每{val:7}秒{dmg:30伤害}；触发时{adj:相邻}物品{charge:充能}{val:2s}；武器类触发时{charge:充能}{val:0.6s}"
-      },
-      "Silver": {
-        "cooldown": 7000,
-        "damage": 40,
-        "heal": 0,
-        "shield": 0,
-        "burn": 0,
-        "poison": 0,
-        "skill_cn": "每{val:7}秒{dmg:40伤害}；触发时{adj:相邻}物品{charge:充能}{val:2s}；武器类触发时{charge:充能}{val:0.6s}"
-      },
-      "Gold": {
-        "cooldown": 7000,
+        "cooldown": 10000,
         "damage": 50,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{dmg:50伤害}；触发时{adj:相邻}物品{charge:充能}{val:2s}；武器类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": ""
       },
-      "Diamond": {
-        "cooldown": 7000,
-        "damage": 60,
+      "Silver": {
+        "cooldown": 10000,
+        "damage": 75,
         "heal": 0,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{dmg:60伤害}；触发时{adj:相邻}物品{charge:充能}{val:2s}；武器类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": ""
+      },
+      "Gold": {
+        "cooldown": 10000,
+        "damage": 100,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": ""
+      },
+      "Diamond": {
+        "cooldown": 10000,
+        "damage": 150,
+        "heal": 0,
+        "shield": 0,
+        "burn": 0,
+        "poison": 0,
+        "skill_cn": ""
       }
     }
   },
@@ -428,7 +428,6 @@
     "name_cn": "连发步枪",
     "name_en": "Repeater",
     "tags": [
-      "武器",
       "枪械"
     ],
     "price": 4,
@@ -440,8 +439,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromAdjacentWeapon": 500,
-        "skill_cn": "每{val:6}秒{dmg:20伤害}；{adj:相邻}武器每次触发时为自身{charge:充能}{val:0.5s}"
+        "onTrigger": {
+          "damageGrowth": 4
+        },
+        "skill_cn": "每发伤害 {dmg:+4}（本战）"
       },
       "Silver": {
         "cooldown": 6000,
@@ -450,8 +451,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromAdjacentWeapon": 1000,
-        "skill_cn": "每{val:6}秒{dmg:30伤害}；{adj:相邻}武器每次触发时为自身{charge:充能}{val:1s}"
+        "onTrigger": {
+          "damageGrowth": 6
+        },
+        "skill_cn": "每发伤害 {dmg:+6}（本战）"
       },
       "Gold": {
         "cooldown": 6000,
@@ -460,8 +463,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromAdjacentWeapon": 1500,
-        "skill_cn": "每{val:6}秒{dmg:40伤害}；{adj:相邻}武器每次触发时为自身{charge:充能}{val:1.5s}"
+        "onTrigger": {
+          "damageGrowth": 8
+        },
+        "skill_cn": "每发伤害 {dmg:+8}（本战）"
       },
       "Diamond": {
         "cooldown": 6000,
@@ -470,8 +475,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromAdjacentWeapon": 2000,
-        "skill_cn": "每{val:6}秒{dmg:50伤害}；{adj:相邻}武器每次触发时为自身{charge:充能}{val:2s}"
+        "onTrigger": {
+          "damageGrowth": 12
+        },
+        "skill_cn": "每发伤害 {dmg:+12}（本战）"
       }
     }
   },
@@ -480,15 +487,9 @@
     "name_cn": "河豚",
     "name_en": "Pufferfish",
     "tags": [
-      "水系",
       "伙伴"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "伙伴",
-      "ms": 500
-    },
-    "poisonToShield": true,
     "tiers": {
       "Bronze": {
         "cooldown": 8000,
@@ -497,7 +498,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 8,
-        "skill_cn": "每{val:8}秒{poison:8层剧毒}；同时获得等量护盾；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发剧毒 {poison:+1}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 1
+        }
       },
       "Silver": {
         "cooldown": 8000,
@@ -506,7 +510,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 12,
-        "skill_cn": "每{val:8}秒{poison:12层剧毒}；同时获得等量护盾；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发剧毒 {poison:+2}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 2
+        }
       },
       "Gold": {
         "cooldown": 8000,
@@ -515,7 +522,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 20,
-        "skill_cn": "每{val:8}秒{poison:20层剧毒}；同时获得等量护盾；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发剧毒 {poison:+3}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 3
+        }
       },
       "Diamond": {
         "cooldown": 8000,
@@ -524,24 +534,21 @@
         "shield": 0,
         "burn": 0,
         "poison": 36,
-        "skill_cn": "每{val:8}秒{poison:36层剧毒}；同时获得等量护盾；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发剧毒 {poison:+4}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 4
+        }
       }
     }
   },
   {
     "id": 11,
-    "name_cn": "幽渊鮟鱇",
-    "name_en": "Darkwater Anglerfish",
+    "name_cn": "灯笼鱼",
+    "name_en": "Lanternfish",
     "tags": [
-      "伙伴",
-      "水系"
+      "伙伴"
     ],
     "price": 4,
-    "tagCharge": {
-      "tag": "伙伴",
-      "ms": 500
-    },
-    "chargeReadiest": 3000,
     "tiers": {
       "Bronze": {
         "cooldown": 8000,
@@ -550,7 +557,10 @@
         "shield": 0,
         "burn": 8,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{burn:8层灼烧}；触发时为进度最高的其他物品{charge:充能}{val:3s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Silver": {
         "cooldown": 8000,
@@ -559,7 +569,10 @@
         "shield": 0,
         "burn": 12,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{burn:12层灼烧}；触发时为进度最高的其他物品{charge:充能}{val:3s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Gold": {
         "cooldown": 8000,
@@ -568,7 +581,10 @@
         "shield": 0,
         "burn": 20,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{burn:20层灼烧}；触发时为进度最高的其他物品{charge:充能}{val:3s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Diamond": {
         "cooldown": 8000,
@@ -577,7 +593,10 @@
         "shield": 0,
         "burn": 36,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{burn:36层灼烧}；触发时为进度最高的其他物品{charge:充能}{val:3s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       }
     }
   },
@@ -589,11 +608,6 @@
       "伙伴"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "伙伴",
-      "ms": 500
-    },
-    "companionCharge": 1000,
     "tiers": {
       "Bronze": {
         "cooldown": 6000,
@@ -602,7 +616,10 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "skill_cn": "每{val:6}秒{burn:3灼烧}；触发时所有伙伴{charge:充能}{val:1s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发灼烧 {burn:+1}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 1
+        }
       },
       "Silver": {
         "cooldown": 6000,
@@ -611,7 +628,10 @@
         "shield": 0,
         "burn": 5,
         "poison": 0,
-        "skill_cn": "每{val:6}秒{burn:5灼烧}；触发时所有伙伴{charge:充能}{val:1s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发灼烧 {burn:+2}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 2
+        }
       },
       "Gold": {
         "cooldown": 6000,
@@ -620,7 +640,10 @@
         "shield": 0,
         "burn": 8,
         "poison": 0,
-        "skill_cn": "每{val:6}秒{burn:8灼烧}；触发时所有伙伴{charge:充能}{val:1s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发灼烧 {burn:+3}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 3
+        }
       },
       "Diamond": {
         "cooldown": 6000,
@@ -629,7 +652,10 @@
         "shield": 0,
         "burn": 14,
         "poison": 0,
-        "skill_cn": "每{val:6}秒{burn:14灼烧}；触发时所有伙伴{charge:充能}{val:1s}；伙伴类触发时{charge:充能}{val:0.5s}"
+        "skill_cn": "每发灼烧 {burn:+4}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 4
+        }
       }
     }
   },
@@ -638,15 +664,9 @@
     "name_cn": "龟壳",
     "name_en": "Turtle Shell",
     "tags": [
-      "水系",
       "防具"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "防具",
-      "ms": 800
-    },
-    "strikeShield": 15,
     "tiers": {
       "Bronze": {
         "cooldown": 10000,
@@ -655,7 +675,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:10}秒{shield:20护盾}；触发时破除敌方{shield:15点护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:2s}",
+        "onTrigger": {
+          "adjacentCharge": 2000
+        }
       },
       "Silver": {
         "cooldown": 10000,
@@ -664,7 +687,10 @@
         "shield": 32,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:10}秒{shield:32护盾}；触发时破除敌方{shield:15点护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:3s}",
+        "onTrigger": {
+          "adjacentCharge": 3000
+        }
       },
       "Gold": {
         "cooldown": 10000,
@@ -673,7 +699,10 @@
         "shield": 56,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:10}秒{shield:56护盾}；触发时破除敌方{shield:15点护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:4s}",
+        "onTrigger": {
+          "adjacentCharge": 4000
+        }
       },
       "Diamond": {
         "cooldown": 10000,
@@ -682,7 +711,10 @@
         "shield": 100,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:10}秒{shield:100护盾}；触发时破除敌方{shield:15点护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:5s}",
+        "onTrigger": {
+          "adjacentCharge": 5000
+        }
       }
     }
   },
@@ -691,15 +723,9 @@
     "name_cn": "珊瑚护甲",
     "name_en": "Coral Armor",
     "tags": [
-      "水系",
-      "服饰",
       "防具"
     ],
     "price": 5,
-    "tagCharge": {
-      "tag": "防具",
-      "ms": 800
-    },
     "tiers": {
       "Bronze": {
         "cooldown": 10000,
@@ -708,8 +734,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "shieldGrowth": 5,
-        "skill_cn": "每{val:10}秒{shield:20护盾}；每次触发护盾量+5（战斗内累积）；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Silver": {
         "cooldown": 9000,
@@ -718,8 +746,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "shieldGrowth": 10,
-        "skill_cn": "每{val:9}秒{shield:20护盾}；每次触发护盾量+10（战斗内累积）；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Gold": {
         "cooldown": 8000,
@@ -728,8 +758,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "shieldGrowth": 15,
-        "skill_cn": "每{val:8}秒{shield:20护盾}；每次触发护盾量+15（战斗内累积）；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Diamond": {
         "cooldown": 7000,
@@ -738,8 +770,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "shieldGrowth": 20,
-        "skill_cn": "每{val:7}秒{shield:20护盾}；每次触发护盾量+20（战斗内累积）；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       }
     }
   },
@@ -748,15 +782,9 @@
     "name_cn": "珊瑚",
     "name_en": "Coral",
     "tags": [
-      "水系",
       "食物"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "食物",
-      "ms": 1000
-    },
-    "overhealToShield": true,
     "tiers": {
       "Bronze": {
         "cooldown": 6000,
@@ -765,7 +793,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:6}秒治疗{heal:10}；HP已满时超量治疗转为护盾；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "相邻充能 {charge:1.5s}",
+        "onTrigger": {
+          "adjacentCharge": 1500
+        }
       },
       "Silver": {
         "cooldown": 6000,
@@ -774,7 +805,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:6}秒治疗{heal:16}；HP已满时超量治疗转为护盾；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "相邻充能 {charge:2s}",
+        "onTrigger": {
+          "adjacentCharge": 2000
+        }
       },
       "Gold": {
         "cooldown": 6000,
@@ -783,7 +817,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:6}秒治疗{heal:28}；HP已满时超量治疗转为护盾；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "相邻充能 {charge:2.5s}",
+        "onTrigger": {
+          "adjacentCharge": 2500
+        }
       },
       "Diamond": {
         "cooldown": 6000,
@@ -792,7 +829,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:6}秒治疗{heal:48}；HP已满时超量治疗转为护盾；食物类触发时{charge:充能}{val:1s}"
+        "skill_cn": "相邻充能 {charge:3.5s}",
+        "onTrigger": {
+          "adjacentCharge": 3500
+        }
       }
     }
   },
@@ -804,11 +844,6 @@
       "工具"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "工具",
-      "ms": 600
-    },
-    "globalCharge": 1000,
     "tiers": {
       "Bronze": {
         "cooldown": 9000,
@@ -817,7 +852,10 @@
         "shield": 0,
         "burn": 3,
         "poison": 3,
-        "skill_cn": "每{val:9}秒{burn:3灼烧}+{poison:3剧毒}；触发时所有物品{charge:充能}{val:1s}；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:3}重触发",
+        "onTrigger": {
+          "multiTrigger": 3
+        }
       },
       "Silver": {
         "cooldown": 9000,
@@ -826,7 +864,10 @@
         "shield": 0,
         "burn": 5,
         "poison": 5,
-        "skill_cn": "每{val:9}秒{burn:5灼烧}+{poison:5剧毒}；触发时所有物品{charge:充能}{val:1s}；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:3}重触发",
+        "onTrigger": {
+          "multiTrigger": 3
+        }
       },
       "Gold": {
         "cooldown": 9000,
@@ -835,7 +876,10 @@
         "shield": 0,
         "burn": 9,
         "poison": 9,
-        "skill_cn": "每{val:9}秒{burn:9灼烧}+{poison:9剧毒}；触发时所有物品{charge:充能}{val:1s}；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:3}重触发",
+        "onTrigger": {
+          "multiTrigger": 3
+        }
       },
       "Diamond": {
         "cooldown": 9000,
@@ -844,7 +888,10 @@
         "shield": 0,
         "burn": 16,
         "poison": 16,
-        "skill_cn": "每{val:9}秒{burn:16灼烧}+{poison:16剧毒}；触发时所有物品{charge:充能}{val:1s}；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "{val:3}重触发",
+        "onTrigger": {
+          "multiTrigger": 3
+        }
       }
     }
   },
@@ -853,14 +900,9 @@
     "name_cn": "鱼饵",
     "name_en": "Chum",
     "tags": [
-      "水系",
       "食物"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "食物",
-      "ms": 1000
-    },
     "tiers": {
       "Bronze": {
         "cooldown": 5000,
@@ -868,9 +910,11 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 0,
-        "globalCritBonus": 0.07,
-        "skill_cn": "每{val:5}秒我方其他物品暴击率+7%（可叠加）"
+        "poison": 3,
+        "skill_cn": "每发剧毒 {poison:+1}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 1
+        }
       },
       "Silver": {
         "cooldown": 5000,
@@ -878,9 +922,11 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 0,
-        "globalCritBonus": 0.08,
-        "skill_cn": "每{val:5}秒我方其他物品暴击率+8%（可叠加）"
+        "poison": 5,
+        "skill_cn": "每发剧毒 {poison:+2}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 2
+        }
       },
       "Gold": {
         "cooldown": 5000,
@@ -888,9 +934,11 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 0,
-        "globalCritBonus": 0.09,
-        "skill_cn": "每{val:5}秒我方其他物品暴击率+9%（可叠加）"
+        "poison": 8,
+        "skill_cn": "每发剧毒 {poison:+2}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 2
+        }
       },
       "Diamond": {
         "cooldown": 5000,
@@ -898,9 +946,11 @@
         "heal": 0,
         "shield": 0,
         "burn": 0,
-        "poison": 0,
-        "globalCritBonus": 0.1,
-        "skill_cn": "每{val:5}秒我方其他物品暴击率+10%（可叠加）"
+        "poison": 12,
+        "skill_cn": "每发剧毒 {poison:+3}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 3
+        }
       }
     }
   },
@@ -909,17 +959,9 @@
     "name_cn": "潜水头盔",
     "name_en": "Diving Helmet",
     "tags": [
-      "水系",
-      "工具",
-      "服饰",
-      "防具"
+      "工具"
     ],
     "price": 4,
-    "tagCharge": {
-      "tag": "防具",
-      "ms": 800
-    },
-    "chargeWaterItems": 2000,
     "tiers": {
       "Bronze": {
         "cooldown": 10000,
@@ -928,7 +970,10 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:10}秒{shield:15护盾}；触发时为所有水系物品{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:2s}",
+        "onTrigger": {
+          "adjacentCharge": 2000
+        }
       },
       "Silver": {
         "cooldown": 9000,
@@ -937,7 +982,10 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:9}秒{shield:15护盾}；触发时为所有水系物品{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:2.5s}",
+        "onTrigger": {
+          "adjacentCharge": 2500
+        }
       },
       "Gold": {
         "cooldown": 8000,
@@ -946,7 +994,10 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{shield:15护盾}；触发时为所有水系物品{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:3s}",
+        "onTrigger": {
+          "adjacentCharge": 3000
+        }
       },
       "Diamond": {
         "cooldown": 7000,
@@ -955,7 +1006,10 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{shield:15护盾}；触发时为所有水系物品{charge:充能}{val:2s}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "相邻充能 {charge:4s}",
+        "onTrigger": {
+          "adjacentCharge": 4000
+        }
       }
     }
   },
@@ -964,10 +1018,7 @@
     "name_cn": "深潜器",
     "name_en": "Submersible",
     "tags": [
-      "水系",
-      "武器",
-      "载具",
-      "科技"
+      "载具"
     ],
     "price": 4,
     "tiers": {
@@ -978,7 +1029,10 @@
         "shield": 10,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:10伤害}和{shield:10护盾}"
+        "skill_cn": "每发护盾 {shield:+3}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 3
+        }
       },
       "Silver": {
         "cooldown": 5000,
@@ -987,7 +1041,10 @@
         "shield": 20,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:20伤害}和{shield:20护盾}"
+        "skill_cn": "每发护盾 {shield:+5}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 5
+        }
       },
       "Gold": {
         "cooldown": 5000,
@@ -996,7 +1053,10 @@
         "shield": 30,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:30伤害}和{shield:30护盾}"
+        "skill_cn": "每发护盾 {shield:+7}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 7
+        }
       },
       "Diamond": {
         "cooldown": 5000,
@@ -1005,7 +1065,10 @@
         "shield": 40,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:40伤害}和{shield:40护盾}"
+        "skill_cn": "每发护盾 {shield:+10}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 10
+        }
       }
     }
   },
@@ -1017,11 +1080,6 @@
       "工具"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "工具",
-      "ms": 600
-    },
-    "burnBoostIfBurning": 0.5,
     "tiers": {
       "Bronze": {
         "cooldown": 3000,
@@ -1030,7 +1088,10 @@
         "shield": 0,
         "burn": 3,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:3灼烧}；敌方有灼烧时本次+50%；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发灼烧 {burn:+1}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 1
+        }
       },
       "Silver": {
         "cooldown": 3000,
@@ -1039,7 +1100,10 @@
         "shield": 0,
         "burn": 5,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:5灼烧}；敌方有灼烧时本次+50%；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发灼烧 {burn:+2}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 2
+        }
       },
       "Gold": {
         "cooldown": 3000,
@@ -1048,7 +1112,10 @@
         "shield": 0,
         "burn": 9,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:9灼烧}；敌方有灼烧时本次+50%；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发灼烧 {burn:+3}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 3
+        }
       },
       "Diamond": {
         "cooldown": 3000,
@@ -1057,7 +1124,10 @@
         "shield": 0,
         "burn": 16,
         "poison": 0,
-        "skill_cn": "每{val:3}秒{burn:16灼烧}；敌方有灼烧时本次+50%；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发灼烧 {burn:+4}层（本战）",
+        "onTrigger": {
+          "burnGrowth": 4
+        }
       }
     }
   },
@@ -1066,15 +1136,9 @@
     "name_cn": "燧发枪",
     "name_en": "Flintlock",
     "tags": [
-      "武器",
       "枪械"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "武器",
-      "ms": 600
-    },
-    "alwaysCrit": true,
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
@@ -1083,8 +1147,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "critBurnStacks": 4,
-        "skill_cn": "每{val:7}秒必定暴击（×1.5）造成{dmg:15伤害}，并施加{burn:4层灼烧}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "adjacentCharge": 1000
+        },
+        "skill_cn": "相邻充能 {charge:1s}"
       },
       "Silver": {
         "cooldown": 6000,
@@ -1093,8 +1159,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "critBurnStacks": 6,
-        "skill_cn": "每{val:6}秒必定暴击（×1.5）造成{dmg:21伤害}，并施加{burn:6层灼烧}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "adjacentCharge": 1500
+        },
+        "skill_cn": "相邻充能 {charge:1.5s}"
       },
       "Gold": {
         "cooldown": 5000,
@@ -1103,8 +1171,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "critBurnStacks": 9,
-        "skill_cn": "每{val:5}秒必定暴击（×1.5）造成{dmg:30伤害}，并施加{burn:9层灼烧}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "adjacentCharge": 2000
+        },
+        "skill_cn": "相邻充能 {charge:2s}"
       },
       "Diamond": {
         "cooldown": 4000,
@@ -1113,8 +1183,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "critBurnStacks": 16,
-        "skill_cn": "每{val:4}秒必定暴击（×1.5）造成{dmg:42伤害}，并施加{burn:16层灼烧}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "adjacentCharge": 2500
+        },
+        "skill_cn": "相邻充能 {charge:2.5s}"
       }
     }
   },
@@ -1123,15 +1195,9 @@
     "name_cn": "散弹枪",
     "name_en": "Blunderbuss",
     "tags": [
-      "武器",
       "枪械"
     ],
     "price": 4,
-    "tagCharge": {
-      "tag": "武器",
-      "ms": 600
-    },
-    "strikeShield": 20,
     "tiers": {
       "Bronze": {
         "cooldown": 8000,
@@ -1140,7 +1206,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{dmg:35伤害}；触发时破除敌方{shield:20点护盾}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "multiTrigger": 3
+        },
+        "skill_cn": "{val:3}重触发"
       },
       "Silver": {
         "cooldown": 7000,
@@ -1149,7 +1218,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:7}秒{dmg:50伤害}；触发时破除敌方{shield:20点护盾}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "multiTrigger": 3
+        },
+        "skill_cn": "{val:3}重触发"
       },
       "Gold": {
         "cooldown": 6000,
@@ -1158,7 +1230,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:6}秒{dmg:72伤害}；触发时破除敌方{shield:20点护盾}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "multiTrigger": 3
+        },
+        "skill_cn": "{val:3}重触发"
       },
       "Diamond": {
         "cooldown": 5000,
@@ -1167,7 +1242,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "skill_cn": "每{val:5}秒{dmg:100伤害}；触发时破除敌方{shield:20点护盾}；武器类触发时{charge:充能}{val:0.6s}"
+        "onTrigger": {
+          "multiTrigger": 3
+        },
+        "skill_cn": "{val:3}重触发"
       }
     }
   },
@@ -1176,47 +1254,57 @@
     "name_cn": "舰炮",
     "name_en": "Broadside Cannon",
     "tags": [
-      "武器",
-      "枪械"
+      "载具"
     ],
     "price": 5,
-    "adjacentCharge": 3000,
     "tiers": {
       "Bronze": {
         "cooldown": 11000,
         "damage": 60,
         "heal": 0,
         "shield": 0,
-        "burn": 0,
+        "burn": 5,
         "poison": 0,
-        "skill_cn": "每{val:11}秒{dmg:60伤害}；触发时{adj:相邻}物品{charge:充能}{val:3s}"
+        "skill_cn": "每发伤害 {dmg:+8}（本战）",
+        "onTrigger": {
+          "damageGrowth": 8
+        }
       },
       "Silver": {
         "cooldown": 10000,
         "damage": 80,
         "heal": 0,
         "shield": 0,
-        "burn": 0,
+        "burn": 8,
         "poison": 0,
-        "skill_cn": "每{val:10}秒{dmg:80伤害}；触发时{adj:相邻}物品{charge:充能}{val:3s}"
+        "skill_cn": "每发伤害 {dmg:+12}（本战）",
+        "onTrigger": {
+          "damageGrowth": 12
+        }
       },
       "Gold": {
         "cooldown": 9000,
         "damage": 110,
         "heal": 0,
         "shield": 0,
-        "burn": 0,
+        "burn": 12,
         "poison": 0,
-        "skill_cn": "每{val:9}秒{dmg:110伤害}；触发时{adj:相邻}物品{charge:充能}{val:3s}"
+        "skill_cn": "每发伤害 {dmg:+18}（本战）",
+        "onTrigger": {
+          "damageGrowth": 18
+        }
       },
       "Diamond": {
         "cooldown": 8000,
         "damage": 150,
         "heal": 0,
         "shield": 0,
-        "burn": 0,
+        "burn": 18,
         "poison": 0,
-        "skill_cn": "每{val:8}秒{dmg:150伤害}；触发时{adj:相邻}物品{charge:充能}{val:3s}"
+        "skill_cn": "每发伤害 {dmg:+25}（本战）",
+        "onTrigger": {
+          "damageGrowth": 25
+        }
       }
     }
   },
@@ -1225,50 +1313,57 @@
     "name_cn": "独桅帆船",
     "name_en": "Corsair Sloop",
     "tags": [
-      "载具",
-      "武器"
+      "载具"
     ],
     "price": 4,
     "tiers": {
       "Bronze": {
         "cooldown": 7000,
         "damage": 12,
-        "heal": 0,
+        "heal": 5,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeWeaponItems": 1000,
-        "skill_cn": "每{val:7}秒{dmg:12伤害}；触发时所有武器{charge:充能}{val:1s}"
+        "skill_cn": "相邻充能 {charge:1s}",
+        "onTrigger": {
+          "adjacentCharge": 1000
+        }
       },
       "Silver": {
         "cooldown": 6000,
         "damage": 18,
-        "heal": 0,
+        "heal": 7,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeWeaponItems": 1500,
-        "skill_cn": "每{val:6}秒{dmg:18伤害}；触发时所有武器{charge:充能}{val:1.5s}"
+        "skill_cn": "相邻充能 {charge:1.5s}",
+        "onTrigger": {
+          "adjacentCharge": 1500
+        }
       },
       "Gold": {
         "cooldown": 5000,
         "damage": 25,
-        "heal": 0,
+        "heal": 10,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeWeaponItems": 2000,
-        "skill_cn": "每{val:5}秒{dmg:25伤害}；触发时所有武器{charge:充能}{val:2s}"
+        "skill_cn": "相邻充能 {charge:2s}",
+        "onTrigger": {
+          "adjacentCharge": 2000
+        }
       },
       "Diamond": {
         "cooldown": 4000,
         "damage": 35,
-        "heal": 0,
+        "heal": 15,
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeWeaponItems": 2500,
-        "skill_cn": "每{val:4}秒{dmg:35伤害}；触发时所有武器{charge:充能}{val:2.5s}"
+        "skill_cn": "相邻充能 {charge:2.5s}",
+        "onTrigger": {
+          "adjacentCharge": 2500
+        }
       }
     }
   },
@@ -1284,42 +1379,38 @@
       "Bronze": {
         "cooldown": 12000,
         "damage": 0,
-        "heal": 0,
+        "heal": 10,
         "shield": 25,
         "burn": 0,
         "poison": 0,
-        "battleStartShield": 20,
-        "skill_cn": "战斗开始时获得{shield:20护盾}；每{val:12}秒{shield:25护盾}"
+        "skill_cn": ""
       },
       "Silver": {
         "cooldown": 10000,
         "damage": 0,
-        "heal": 0,
+        "heal": 15,
         "shield": 35,
         "burn": 0,
         "poison": 0,
-        "battleStartShield": 35,
-        "skill_cn": "战斗开始时获得{shield:35护盾}；每{val:10}秒{shield:35护盾}"
+        "skill_cn": ""
       },
       "Gold": {
         "cooldown": 8000,
         "damage": 0,
-        "heal": 0,
+        "heal": 22,
         "shield": 50,
         "burn": 0,
         "poison": 0,
-        "battleStartShield": 60,
-        "skill_cn": "战斗开始时获得{shield:60护盾}；每{val:8}秒{shield:50护盾}"
+        "skill_cn": ""
       },
       "Diamond": {
         "cooldown": 6000,
         "damage": 0,
-        "heal": 0,
+        "heal": 30,
         "shield": 70,
         "burn": 0,
         "poison": 0,
-        "battleStartShield": 100,
-        "skill_cn": "战斗开始时获得{shield:100护盾}；每{val:6}秒{shield:70护盾}"
+        "skill_cn": ""
       }
     }
   },
@@ -1328,9 +1419,7 @@
     "name_cn": "蒸汽装甲舰",
     "name_en": "Steam Ironclad",
     "tags": [
-      "载具",
-      "武器",
-      "科技"
+      "载具"
     ],
     "price": 5,
     "tiers": {
@@ -1341,9 +1430,7 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "damageGrowth": 5,
-        "shieldGrowth": 5,
-        "skill_cn": "每{val:8}秒{dmg:15伤害}和{shield:15护盾}；每次触发伤害与护盾量均+5（战斗内累积）"
+        "skill_cn": ""
       },
       "Silver": {
         "cooldown": 7000,
@@ -1352,9 +1439,7 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "damageGrowth": 8,
-        "shieldGrowth": 8,
-        "skill_cn": "每{val:7}秒{dmg:15伤害}和{shield:15护盾}；每次触发伤害与护盾量均+8（战斗内累积）"
+        "skill_cn": ""
       },
       "Gold": {
         "cooldown": 6000,
@@ -1363,9 +1448,7 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "damageGrowth": 12,
-        "shieldGrowth": 12,
-        "skill_cn": "每{val:6}秒{dmg:15伤害}和{shield:15护盾}；每次触发伤害与护盾量均+12（战斗内累积）"
+        "skill_cn": ""
       },
       "Diamond": {
         "cooldown": 5000,
@@ -1374,9 +1457,7 @@
         "shield": 15,
         "burn": 0,
         "poison": 0,
-        "damageGrowth": 18,
-        "shieldGrowth": 18,
-        "skill_cn": "每{val:5}秒{dmg:15伤害}和{shield:15护盾}；每次触发伤害与护盾量均+18（战斗内累积）"
+        "skill_cn": ""
       }
     }
   },
@@ -1385,8 +1466,7 @@
     "name_cn": "自动炮台",
     "name_en": "Auto Turret",
     "tags": [
-      "科技",
-      "武器"
+      "科技"
     ],
     "price": 4,
     "tiers": {
@@ -1397,8 +1477,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromWeapon": 500,
-        "skill_cn": "每{val:10}秒{dmg:45伤害}；场上每件武器每次触发时为自身{charge:充能}{val:0.5s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Silver": {
         "cooldown": 10000,
@@ -1407,8 +1489,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromWeapon": 800,
-        "skill_cn": "每{val:10}秒{dmg:60伤害}；场上每件武器每次触发时为自身{charge:充能}{val:0.8s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Gold": {
         "cooldown": 10000,
@@ -1417,8 +1501,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromWeapon": 1000,
-        "skill_cn": "每{val:10}秒{dmg:80伤害}；场上每件武器每次触发时为自身{charge:充能}{val:1s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       },
       "Diamond": {
         "cooldown": 10000,
@@ -1427,8 +1513,10 @@
         "shield": 0,
         "burn": 0,
         "poison": 0,
-        "chargeFromWeapon": 1500,
-        "skill_cn": "每{val:10}秒{dmg:110伤害}；场上每件武器每次触发时为自身{charge:充能}{val:1.5s}"
+        "skill_cn": "{val:2}重触发",
+        "onTrigger": {
+          "multiTrigger": 2
+        }
       }
     }
   },
@@ -1437,14 +1525,9 @@
     "name_cn": "磁力护盾",
     "name_en": "Magnetic Shield",
     "tags": [
-      "科技",
-      "防具"
+      "科技"
     ],
     "price": 4,
-    "tagCharge": {
-      "tag": "防具",
-      "ms": 800
-    },
     "tiers": {
       "Bronze": {
         "cooldown": 9000,
@@ -1453,8 +1536,10 @@
         "shield": 25,
         "burn": 0,
         "poison": 0,
-        "shieldOnDamaged": 3,
-        "skill_cn": "每{val:9}秒{shield:25护盾}；每次受到伤害时获得{shield:3护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+4}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 4
+        }
       },
       "Silver": {
         "cooldown": 8000,
@@ -1463,8 +1548,10 @@
         "shield": 35,
         "burn": 0,
         "poison": 0,
-        "shieldOnDamaged": 5,
-        "skill_cn": "每{val:8}秒{shield:35护盾}；每次受到伤害时获得{shield:5护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+6}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 6
+        }
       },
       "Gold": {
         "cooldown": 7000,
@@ -1473,8 +1560,10 @@
         "shield": 50,
         "burn": 0,
         "poison": 0,
-        "shieldOnDamaged": 8,
-        "skill_cn": "每{val:7}秒{shield:50护盾}；每次受到伤害时获得{shield:8护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+8}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 8
+        }
       },
       "Diamond": {
         "cooldown": 6000,
@@ -1483,8 +1572,10 @@
         "shield": 70,
         "burn": 0,
         "poison": 0,
-        "shieldOnDamaged": 12,
-        "skill_cn": "每{val:6}秒{shield:70护盾}；每次受到伤害时获得{shield:12护盾}；防具类触发时{charge:充能}{val:0.8s}"
+        "skill_cn": "每发护盾 {shield:+12}（本战）",
+        "onTrigger": {
+          "shieldGrowth": 12
+        }
       }
     }
   },
@@ -1493,15 +1584,9 @@
     "name_cn": "毒气弹",
     "name_en": "Toxin Canister",
     "tags": [
-      "科技",
       "工具"
     ],
     "price": 3,
-    "tagCharge": {
-      "tag": "工具",
-      "ms": 600
-    },
-    "poisonBurnScaleDamage": 0.5,
     "tiers": {
       "Bronze": {
         "cooldown": 6000,
@@ -1510,7 +1595,10 @@
         "shield": 0,
         "burn": 4,
         "poison": 4,
-        "skill_cn": "每{val:6}秒{burn:4灼烧}+{poison:4剧毒}；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发剧毒 {poison:+1}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 1
+        }
       },
       "Silver": {
         "cooldown": 6000,
@@ -1519,7 +1607,10 @@
         "shield": 0,
         "burn": 6,
         "poison": 6,
-        "skill_cn": "每{val:6}秒{burn:6灼烧}+{poison:6剧毒}；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发剧毒 {poison:+2}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 2
+        }
       },
       "Gold": {
         "cooldown": 5000,
@@ -1528,7 +1619,10 @@
         "shield": 0,
         "burn": 10,
         "poison": 10,
-        "skill_cn": "每{val:5}秒{burn:10灼烧}+{poison:10剧毒}；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发剧毒 {poison:+2}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 2
+        }
       },
       "Diamond": {
         "cooldown": 4000,
@@ -1537,7 +1631,10 @@
         "shield": 0,
         "burn": 16,
         "poison": 16,
-        "skill_cn": "每{val:4}秒{burn:16灼烧}+{poison:16剧毒}；敌方同时有灼烧和剧毒时额外造成（灼烧层+剧毒层）×0.5伤害；工具类触发时{charge:充能}{val:0.6s}"
+        "skill_cn": "每发剧毒 {poison:+3}层（本战）",
+        "onTrigger": {
+          "poisonGrowth": 3
+        }
       }
     }
   }

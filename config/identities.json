@@ -1,22 +1,5 @@
 [
   {
-    "id": "samurai",
-    "icon": "☠️",
-    "portrait": "identities/samurai.jpg",
-    "name": "独眼剑客",
-    "flavor": "「这刀跟了我三十年」",
-    "startItems": [7],
-    "startTag": "武器",
-    "itemNames": ["弯刀", "+ 2件随机武器类"],
-    "skill": {
-      "type": "tag_cooldown_reduce",
-      "tag": "武器",
-      "threshold": 3,
-      "ms": 1000,
-      "desc": "武器×3：触发间隔-1秒"
-    }
-  },
-  {
     "id": "gunner",
     "icon": "💣",
     "portrait": "identities/gunner.jpg",
@@ -26,9 +9,11 @@
     "startTag": "枪械",
     "itemNames": ["左轮手枪", "+ 2件随机枪械类"],
     "skill": {
-      "type": "gun_charge",
+      "type": "tag_cooldown_reduce",
+      "tags": ["伙伴", "枪械"],
+      "threshold": 3,
       "ms": 1000,
-      "desc": "枪械触发：自充能1秒"
+      "desc": "伙伴枪械×3：触发间隔-1秒"
     }
   },
   {
@@ -38,14 +23,14 @@
     "name": "深海渔翁",
     "flavor": "「海生之物凶猛忠诚」",
     "startItems": [2],
-    "startTag": "水系",
-    "itemNames": ["食人鱼", "+ 2件随机水系类"],
+    "startTag": "伙伴",
+    "itemNames": ["食人鱼", "+ 2件随机伙伴类"],
     "skill": {
       "type": "tag_cooldown_reduce",
-      "tag": "水系",
+      "tags": ["伙伴"],
       "threshold": 3,
       "ms": 1000,
-      "desc": "水系×3：触发间隔-1秒"
+      "desc": "伙伴×3：触发间隔-1秒"
     }
   },
   {
@@ -59,7 +44,7 @@
     "itemNames": ["打火机", "+ 2件随机工具类"],
     "skill": {
       "type": "burn_poison_double",
-      "tag": "工具",
+      "tags": ["工具"],
       "threshold": 3,
       "desc": "工具×3：灼毒伤害翻倍"
     }

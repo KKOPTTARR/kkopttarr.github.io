@@ -91,32 +91,34 @@ const iconUrl  = computed(() => getIconUrl(props.item.name_en, props.item.tier))
 
 const fallbackEmoji = computed(() => {
   const t = props.item.tags?.[0] || ''
-  if (t.includes('武器') || t.includes('枪')) return '⚔️'
+  if (t.includes('武器') || t.includes('枪械')) return '⚔️'
   if (t.includes('防具')) return '🛡'
-  if (t.includes('水系')) return '🐟'
+  if (t.includes('伙伴')) return '🐟'
+  if (t.includes('載具') || t.includes('载具')) return '🚢'
+  if (t.includes('工具')) return '🔧'
+  if (t.includes('食物')) return '🍖'
+  if (t.includes('科技')) return '⚙️'
   return '📦'
 })
 
 const statType = computed(() => {
   const i = props.item
-  if (i.damage        > 0) return 'damage'
-  if (i.heal          > 0) return 'heal'
-  if (i.shield        > 0) return 'shield'
-  if (i.burn          > 0) return 'burn'
-  if (i.poison        > 0) return 'poison'
-  if (i.globalCritBonus)   return 'crit'
-  return 'damage'
+  if (i.damage  > 0) return 'damage'
+  if (i.heal    > 0) return 'heal'
+  if (i.shield  > 0) return 'shield'
+  if (i.burn    > 0) return 'burn'
+  if (i.poison  > 0) return 'poison'
+  return 'none'
 })
 
 // compact 模式下显示最关键的一个数值
 const mainStat = computed(() => {
   const i = props.item
-  if (i.damage        > 0) return i.damage
-  if (i.heal          > 0) return `+${i.heal}`
-  if (i.shield        > 0) return i.shield
-  if (i.burn          > 0) return i.burn
-  if (i.poison        > 0) return i.poison
-  if (i.globalCritBonus)   return `+${Math.round(i.globalCritBonus * 100)}%`
+  if (i.damage  > 0) return i.damage
+  if (i.heal    > 0) return `+${i.heal}`
+  if (i.shield  > 0) return i.shield
+  if (i.burn    > 0) return i.burn
+  if (i.poison  > 0) return i.poison
   return null
 })
 

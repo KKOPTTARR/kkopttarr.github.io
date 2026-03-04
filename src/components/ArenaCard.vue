@@ -35,7 +35,7 @@
 <script setup>
 import { computed } from 'vue'
 import { getIconUrl } from '../data/items.js'
-import { showItemTooltip, hideItemTooltip } from '../composables/useTooltip.js'
+import { showBubble } from '../composables/useBubble.js'
 
 const props = defineProps({
   item: { type: Object, required: true },
@@ -69,30 +69,27 @@ const isCharging = computed(() => {
 // 主要数值
 const statType = computed(() => {
   const i = props.item
-  if (i.damage        > 0) return 'damage'
-  if (i.heal          > 0) return 'heal'
-  if (i.shield        > 0) return 'shield'
-  if (i.burn          > 0) return 'burn'
-  if (i.poison        > 0) return 'poison'
-  if (i.globalCritBonus)   return 'crit'
+  if (i.damage  > 0) return 'damage'
+  if (i.heal    > 0) return 'heal'
+  if (i.shield  > 0) return 'shield'
+  if (i.burn    > 0) return 'burn'
+  if (i.poison  > 0) return 'poison'
   return 'none'
 })
 
 function onCardClick(e) {
   e.stopPropagation()
-  showItemTooltip(props.item, e.clientX, e.clientY)
-  const hide = () => { hideItemTooltip(); document.removeEventListener('click', hide) }
-  setTimeout(() => document.addEventListener('click', hide), 0)
+  const elTop = e.currentTarget.getBoundingClientRect().top
+  showBubble(props.item, e.clientX, elTop)
 }
 
 const mainStat = computed(() => {
   const i = props.item
-  if (i.damage        > 0) return i.damage
-  if (i.heal          > 0) return `+${i.heal}`
-  if (i.shield        > 0) return i.shield
-  if (i.burn          > 0) return i.burn
-  if (i.poison        > 0) return i.poison
-  if (i.globalCritBonus)   return `+${Math.round(i.globalCritBonus * 100)}%`
+  if (i.damage  > 0) return i.damage
+  if (i.heal    > 0) return `+${i.heal}`
+  if (i.shield  > 0) return i.shield
+  if (i.burn    > 0) return i.burn
+  if (i.poison  > 0) return i.poison
   return ''
 })
 </script>

@@ -40,10 +40,9 @@ export function useGameState() {
   const enemyStat  = reactive({ hp: 200, maxHp: 200, shield: 0, burnStacks: 0, poisonStacks: 0 })
 
   // ── 奖励 & UI ───────────────────────────────────────────
-  const pendingRewards = ref([])
-  const showBackpack   = ref(false)
+  const pendingRewards  = ref([])
+  const showBackpack    = ref(false)
   const battleScreenRef = ref(null)
-  const bubbleItem      = ref(null)   // { item, x, y }
 
   // ── 重置（新游戏）──────────────────────────────────────
   function resetState() {
@@ -65,7 +64,6 @@ export function useGameState() {
     selectEnemies.value    = []
     pendingRewards.value   = []
     showBackpack.value     = false
-    bubbleItem.value       = null
     playerItems.splice(0)
     backpackItems.splice(0)
     enemyAbilities.splice(0)
@@ -81,7 +79,7 @@ export function useGameState() {
     currentEnemy, selectEnemies,
     playerItems, backpackItems, enemyAbilities,
     playerStat, enemyStat,
-    pendingRewards, showBackpack, battleScreenRef, bubbleItem,
+    pendingRewards, showBackpack, battleScreenRef,
     resetState,
   }
 }

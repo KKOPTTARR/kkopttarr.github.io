@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="preview-grid-wrap">
-        <GridBoard :items="enemyItems" :is-enemy="true" :is-battle="false" :compact="false" />
+        <GridBoard :items="enemyItems" :is-enemy="true" :is-battle="false" :compact="false" :cell-size="cellSize" />
       </div>
       <!-- 威胁评估 -->
       <div class="threat-row" v-if="threatLevel">
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="preview-grid-wrap">
-        <GridBoard :items="playerItems" :is-enemy="true" :is-battle="false" :compact="false" />
+        <GridBoard :items="playerItems" :is-enemy="true" :is-battle="false" :compact="false" :cell-size="cellSize" />
       </div>
       <div class="my-power-row" v-if="playerItems.length">
         <span class="power-label">我方物品</span>
@@ -75,6 +75,13 @@
 <script setup>
 import { computed } from 'vue'
 import GridBoard from './GridBoard.vue'
+
+// 根据屏幕宽度动态计算格子尺寸，避免 5 列溢出
+// .side-section padding: 8px 10px → 水平各 10px = 20px
+const MAX_COLS = 5
+const cellSize = computed(() =>
+  Math.min(90, Math.floor((window.innerWidth - 20 - (MAX_COLS - 1) * 4) / MAX_COLS))
+)
 
 const props = defineProps({
   battleCount: { type: Number, required: true },
