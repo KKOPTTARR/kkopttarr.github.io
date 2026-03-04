@@ -159,23 +159,6 @@
       @continue="continueEventRound"
     />
 
-    <!-- ══════════════ 商店模式 ══════════════ -->
-    <ShopScreen
-      v-else-if="phase === 'SHOP'"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      :player-items="playerItems"
-      :backpack-items="backpackItems"
-      :shop-slots="shopSlots"
-      :unlocked-cols="unlockedCols"
-      v-model:showBackpack="showBackpack"
-      @reroll="onReroll"
-      @start-battle="onStartBattle"
-    />
-
     <!-- 技能栏（8格横排，点击展开 tooltip） -->
     <div
       v-if="layoutState.skillBar"
@@ -234,7 +217,6 @@ import CashOutScreen       from './components/CashOutScreen.vue'
 import AlchemyScreen       from './components/AlchemyScreen.vue'
 import GamblerScreen       from './components/GamblerScreen.vue'
 import BattleScreen        from './components/BattleScreen.vue'
-import ShopScreen          from './components/ShopScreen.vue'
 import ArrangeScreen       from './components/ArrangeScreen.vue'
 import EnemySelectScreen   from './components/EnemySelectScreen.vue'
 import ItemBubble          from './components/ItemBubble.vue'
@@ -264,7 +246,7 @@ import { setPixiSpeed } from './composables/usePixiBattle.js'
 import { useGameState } from './composables/useGameState.js'
 import { shuffle } from './utils.js'
 
-const { MAX_LIVES, GOLD_PER_DAY, SHOP_SLOTS } = GC
+const { MAX_LIVES, GOLD_PER_DAY } = GC
 
 const {
   phase, battleCount, wins, lives, gold, resultType,
@@ -272,7 +254,7 @@ const {
   identitySkill, identityIcon, skillTooltipVisible, selectedIdentityName,
   battleSpeed, battleItemStats, selectedDifficulty,
   currentEnemy, selectEnemies,
-  playerItems, backpackItems, enemyAbilities, shopSlots,
+  playerItems, backpackItems, enemyAbilities,
   playerStat, enemyStat,
   pendingRewards, showBackpack, battleScreenRef, bubbleItem,
   resetState,
@@ -289,7 +271,7 @@ const unlockedCols = computed(() => Math.min(2 + battleCount.value, GRID_COLS))
 const {
   findFreeSlot, findFreeBackpackSlot,
   handleDropToGrid, handleDropToBackpack, handleDropToSell,
-} = useInventory({ playerItems, backpackItems, shopSlots, gold, phase, unlockedCols, mergeFlash })
+} = useInventory({ playerItems, backpackItems, gold, phase, unlockedCols, mergeFlash })
 
 const { deliverRewards } = useRewards({ playerItems, backpackItems, findFreeSlot, findFreeBackpackSlot })
 
@@ -300,7 +282,7 @@ const {
   afterEventAction, onEventChoice, startEventRound, continueEventRound, beginEventRound,
 } = useEventSystem({
   phase, battleCount, playerItems, backpackItems,
-  gold, mergeFlash, shopSlots, showBackpack,
+  gold, mergeFlash, showBackpack,
   findFreeSlot, findFreeBackpackSlot, deliverRewards,
 })
 
@@ -354,21 +336,9 @@ function startGame() {
   phase.value = 'IDENTITY'
 }
 
-function rollShop() {
-  const p = [...ITEM_POOL]; shuffle(p)
-  shopSlots.length = 0
-  for (let i = 0; i < SHOP_SLOTS; i++) shopSlots.push(p[i] ?? null)
-}
-function onReroll() { if (gold.value < 1) return; gold.value--; rollShop() }
-
 function onStartBattle() {
-  if (phase.value !== 'SHOP' && phase.value !== 'ARRANGE') return
+  if (phase.value !== 'ARRANGE') return
   cancelDrag()
-  if (phase.value === 'SHOP') {
-    showBackpack.value = false
-    phase.value = 'ARRANGE'
-    return
-  }
   selectEnemies.value = getSelectEnemies(battleCount.value)
   phase.value = 'SELECT'
 }

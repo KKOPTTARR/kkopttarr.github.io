@@ -47,7 +47,7 @@ export function buildBackpackGridState(backpackItems) {
 }
 
 // ── Composable（需要响应式状态作为参数）───────────────────────
-export function useInventory({ playerItems, backpackItems, shopSlots, gold, phase, unlockedCols, mergeFlash }) {
+export function useInventory({ playerItems, backpackItems, gold, phase, unlockedCols, mergeFlash }) {
 
   function findFreeSlot() {
     const state = buildGridState(playerItems)
@@ -70,35 +70,8 @@ export function useInventory({ playerItems, backpackItems, shopSlots, gold, phas
       ?? null
   }
 
-  function tryBuyItem(item, shopSlot) {
-    if ((phase.value !== 'SHOP' && phase.value !== 'ARRANGE') || gold.value < item.price) return false
-    const existing = findStackable(item)
-    if (existing) {
-      gold.value -= item.price
-      if (shopSlot >= 0) shopSlots[shopSlot] = null
-      incrementStack(existing)
-      return true
-    }
-    const fs = findFreeSlot()
-    if (fs) {
-      gold.value -= item.price
-      if (shopSlot >= 0) shopSlots[shopSlot] = null
-      playerItems.push(mkInst(item, fs.col, fs.row))
-      return true
-    }
-    const bps = findFreeBackpackSlot()
-    if (bps) {
-      gold.value -= item.price
-      if (shopSlot >= 0) shopSlots[shopSlot] = null
-      backpackItems.push(mkInst(item, bps.col, bps.row))
-      return true
-    }
-    showFlash(mergeFlash, '空间已满！', 1500)
-    return false
-  }
-
-  function handleDropToGrid(item, col, row, sourceType, sourceInstanceId, sourceShopSlot) {
-    if (phase.value !== 'SHOP' && phase.value !== 'ARRANGE') return
+  function handleDropToGrid(item, col, row, sourceType, sourceInstanceId) {
+    if (phase.value !== 'ARRANGE') return
     if (sourceType === 'grid') {
       const idx = playerItems.findIndex(i => i.instanceId === sourceInstanceId)
       if (idx === -1) return
@@ -142,13 +115,11 @@ export function useInventory({ playerItems, backpackItems, shopSlots, gold, phas
         backpackItems.splice(idx, 1)
       }
       playerItems.push(mkInst(item, col, row, { instanceId: sourceInstanceId, stack: item.stack ?? 1 }))
-    } else {
-      tryBuyItem(item, sourceShopSlot)
     }
   }
 
-  function handleDropToBackpack(item, col, row, sourceType, sourceInstanceId, sourceShopSlot) {
-    if (phase.value !== 'SHOP' && phase.value !== 'ARRANGE') return
+  function handleDropToBackpack(item, col, row, sourceType, sourceInstanceId) {
+    if (phase.value !== 'ARRANGE') return
     if (sourceType === 'grid') {
       const idx = playerItems.findIndex(i => i.instanceId === sourceInstanceId)
       if (idx === -1) return
@@ -191,13 +162,11 @@ export function useInventory({ playerItems, backpackItems, shopSlots, gold, phas
         return
       }
       backpackItems.push(mkInst(item, col, row, { instanceId: sourceInstanceId, stack: item.stack ?? 1 }))
-    } else if (sourceType === 'shop') {
-      tryBuyItem(item, sourceShopSlot)
     }
   }
 
   function handleDropToSell(instanceId) {
-    if (phase.value !== 'SHOP' && phase.value !== 'ARRANGE') return
+    if (phase.value !== 'ARRANGE') return
     let idx = playerItems.findIndex(i => i.instanceId === instanceId)
     if (idx !== -1) { playerItems.splice(idx, 1); gold.value += SELL_PRICE; return }
     idx = backpackItems.findIndex(i => i.instanceId === instanceId)
@@ -206,6 +175,6 @@ export function useInventory({ playerItems, backpackItems, shopSlots, gold, phas
 
   return {
     findFreeSlot, findFreeBackpackSlot, findStackable,
-    tryBuyItem, handleDropToGrid, handleDropToBackpack, handleDropToSell,
+    handleDropToGrid, handleDropToBackpack, handleDropToSell,
   }
 }

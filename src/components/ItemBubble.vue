@@ -1,6 +1,9 @@
 <template>
   <Transition name="bubble-fade">
     <div v-if="bubble" class="bubble" :style="bubbleStyle" @click.stop>
+      <div v-if="bubble.item.tags?.length" class="bubble-tags">
+        <span v-for="tag in bubble.item.tags" :key="tag" class="btag">{{ tag }}</span>
+      </div>
       <div class="bubble-stats">
         <span v-if="bubble.item.damage"  class="bpill dmg">⚔️ {{ bubble.item.damage }}</span>
         <span v-if="bubble.item.heal"    class="bpill heal">💚 {{ bubble.item.heal }}</span>
@@ -85,6 +88,23 @@ const arrowLeft = computed(() => {
   flex-direction: column;
   gap: 10px;
   pointer-events: auto;
+}
+
+/* ── 类型标签 ──────────────────────────────────────────── */
+.bubble-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.btag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(200, 134, 10, 0.12);
+  color: #c8a050;
+  border: 1px solid rgba(200, 134, 10, 0.25);
+  letter-spacing: 0.5px;
 }
 
 /* ── 属性胶囊行 ────────────────────────────────────────── */

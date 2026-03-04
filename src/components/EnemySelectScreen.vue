@@ -32,25 +32,14 @@
           <span class="card-stat">❤️ {{ enemy.hp }}</span>
         </div>
 
-        <!-- 技能列表 -->
-        <div class="ability-list">
-          <div v-for="ab in enemy.abilities" :key="ab.id" class="ab-item">
-            <span class="ab-name">{{ ab.name }}</span>
-            <span class="ab-desc">{{ ab.description }}</span>
+        <!-- 掉落偏向 + 奖励 合并一行 -->
+        <div class="card-footer">
+          <div v-if="enemy.dropBias?.length" class="drop-chips">
+            <span v-for="tag in enemy.dropBias" :key="tag" class="drop-chip">{{ tag }}</span>
           </div>
-        </div>
-
-        <div class="card-divider"></div>
-
-        <!-- 掉落偏向 -->
-        <div v-if="enemy.dropBias?.length" class="drop-bias">
-          🎁 偏向：{{ enemy.dropBias.join(' · ') }}
-        </div>
-
-        <!-- 奖励 -->
-        <div class="card-reward-label">胜利奖励</div>
-        <div class="card-reward-count" :class="`reward-color-${enemy.difficulty}`">
-          {{ rewardDesc(enemy.difficulty) }}
+          <div class="card-reward" :class="`reward-color-${enemy.difficulty}`">
+            🎁 {{ rewardDesc(enemy.difficulty) }}
+          </div>
         </div>
       </div>
     </div>
@@ -187,43 +176,26 @@ function rewardDesc(diff) {
 }
 .card-stat { font-size: 11px; color: #9e8060; }
 
-/* ── 分割线 ── */
-.card-divider {
-  width: 60%; height: 1px;
-  background: rgba(200,140,40,.2);
-  margin: 2px 0;
-}
 
-/* ── 技能列表 ── */
-.ability-list {
-  width: 100%; display: flex; flex-direction: column; gap: 4px;
-}
-.ab-item {
-  display: flex; flex-direction: column; gap: 1px;
-  padding: 4px 6px; border-radius: 5px;
-  background: rgba(0,0,0,.25);
-  text-align: left;
-}
-.ab-name { font-size: 10px; font-weight: 700; color: #c8a060; }
-.ab-desc { font-size: 10px; color: #7a6848; line-height: 1.35; }
 
-/* ── 掉落偏向 ── */
-.drop-bias {
-  font-size: 10px; color: #8a9868;
-  background: rgba(80,100,40,.18);
-  border: 1px solid rgba(100,140,50,.25);
-  border-radius: 5px; padding: 3px 8px;
-  width: 100%; text-align: left;
+/* ── 底部：偏向 + 奖励 ── */
+.card-footer {
+  width: 100%;
+  display: flex; flex-direction: column; gap: 5px;
+  margin-top: 2px;
 }
-
-/* ── 奖励 ── */
-.card-reward-label {
-  font-size: 10px; color: #7a6040;
-  letter-spacing: 1px; text-transform: uppercase;
+.drop-chips {
+  display: flex; flex-wrap: wrap; gap: 3px; justify-content: center;
 }
-.card-reward-count {
-  font-size: 11px; font-weight: 700;
-  line-height: 1.4; text-align: center;
+.drop-chip {
+  font-size: 9px; color: #8aaa68;
+  background: rgba(80,100,40,.2);
+  border: 1px solid rgba(100,140,50,.3);
+  border-radius: 4px; padding: 1px 6px;
+}
+.card-reward {
+  font-size: 10px; font-weight: 700;
+  text-align: center;
 }
 .reward-color-normal  { color: #7acc7a; }
 .reward-color-elite   { color: #b880f0; }

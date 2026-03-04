@@ -8,7 +8,7 @@ import GC from '../../config/gameConfig.json'
 
 const {
   EVENTS_PER_ROUND, EVENT_NORMAL_COUNT, EVENT_LAST_NORMAL_COUNT,
-  SHOP_SLOTS, STORM_SHIELD,
+  STORM_SHIELD,
   TAVERN_COST, TAVERN_WIN_GOLD, BLACK_MARKET_COST,
 } = GC
 
@@ -16,7 +16,7 @@ export function useEventSystem({
   phase, battleCount,
   playerItems, backpackItems,
   gold, mergeFlash,
-  shopSlots, showBackpack,
+  showBackpack,
   findFreeSlot, findFreeBackpackSlot,
   deliverRewards,
 }) {
@@ -66,16 +66,6 @@ export function useEventSystem({
       upgradeEventTag.value = tag
       return { ...e, desc: `升级「${tag}」类物品` }
     }
-    if (e.id === 'shop') {
-      const allTags = [...new Set(ITEM_POOL.flatMap(i => i.tags || []))]
-      shuffle(allTags)
-      const tags = allTags.slice(0, 3)
-      const taggedPool = ITEM_POOL.filter(i => i.tags?.some(t => tags.includes(t)))
-      const shuffledPool = [...taggedPool]; shuffle(shuffledPool)
-      shopSlots.length = 0
-      shuffledPool.slice(0, SHOP_SLOTS).forEach(item => shopSlots.push(item))
-      return { ...e, desc: tags.join(' · ') }
-    }
     if (e.id === 'exchange') {
       if (!allItems.length) return null
       return { ...e }
@@ -96,7 +86,7 @@ export function useEventSystem({
       return { ...e, desc: `打捞「${tag}」类铜质宝物，三选一` }
     }
     if (e.id === 'storm_blessing') {
-      return { ...e, desc: `下一场开场获得 ${STORM_SHIELD} 点临时护盾` }
+      return { ...e, desc: `下一场战斗开始时，获得 ${STORM_SHIELD} 点临时护盾` }
     }
     if (e.id === 'tavern_gamble') {
       const ok = checkEventCondition('tavern_gamble', { playerItems, backpackItems, findFreeSlot, findFreeBackpackSlot, gold })

@@ -34,7 +34,6 @@ export function useGameState() {
   const playerItems    = reactive([])
   const backpackItems  = reactive([])
   const enemyAbilities = reactive([])
-  const shopSlots      = reactive([])
 
   // ── 战斗双方属性 ────────────────────────────────────────
   const playerStat = reactive({ hp: 500, maxHp: 500, shield: 0, burnStacks: 0, poisonStacks: 0 })
@@ -70,7 +69,6 @@ export function useGameState() {
     playerItems.splice(0)
     backpackItems.splice(0)
     enemyAbilities.splice(0)
-    shopSlots.splice(0)
     Object.assign(playerStat, { hp: 500, maxHp: 500, shield: 0, burnStacks: 0, poisonStacks: 0 })
     Object.assign(enemyStat,  { hp: 200, maxHp: 200, shield: 0, burnStacks: 0, poisonStacks: 0 })
   }
@@ -81,7 +79,7 @@ export function useGameState() {
     identitySkill, identityIcon, skillTooltipVisible, selectedIdentityName,
     battleSpeed, battleItemStats, selectedDifficulty,
     currentEnemy, selectEnemies,
-    playerItems, backpackItems, enemyAbilities, shopSlots,
+    playerItems, backpackItems, enemyAbilities,
     playerStat, enemyStat,
     pendingRewards, showBackpack, battleScreenRef, bubbleItem,
     resetState,

@@ -82,10 +82,10 @@
   },
   {
     "id": "storm_blessing",
-    "icon": "🌊",
+    "icon": "🛡️",
     "img": "/events/storm_blessing.png",
-    "label": "风暴祝福",
-    "desc": "下一场开场获得临时护盾",
+    "label": "临时护盾",
+    "desc": "下一场战斗开始时，获得一层临时护盾",
     "pool": "last",
     "guaranteed": true
   }
