@@ -6,51 +6,21 @@
     <Transition name="hp-flash"><div v-if="enemyHpFlash"  class="hp-flash hp-flash-enemy"  :class="`hpf-${enemyHpFlash.type}`">{{ enemyHpFlash.text }}</div></Transition>
     <Transition name="hp-flash"><div v-if="playerHpFlash" class="hp-flash hp-flash-player" :class="`hpf-${playerHpFlash.type}`">{{ playerHpFlash.text }}</div></Transition>
 
-    <!-- ══ 敌方展示区（插画 + 技能列表）══ -->
-    <div class="enemy-section">
-      <!-- 敌人插画 -->
-      <div class="enemy-portrait-wrap" :class="{ 'enemy-defeated': enemyDefeated }">
-        <img :src="portraitUrl" class="enemy-portrait" :alt="enemyName" />
-        <div class="portrait-vignette"></div>
-        <!-- 状态 chips -->
-        <div class="enemy-chips">
+    <!-- ══ 敌方展示区（全宽压迫式）══ -->
+    <div class="enemy-section" :class="{ 'enemy-defeated': enemyDefeated, 'enemy-attacking': enemyAttacking }">
+      <!-- 模糊背景层：同张图 cover + blur，填补 contain 两侧空白 -->
+      <img :src="portraitUrl" class="enemy-bg-blur" aria-hidden="true" />
+      <!-- 主图：contain 完整显示角色，受击/动画均在此层 -->
+      <img :src="portraitUrl" class="enemy-bg-img" :class="{ 'enemy-hurt-flash': enemyHurt }" :alt="enemyName" />
+      <div class="enemy-overlay"></div>
+      <div class="enemy-info-bar">
+        <span class="enemy-info-name">{{ enemyName }}</span>
+        <div class="enemy-info-chips">
           <span v-if="enemyTotalBurn   > 0" class="chip burn-chip">🔥{{ enemyTotalBurn }}</span>
           <span v-if="enemyTotalPoison > 0" class="chip poison-chip">☠{{ enemyTotalPoison }}</span>
           <span v-if="enemyStat?.shield > 0" class="chip shield-chip">🛡{{ enemyStat.shield }}</span>
         </div>
       </div>
-
-      <!-- 技能列表 -->
-      <div class="ability-list">
-        <div
-          v-for="ab in enemyAbilities"
-          :key="ab.id"
-          class="ability-row"
-          :class="{ triggering: ab.triggering }"
-        >
-          <div class="ab-header">
-            <span class="ab-name">{{ ab.name }}</span>
-            <span class="ab-effects">
-              <span v-if="ab.damage  > 0">⚔️{{ ab.damage }}</span>
-              <span v-if="ab.heal    > 0">💚{{ ab.heal }}</span>
-              <span v-if="ab.shield  > 0">🛡{{ ab.shield }}</span>
-              <span v-if="ab.burn    > 0">🔥{{ ab.burn }}</span>
-              <span v-if="ab.poison  > 0">☠{{ ab.poison }}</span>
-            </span>
-          </div>
-          <div class="ab-cd-track">
-            <div
-              class="ab-cd-fill"
-              :style="{
-                width: (ab.cooldownProgress / ab.cooldown * 100) + '%',
-                background: ab.triggering ? '#e67e22' : cdColor(ab)
-              }"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 敌方战斗日志（嵌在 enemy-section 内，相对定位）-->
       <TransitionGroup tag="div" class="side-log enemy-log" name="log-slide">
         <div v-for="entry in enemyLog" :key="entry.id" class="log-entry log-enemy">
           <span class="log-icon">{{ entry.icon }}</span>
@@ -59,6 +29,27 @@
           <span v-if="entry.special" class="log-special">{{ entry.special }}</span>
         </div>
       </TransitionGroup>
+    </div>
+
+    <!-- ══ 技能时间轴 ══ -->
+    <div class="skill-timeline">
+      <div
+        v-for="ab in enemyAbilities"
+        :key="ab.id"
+        class="tl-row"
+        :class="{
+          'tl-triggering': ab.triggering,
+          'tl-danger': !ab.triggering && ab.cooldownProgress / ab.cooldown >= 0.78
+        }"
+      >
+        <span class="tl-icon">{{ abilityIcon(ab) }}</span>
+        <span class="tl-name">{{ ab.name }}</span>
+        <div class="tl-track">
+          <div class="tl-fill" :style="{ width: (ab.cooldownProgress / ab.cooldown * 100) + '%', background: tlBarColor(ab) }"></div>
+        </div>
+        <span class="tl-effects">{{ abilityEffects(ab) }}</span>
+        <span v-if="ab.triggering" class="tl-badge">触发!</span>
+      </div>
     </div>
 
     <!-- ══ 中央战斗区 ══ -->
@@ -117,7 +108,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import ArenaCard from './ArenaCard.vue'
 import {
   initPixi, destroyPixi,
@@ -173,12 +164,31 @@ const arenaGridStyle = computed(() => {
   }
 })
 
-// ── 技能冷却条颜色 ─────────────────────────────────────────
-function cdColor(ab) {
+// ── 时间轴 helper ──────────────────────────────────────────
+function abilityIcon(ab) {
+  if (ab.burn   > 0 && ab.damage > 0) return '🔥'
+  if (ab.poison > 0) return '☠️'
+  if (ab.burn   > 0) return '🔥'
+  if (ab.heal   > 0) return '💚'
+  if (ab.shield > 0) return '🛡'
+  return '⚔️'
+}
+
+function abilityEffects(ab) {
+  const p = []
+  if (ab.damage  > 0) p.push(`⚔️${ab.damage}`)
+  if (ab.heal    > 0) p.push(`💚${ab.heal}`)
+  if (ab.shield  > 0) p.push(`🛡${ab.shield}`)
+  if (ab.burn    > 0) p.push(`🔥${ab.burn}`)
+  if (ab.poison  > 0) p.push(`☠${ab.poison}`)
+  return p.join(' ')
+}
+
+function tlBarColor(ab) {
   const pct = ab.cooldownProgress / ab.cooldown
-  if (pct >= 0.85) return 'linear-gradient(90deg,#c0350a,#e67e22)'
-  if (pct >= 0.5)  return 'linear-gradient(90deg,#2471a3,#c0350a)'
-  return '#2471a3'
+  if (ab.triggering || pct >= 0.85) return 'linear-gradient(90deg,#b02a08,#e67e22)'
+  if (pct >= 0.55) return 'linear-gradient(90deg,#1a5080,#b02a08)'
+  return 'linear-gradient(90deg,#163c60,#1e6090)'
 }
 
 // ── 攻击队列 ─────────────────────────────────────────────
@@ -308,7 +318,7 @@ function flashSpecialCard(instanceId) {
 }
 
 function shakeTarget(isEnemy) {
-  const el = document.querySelector(isEnemy ? '.player-section' : '.enemy-portrait-wrap')
+  const el = document.querySelector(isEnemy ? '.player-section' : '.enemy-section')
   if (!el) return
   el.classList.remove('elem-shake')
   void el.offsetWidth
@@ -320,7 +330,42 @@ watch(() => props.latestAttack, (info) => {
   handleAttack(info)
 })
 
-const enemyDefeated = ref(false)
+const enemyDefeated  = ref(false)
+const enemyAttacking = ref(false)
+const enemyHurt      = ref(false)
+let _attackTimer = null
+let _hurtTimer   = null
+
+// 监听技能触发 → 攻击出手动画
+watch(
+  () => props.enemyAbilities?.some(ab => ab.triggering),
+  async (isTriggering) => {
+    if (!isTriggering || enemyDefeated.value) return
+    clearTimeout(_attackTimer)
+    if (enemyAttacking.value) {
+      enemyAttacking.value = false
+      await nextTick()
+    }
+    enemyAttacking.value = true
+    _attackTimer = setTimeout(() => { enemyAttacking.value = false }, 520)
+  }
+)
+
+// 监听 HP 下降 → 受击红闪
+watch(
+  () => props.enemyStat?.hp,
+  async (hp, prevHp) => {
+    if (prevHp === undefined || hp === undefined) return
+    if (hp < prevHp && hp > 0) {
+      clearTimeout(_hurtTimer)
+      enemyHurt.value = false
+      await nextTick()
+      enemyHurt.value = true
+      _hurtTimer = setTimeout(() => { enemyHurt.value = false }, 420)
+    }
+  }
+)
+
 watch(battleEndResult, (r) => {
   if (r === 'win') {
     enemyDefeated.value = true
@@ -338,7 +383,6 @@ onMounted(() => { _isMounted = true; _initPixiAsync() })
 async function _initPixiAsync() {
   try {
     await initPixi()
-    // 组件在 Pixi 异步初始化期间已卸载时，立即清理孤立 canvas
     if (!_isMounted) destroyPixi()
   } catch (e) { console.warn('[PIXI] init failed', e) }
 }
@@ -347,6 +391,7 @@ onUnmounted(() => {
   _isMounted = false
   _specialTimers.forEach(clearTimeout)
   clearTimeout(_eHpTimer); clearTimeout(_pHpTimer)
+  clearTimeout(_attackTimer); clearTimeout(_hurtTimer)
   destroyPixi()
 })
 
@@ -398,14 +443,139 @@ defineExpose({ startBattleDeploy, onBattleStart })
     url('/background/bg-victory.png') center / cover no-repeat;
 }
 
-/* ── 敌方展示区（上半区，内容垂直居中）── */
+/* ── 敌方展示区（全宽压迫式）── */
 .enemy-section {
   position: relative; z-index: 6;
   flex: 1;
-  display: flex; flex-direction: row;
-  align-items: center;
-  gap: 10px; padding: 8px 12px;
+  min-height: 140px;
   overflow: hidden;
+}
+
+/* 模糊背景层：cover 放大 + 模糊，填补 contain 两侧空白 */
+.enemy-bg-blur {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  display: block;
+  filter: blur(14px) brightness(0.55) saturate(1.3);
+  transform: scale(1.06); /* 防止 blur 边缘露出白边 */
+}
+
+/* 主图：contain 完整显示角色，垂直底部对齐 */
+.enemy-bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain; object-position: center bottom;
+  display: block;
+}
+
+/* Idle：轻微浮动（仅主图层） */
+@keyframes enemy-bg-idle {
+  0%, 100% { transform: translateY(0px)  scale(1); }
+  50%       { transform: translateY(-5px) scale(1.015); }
+}
+.enemy-section:not(.enemy-defeated) .enemy-bg-img:not(.enemy-hurt-flash) {
+  animation: enemy-bg-idle 4s ease-in-out infinite;
+}
+
+/* 渐变遮罩：底部加深（衔接时间轴），顶部轻压 */
+.enemy-overlay {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(0,0,0,.45) 0%,
+      transparent 18%,
+      transparent 65%,
+      rgba(0,0,0,.9) 100%);
+}
+
+/* 底部信息栏：名字 + chips */
+.enemy-info-bar {
+  position: absolute; bottom: 9px; left: 12px; right: 10px;
+  z-index: 2; display: flex; align-items: center; gap: 8px;
+}
+.enemy-info-name {
+  font-size: 15px; font-weight: 900; color: #fff; flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  text-shadow: 0 1px 8px rgba(0,0,0,1), 0 0 28px rgba(0,0,0,.95);
+  letter-spacing: .5px;
+}
+.enemy-info-chips { display: flex; gap: 4px; flex-shrink: 0; }
+
+/* 攻击出手：section 整体向下微冲 */
+@keyframes enemy-section-attack {
+  0%   { transform: translateY(0)    scaleY(1); }
+  20%  { transform: translateY(10px) scaleY(1.03); }
+  55%  { transform: translateY(5px)  scaleY(1.01); }
+  80%  { transform: translateY(-2px) scaleY(0.99); }
+  100% { transform: translateY(0)    scaleY(1); }
+}
+.enemy-section.enemy-attacking { animation: enemy-section-attack .52s ease-out; }
+
+/* 受击红色闪烁（在 bg-img 上） */
+@keyframes enemy-hurt-flash {
+  0%   { filter: brightness(1)   saturate(1); }
+  18%  { filter: brightness(3.2) saturate(0) sepia(1) hue-rotate(-20deg); }
+  55%  { filter: brightness(1.6) saturate(0.5); }
+  100% { filter: brightness(1)   saturate(1); }
+}
+.enemy-bg-img.enemy-hurt-flash { animation: enemy-hurt-flash .42s ease-out; }
+
+/* 阵亡 */
+@keyframes enemy-bg-death {
+  0%   { transform: scale(1);    filter: brightness(1)   saturate(1); }
+  12%  { transform: scale(1.06); filter: brightness(3.5) saturate(0); }
+  45%  { transform: scale(0.96) rotate(2deg);  filter: brightness(0.4) saturate(0); opacity:.7; }
+  100% { transform: scale(0.86) rotate(-2deg); filter: brightness(0.1) saturate(0); opacity:.2; }
+}
+.enemy-section.enemy-defeated .enemy-bg-img,
+.enemy-section.enemy-defeated .enemy-bg-blur {
+  animation: enemy-bg-death .9s .08s ease-out forwards;
+}
+
+/* shake（受击抖动，同时作用于 enemy-section 和 player-section）*/
+.enemy-section.elem-shake,
+.player-section.elem-shake { animation: elem-shake .38s ease-out; }
+
+/* ── 技能时间轴 ── */
+.skill-timeline {
+  position: relative; z-index: 6; flex-shrink: 0;
+  background: rgba(6,3,1,.9);
+  border-bottom: 1px solid rgba(160,50,10,.25);
+  padding: 5px 10px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.tl-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 2px 4px; border-radius: 4px;
+}
+.tl-row.tl-triggering { animation: tl-row-flash .45s ease-out; }
+@keyframes tl-row-flash {
+  0%   { background: rgba(230,126,34,0); box-shadow: none; }
+  30%  { background: rgba(230,126,34,.2); box-shadow: 0 0 10px rgba(230,126,34,.4); }
+  100% { background: rgba(230,126,34,0); box-shadow: none; }
+}
+.tl-icon    { font-size: 13px; flex-shrink: 0; width: 18px; text-align: center; }
+.tl-name    { font-size: 10px; font-weight: bold; color: #e08050; white-space: nowrap;
+              min-width: 52px; max-width: 52px; overflow: hidden; text-overflow: ellipsis; }
+.tl-track   { flex: 1; height: 10px; background: rgba(255,255,255,.07); border-radius: 5px; overflow: hidden; }
+.tl-fill    { height: 100%; border-radius: 5px; transition: width .1s linear; }
+.tl-effects { font-size: 10px; color: var(--text-dim); white-space: nowrap; min-width: 52px; text-align: right; }
+.tl-badge   {
+  font-size: 9px; font-weight: 900; color: #e67e22; flex-shrink: 0;
+  background: rgba(230,126,34,.18); border: 1px solid rgba(230,126,34,.5);
+  padding: 1px 5px; border-radius: 4px; white-space: nowrap;
+  animation: tl-badge-pulse .35s ease-in-out infinite alternate;
+}
+@keyframes tl-badge-pulse {
+  from { opacity: .7; }
+  to   { opacity: 1; transform: scale(1.07); }
+}
+.tl-row.tl-danger .tl-fill,
+.tl-row.tl-triggering .tl-fill { animation: tl-fill-pulse .55s ease-in-out infinite alternate; }
+@keyframes tl-fill-pulse {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.7); }
 }
 
 /* ── 中央分隔线（攻击事件，高度固定）── */
@@ -413,65 +583,6 @@ defineExpose({ startBattleDeploy, onBattleStart })
   position: relative; z-index: 6;
   flex: 0 0 auto; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
-}
-
-.enemy-portrait-wrap {
-  position: relative;
-  width: 110px; height: 140px; flex-shrink: 0;
-  border-radius: 10px; overflow: hidden;
-  border: 1px solid rgba(200,80,30,.45);
-  box-shadow: 0 6px 24px rgba(0,0,0,.7), 0 0 20px rgba(180,60,20,.25);
-}
-.enemy-portrait {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: center 20%;
-  display: block;
-}
-.portrait-vignette {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,.7) 100%);
-}
-.enemy-chips {
-  position: absolute; bottom: 5px; left: 5px;
-  display: flex; flex-wrap: wrap; gap: 3px;
-}
-
-/* ── 技能列表 ── */
-.ability-list {
-  flex: 1; min-width: 0;
-  display: flex; flex-direction: column;
-  gap: 6px; justify-content: flex-start;
-}
-.ability-row {
-  background: rgba(180,60,20,.12);
-  border: 1px solid rgba(200,80,30,.2);
-  border-radius: 6px;
-  padding: 5px 8px;
-  transition: border-color .15s, background .15s;
-}
-.ability-row.triggering {
-  border-color: #e67e22;
-  background: rgba(230,126,34,.2);
-  animation: ab-flash .4s ease-out;
-}
-@keyframes ab-flash {
-  0%   { box-shadow: 0 0 0 rgba(230,126,34,0); }
-  40%  { box-shadow: 0 0 12px rgba(230,126,34,.6); }
-  100% { box-shadow: 0 0 0 rgba(230,126,34,0); }
-}
-.ab-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 4px;
-}
-.ab-name    { font-size: 11px; font-weight: bold; color: #e08050; }
-.ab-effects { font-size: 10px; color: var(--text-dim); display: flex; gap: 4px; }
-.ab-cd-track {
-  height: 4px; border-radius: 2px;
-  background: rgba(255,255,255,.08); overflow: hidden;
-}
-.ab-cd-fill {
-  height: 100%; border-radius: 2px;
-  transition: width .1s linear;
 }
 
 /* ── 状态 chips ── */
@@ -595,27 +706,12 @@ defineExpose({ startBattleDeploy, onBattleStart })
 .battle-result-leave-to     { opacity: 0; }
 @keyframes result-fade-in   { from { opacity: 0; } to { opacity: 1; } }
 
-/* ── 敌方阵亡动画 ── */
-@keyframes enemy-death {
-  0%   { transform: scale(1);    filter: brightness(1) saturate(1); }
-  12%  { transform: scale(1.06); filter: brightness(3.5) saturate(0); }
-  45%  { transform: scale(0.92) rotate(4deg);  filter: brightness(0.4) saturate(0); opacity: .7; }
-  100% { transform: scale(0.82) rotate(-3deg); filter: brightness(0.1) saturate(0); opacity: .25; }
-}
-.enemy-portrait-wrap.enemy-defeated .enemy-portrait {
-  animation: enemy-death 0.9s 0.08s ease-out forwards;
-}
-
-/* ── 受击抖动（敌方插画 / 玩家区）── */
+/* ── 受击抖动 ── */
 @keyframes elem-shake {
-  0%, 100% { transform: translate(0, 0)        rotate(0deg) }
-  15%      { transform: translate(-8px, 4px)   rotate(-1.2deg) }
-  35%      { transform: translate(7px, -5px)   rotate(1.0deg) }
-  55%      { transform: translate(-5px, 3px)   rotate(-0.6deg) }
-  75%      { transform: translate(4px, -2px)   rotate(0.4deg) }
-}
-.enemy-portrait-wrap.elem-shake,
-.player-section.elem-shake {
-  animation: elem-shake 0.38s ease-out;
+  0%, 100% { transform: translate(0, 0)      rotate(0deg) }
+  15%      { transform: translate(-8px, 4px) rotate(-1.2deg) }
+  35%      { transform: translate(7px, -5px) rotate(1.0deg) }
+  55%      { transform: translate(-5px, 3px) rotate(-0.6deg) }
+  75%      { transform: translate(4px, -2px) rotate(0.4deg) }
 }
 </style>

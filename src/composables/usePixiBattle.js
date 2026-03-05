@@ -143,7 +143,7 @@ export function spawnChargeArc(fromId, toId) {
 export function spawnDotFloatingText(isEnemyTarget, value, type) {
   if (!_app) return
   const cr  = _app.canvas.getBoundingClientRect()
-  const sel = isEnemyTarget ? '.enemy-portrait-wrap' : '.arena-grid'
+  const sel = isEnemyTarget ? '.enemy-section' : '.arena-grid'
   const el  = document.querySelector(sel)
   if (!el) return
   const r = el.getBoundingClientRect()
@@ -157,7 +157,7 @@ export function spawnDotHit(isEnemy, type) {
   if (!_app) return
   const cr  = _app.canvas.getBoundingClientRect()
   const sel = isEnemy
-    ? '.enemy-portrait-wrap'
+    ? '.enemy-section'
     : '.arena-grid'
   const el = document.querySelector(sel)
   if (!el) return
@@ -221,14 +221,14 @@ export function spawnAttackArc(instanceId, isEnemy, type, onImpact) {
       toX = dr.left + dr.width  * (0.1 + Math.random() * 0.8) - cr.left
       toY = dr.top  + dr.height * (0.2  + Math.random() * 0.6) - cr.top
     } else {
-      const dst = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
+      const dst = document.querySelector('.enemy-section') ?? document.querySelector('.enemy-section')
       if (!dst) return
       const dr = dst.getBoundingClientRect()
       toX = dr.left + dr.width  / 2 - cr.left
       toY = dr.top  + dr.height / 2 - cr.top
     }
   } else {
-    const src = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
+    const src = document.querySelector('.enemy-section') ?? document.querySelector('.enemy-section')
     if (!src) return
     const sr = src.getBoundingClientRect()
     fromX = sr.left + sr.width  / 2 - cr.left
@@ -485,4 +485,6 @@ function _tick(ticker) {
     r.obj.circle(0, 0, r.radius).stroke({ color: r.color, width: Math.max(0.5, r.life * r.strokeWidth) })
     if (r.life <= 0) { _app.stage.removeChild(r.obj); r.obj.destroy(); _rings.splice(i, 1) }
   }
+
 }
+
