@@ -54,7 +54,7 @@
                 <span class="skill-label">技能</span>
               </button>
               <Transition name="skill-fade">
-                <div v-if="skillOpen" class="skill-desc">{{ current.skill?.desc }}</div>
+                <div v-if="skillOpen" class="skill-desc">{{ currentSkillDesc }}</div>
               </Transition>
             </div>
           </div>
@@ -86,6 +86,7 @@
 import { ref, computed } from 'vue'
 import { IDENTITY_POOL } from '../data/config.js'
 import { findItem, getIconUrl } from '../data/items.js'
+import { SKILL_POOL } from '../composables/useSkills.js'
 
 const baseUrl = import.meta.env.BASE_URL
 defineEmits(['choose'])
@@ -95,6 +96,15 @@ const skillOpen    = ref(false)
 const slideDir     = ref('slide-left')
 
 const current = computed(() => IDENTITY_POOL[currentIndex.value])
+
+const currentSkillDesc = computed(() => {
+  const id = current.value.skillId
+  const tier = current.value.skillTier ?? 'Bronze'
+  const base = SKILL_POOL.find(s => s.id === id)
+  if (!base) return ''
+  const val = base.tiers?.[tier]?.value ?? ''
+  return base.desc_cn.replace('{value}', val)
+})
 
 const fixedItem = computed(() => {
   const id = current.value.startItems?.[0]

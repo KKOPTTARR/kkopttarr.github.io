@@ -1,17 +1,18 @@
 import { computed } from 'vue'
 import { ITEM_POOL, findItem } from '../data/items.js'
-import { TIER_ORDER, nextTierOf } from '../data/tiers.js'
+import { TIER_ORDER, TIER_LABELS, nextTierOf } from '../data/tiers.js'
+import { applyRandomEffect } from '../data/specialEffects.js'
 import { incrementStack } from './useMergeAnim.js'
 import { shuffle, showFlash } from '../utils.js'
 import GC from '../../config/gameConfig.json'
 
-const { CASH_OUT_PRICE } = GC
-
 export function useEventActions({
-  playerItems, backpackItems, gold, mergeFlash,
+  playerItems, backpackItems, mergeFlash,
   findFreeSlot, findFreeBackpackSlot, mkInst,
   deliverRewards, playMergeAnimation, playDiceAnimation, afterEventAction,
-  upgradeEventTag,
+  upgradeEventTag, breakBoatsBuff,
+  lives, maxLives,
+  exchangeFromType, exchangeToType,
 }) {
 
   // ── 工具：从阵容或背包中移除物品实例 ────────────────────────
@@ -24,19 +25,18 @@ export function useEventActions({
 
   // ── 升级 ──────────────────────────────────────────────────
   function doUpgrade(inst) {
-    if (gold.value < inst.price) return
     const nextTier = nextTierOf(inst.tier)
     if (nextTier === inst.tier) return
     const base = findItem(inst.id)
     const tierStats = base?.tiers?.[nextTier]
     if (!tierStats) return
-    gold.value -= inst.price
     playMergeAnimation(inst, inst.tier, nextTier, base, tierStats, afterEventAction)
   }
 
   // ── 以物换物 ──────────────────────────────────────────────
   function doExchange(inst) {
-    const pool = ITEM_POOL.filter(i => i.id !== inst.id)
+    const toType = exchangeToType?.value
+    const pool = ITEM_POOL.filter(i => i.id !== inst.id && (!toType || i.tags?.includes(toType)))
     const shuffled = [...pool]; shuffle(shuffled)
     const base = shuffled[0]
     if (!base) { afterEventAction(); return }
@@ -72,48 +72,189 @@ export function useEventActions({
     afterEventAction()
   }
 
-  // ── 变现 ──────────────────────────────────────────────────
-  function doCashOut(inst) {
-    removeItemInst(inst)
-    const earned = CASH_OUT_PRICE[inst.tier] ?? 1
-    gold.value += earned
-    showFlash(mergeFlash, `💰 变现 +${earned} 金`)
+  // ── 宝藏商店选取 ──────────────────────────────────────────
+  async function doShopSelect(item) {
+    await deliverRewards([item])
     afterEventAction()
   }
 
   // ── 炼金 ──────────────────────────────────────────────────
   async function doAlchemyConfirm(selectedInsts) {
     for (const inst of selectedInsts) removeItemInst(inst)
-    const pool = ITEM_POOL.filter(i => i.tiers?.Gold); shuffle(pool)
+    const inputTier  = selectedInsts[0]?.tier ?? 'Bronze'
+    const outputTier = nextTierOf(inputTier)
+    const pool = ITEM_POOL.filter(i => i.tiers?.[outputTier]); shuffle(pool)
     const base = pool[0]
-    if (base) await deliverRewards([{ ...base, tier: 'Gold', ...(base.tiers.Gold || {}) }])
+    if (base) await deliverRewards([{ ...base, tier: outputTier, ...(base.tiers[outputTier] || {}) }])
     afterEventAction()
   }
 
-  // ── 赌徒骰子 ──────────────────────────────────────────────
-  function doGamblerDice(inst) {
-    const isWin  = Math.random() < 0.5
-    const base   = findItem(inst.id)
-    if (!base) { afterEventAction(); return }
+  // ── 深锚强化 ──────────────────────────────────────────────
+  function doDeepAnchor(inst) {
+    const effect = applyRandomEffect(inst)
+    showFlash(mergeFlash, `${inst.name_cn} 获得「${effect.label}」！`)
+    afterEventAction()
+  }
 
-    const fromTier = inst.tier
-    if (isWin) {
-      const toTier    = nextTierOf(fromTier)
-      const tierStats = base.tiers?.[toTier]
-      playDiceAnimation({ inst, isWin: true, isDestroy: false, fromTier, toTier, base, tierStats, onComplete: afterEventAction })
+  // ── 破釜沉舟 ──────────────────────────────────────────────
+  function doBreakBoats() {
+    const loss = Math.max(1, Math.ceil(maxLives * 0.2))
+    lives.value = Math.max(1, lives.value - loss)
+    const effects = playerItems.map(applyRandomEffect)
+    const labels = [...new Set(effects.map(e => e.label))].join('、')
+    showFlash(mergeFlash, `阵容获得：${labels}！`)
+    afterEventAction()
+  }
+
+  // ── 蒙面交易选取 ──────────────────────────────────────────
+  async function doBlindTradeSelect(item) {
+    await deliverRewards([item])
+    afterEventAction()
+  }
+
+  // ── 酒馆赌注（猜大小）──────────────────────────────────────
+  function doTavernGamble(guess) {
+    const allItems = [...playerItems, ...backpackItems]
+    if (!allItems.length) { afterEventAction(); return }
+    const face   = Math.floor(Math.random() * 6) + 1
+    const actual = face <= 3 ? 'low' : 'high'
+    const win    = guess === actual
+
+    const pool = [...allItems]
+    shuffle(pool)
+    const item = pool[0]
+
+    if (win) {
+      if (item.tier === 'Diamond') {
+        playDiceAnimation({ face, isWin: true, label: `猜对了！${item.name_cn} 已是最高品质！`, onComplete: afterEventAction })
+        return
+      }
+      const toTier = nextTierOf(item.tier)
+      playDiceAnimation({
+        face, isWin: true,
+        label: `猜对了！${item.name_cn} 升至${TIER_LABELS[toTier]}质！`,
+        onComplete: () => {
+          const base = findItem(item.id)
+          const tierStats = base?.tiers?.[toTier]
+          if (tierStats) { item.tier = toTier; Object.assign(item, tierStats) }
+          afterEventAction()
+        },
+      })
     } else {
-      const tierIdx = TIER_ORDER.indexOf(fromTier)
-      if (tierIdx === 0) {
+      if (item.tier === 'Bronze') {
         playDiceAnimation({
-          inst, isWin: false, isDestroy: true,
-          fromTier, toTier: null, base, tierStats: null,
-          onComplete: () => { removeItemInst(inst); afterEventAction() },
+          face, isWin: false,
+          label: `猜错了！${item.name_cn} 化为灰烬！`,
+          onComplete: () => { removeItemInst(item); afterEventAction() },
         })
       } else {
-        const toTier    = TIER_ORDER[tierIdx - 1]
-        const tierStats = base.tiers?.[toTier]
-        playDiceAnimation({ inst, isWin: false, isDestroy: false, fromTier, toTier, base, tierStats, onComplete: afterEventAction })
+        const toTier = TIER_ORDER[TIER_ORDER.indexOf(item.tier) - 1]
+        playDiceAnimation({
+          face, isWin: false,
+          label: `猜错了！${item.name_cn} 降至${TIER_LABELS[toTier]}质`,
+          onComplete: () => {
+            const base = findItem(item.id)
+            const tierStats = base?.tiers?.[toTier]
+            if (tierStats) { item.tier = toTier; Object.assign(item, tierStats) }
+            afterEventAction()
+          },
+        })
       }
+    }
+  }
+
+  // ── 赌徒骰子 ──────────────────────────────────────────────
+  function doGamblerDice() {
+    const face     = Math.floor(Math.random() * 6) + 1
+    const allItems = [...playerItems, ...backpackItems]
+
+    if (!allItems.length) { afterEventAction(); return }
+
+    if (face === 1) {
+      // 随机销毁一件物品
+      const pool = [...allItems]; shuffle(pool)
+      const target = pool[0]
+      playDiceAnimation({
+        face, isWin: false,
+        label: `💀 ${target.name_cn} 化为灰烬！`,
+        onComplete: () => { removeItemInst(target); afterEventAction() },
+      })
+
+    } else if (face === 2) {
+      // 随机一件物品降一品质（若全为铜质则销毁一件）
+      const downgradeable = allItems.filter(i => TIER_ORDER.indexOf(i.tier) > 0)
+      if (!downgradeable.length) {
+        const pool = [...allItems]; shuffle(pool)
+        const target = pool[0]
+        playDiceAnimation({
+          face, isWin: false,
+          label: `💀 ${target.name_cn} 化为灰烬！`,
+          onComplete: () => { removeItemInst(target); afterEventAction() },
+        })
+        return
+      }
+      shuffle(downgradeable)
+      const target   = downgradeable[0]
+      const toTier   = TIER_ORDER[TIER_ORDER.indexOf(target.tier) - 1]
+      const base     = findItem(target.id)
+      const tierStats = base?.tiers?.[toTier]
+      playDiceAnimation({
+        face, isWin: false,
+        label: `↓ ${target.name_cn} 降至${TIER_LABELS[toTier]}质`,
+        onComplete: () => {
+          if (tierStats) { target.tier = toTier; Object.assign(target, tierStats) }
+          afterEventAction()
+        },
+      })
+
+    } else if (face === 3) {
+      // 随机替换一件物品为同品质另一件
+      const pool = [...allItems]; shuffle(pool)
+      const target = pool[0]
+      const tier   = target.tier
+      const candidates = ITEM_POOL.filter(b => b.tiers?.[tier] && b.id !== target.id)
+      shuffle(candidates)
+      const newBase = candidates[0]
+      if (!newBase) {
+        playDiceAnimation({ face, isWin: false, label: '没有可替换的物品', onComplete: afterEventAction })
+        return
+      }
+      playDiceAnimation({
+        face, isWin: true,
+        label: `🔄 ${target.name_cn} → ${newBase.name_cn}`,
+        onComplete: () => {
+          const tierStats = newBase.tiers[tier] || {}
+          const { instanceId, col, row, stack } = target
+          Object.assign(target, newBase, tierStats, { instanceId, col, row, tier, stack: stack ?? 1 })
+          afterEventAction()
+        },
+      })
+
+    } else {
+      // face 4/5/6：随机升品质 N 件
+      const n            = face - 3
+      const upgradeable  = allItems.filter(i => i.tier !== 'Diamond')
+      shuffle(upgradeable)
+      const targets = upgradeable.slice(0, n)
+      if (!targets.length) {
+        playDiceAnimation({ face, isWin: true, label: '⭐ 所有物品已是钻石品质！', onComplete: afterEventAction })
+        return
+      }
+      const names = targets.map(t => t.name_cn).join('、')
+      playDiceAnimation({
+        face, isWin: true,
+        label: `⭐ ${names} 升品质！`,
+        onComplete: () => {
+          for (const target of targets) {
+            const toTier    = nextTierOf(target.tier)
+            if (toTier === target.tier) continue
+            const base      = findItem(target.id)
+            const tierStats = base?.tiers?.[toTier]
+            if (tierStats) { target.tier = toTier; Object.assign(target, tierStats) }
+          }
+          afterEventAction()
+        },
+      })
     }
   }
 
@@ -127,43 +268,34 @@ export function useEventActions({
       TIER_ORDER.indexOf(i.tier) < TIER_ORDER.length - 1
     )
   })
-  const bronzeItems        = computed(() => allItems.value.filter(i => i.tier === 'Bronze'))
-  const exchangeableItems  = allItems
-  const cashOutItems       = allItems
-  const alchemyBronzeItems = bronzeItems
-  const gamblerItems       = allItems
+  const exchangeableItems = computed(() => {
+    const fromType = exchangeFromType?.value
+    if (!fromType) return allItems.value
+    return allItems.value.filter(i => i.tags?.includes(fromType))
+  })
+  const alchemyItems      = computed(() => allItems.value.filter(i => i.tier !== 'Diamond'))
 
   return {
     doUpgrade, doExchange,
-    doWreckSelect, doCashOut, doAlchemyConfirm, doGamblerDice,
-    upgradeableItems, exchangeableItems,
-    cashOutItems, alchemyBronzeItems, gamblerItems,
+    doWreckSelect, doAlchemyConfirm, doGamblerDice, doShopSelect,
+    doDeepAnchor, doBreakBoats, doBlindTradeSelect, doTavernGamble,
+    upgradeableItems, exchangeableItems, alchemyItems,
   }
 }
 
 // ── 条件检查（供 useEventSystem 使用）────────────────────────
-export function checkEventCondition(eventId, { playerItems, backpackItems, findFreeSlot, findFreeBackpackSlot, gold }) {
+export function checkEventCondition(eventId, { playerItems, backpackItems, findFreeSlot, findFreeBackpackSlot }) {
   const allItems = [...playerItems, ...backpackItems]
 
-  if (eventId === 'wreck_search') {
-    return allItems.length > 0
-  }
-  if (eventId === 'storm_shuffle') {
+if (eventId === 'storm_shuffle') {
     return allItems.length >= 2
   }
-  if (eventId === 'cash_out') {
-    return allItems.length > 0
-  }
-  if (eventId === 'tavern_gamble') {
-    return (gold?.value ?? 0) >= GC.TAVERN_COST
-  }
-  if (eventId === 'black_market') {
-    return (gold?.value ?? 0) >= GC.BLACK_MARKET_COST
-  }
   if (eventId === 'alchemy') {
-    return allItems.filter(i => i.tier === 'Bronze').length >= 3
+    return TIER_ORDER.slice(0, -1).some(tier =>
+      allItems.filter(i => i.tier === tier).length >= 3
+    )
   }
-  if (eventId === 'gambler_dice') {
+  if (['gambler_dice', 'deep_anchor', 'break_boats', 'tavern_gamble'].includes(eventId)) {
     return allItems.length > 0
   }
   return true

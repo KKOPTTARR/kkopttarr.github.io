@@ -47,6 +47,7 @@
 <script setup>
 import { getIconUrl } from '../data/items.js'
 import { TIER_LABELS } from '../data/tiers.js'
+import { parseSkill } from '../utils.js'
 
 const props = defineProps({ items: { type: Array, default: () => [] } })
 const emit = defineEmits(['close'])
@@ -57,23 +58,6 @@ function onImgError(e) {
 
 function closeAll() {
   for (let i = props.items.length - 1; i >= 0; i--) emit('close', i)
-}
-
-const SKILL_COLORS = {
-  dmg:    '#ff6060',
-  burn:   '#ff9040',
-  heal:   '#6dcc6d',
-  shield: '#60a8ff',
-  poison: '#b070e8',
-  val:    '#e8c840',
-}
-
-function parseSkill(text) {
-  return text.replace(/\{(\w+):([^}]*)\}/g, (_, type, content) => {
-    const color = SKILL_COLORS[type]
-    if (!color) return content
-    return `<span style="color:${color};font-weight:600">${content}</span>`
-  })
 }
 </script>
 

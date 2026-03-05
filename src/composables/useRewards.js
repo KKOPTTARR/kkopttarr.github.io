@@ -7,7 +7,7 @@ import REWARD_WEIGHTS from '../../config/rewards.json'
 import GC from '../../config/gameConfig.json'
 
 // 单例动画状态（供 App.vue template 直接监听）
-export const rewardAnim = reactive({ active: false, items: [], phase: '' })
+export const rewardAnim = reactive({ active: false, items: [], phase: '', isConsolation: false, result: null, livesLeft: 0 })
 
 function rollTier(cfg) {
   const r = Math.random() * 100
@@ -48,6 +48,7 @@ export function rollRewardItems(difficulty, isWin, dropBias = []) {
 export function useRewards({ playerItems, backpackItems, findFreeSlot, findFreeBackpackSlot }) {
   async function deliverRewards(items) {
     if (!items.length) return
+    if (rewardAnim.result === null) rewardAnim.isConsolation = false
     for (const item of items) {
       const existing = playerItems.find(i => i.id === item.id && i.tier === item.tier && i.stack < GC.MERGE_THRESHOLD)
         ?? backpackItems.find(i => i.id === item.id && i.tier === item.tier && i.stack < GC.MERGE_THRESHOLD)
@@ -66,10 +67,11 @@ export function useRewards({ playerItems, backpackItems, findFreeSlot, findFreeB
     rewardAnim.items = items
     rewardAnim.active = true
     rewardAnim.phase = 'show'
-    await sleep(500)
+    await sleep(600)
     rewardAnim.phase = 'fly'
-    await sleep(items.length * 150 + 500)
+    await sleep(items.length * 150 + 600)
     rewardAnim.active = false
+    rewardAnim.result = null
   }
 
   return { deliverRewards }

@@ -2,23 +2,18 @@
 <div class="arrange-screen">
   <!-- 状态栏 + 标题 -->
   <div class="arrange-header">
-    <div class="panel-status">
-      <div class="status-lives">
-        <span v-for="i in maxLives" :key="i" class="heart-icon">{{ i <= lives ? '⚡' : '○' }}</span>
-      </div>
-      <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/{{ GC.WINS_TO_CLEAR }} ⭐</div>
-      <div class="status-gold">💰 {{ gold }}</div>
-    </div>
+    <PanelStatus :lives="lives" :max-lives="maxLives" :battle-count="battleCount" />
     <div class="arrange-title-row">
       <span class="panel-title">⚔️ 整理阵容</span>
       <button v-if="hasPendingEvents" class="go-battle-btn continue-btn" @click="$emit('continue')">继续 →</button>
+      <button v-else-if="isBossNext" class="go-battle-btn boss-btn" @click="$emit('startBattle')">💀 迎战 BOSS</button>
       <button v-else class="go-battle-btn" @click="$emit('startBattle')">⚔️ 出发</button>
     </div>
   </div>
 
   <!-- 背包 + 阵容整体下移 -->
   <div class="sell-zone" :class="{ 'drag-over-sell': dragState.overSellZone }">
-    🗑️ 拖到此处出售 (+1金)
+    🗑️ 拖到此处丢弃
   </div>
 
   <div class="bottom-content">
@@ -48,8 +43,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import GC from '../../config/gameConfig.json'
-import GridBoard from './GridBoard.vue'
+import GridBoard   from './GridBoard.vue'
+import PanelStatus from './PanelStatus.vue'
 import { dragState } from '../composables/useDrag.js'
 import { BP_ROWS, BP_COLS } from '../composables/useInventory.js'
 import { useLayout } from '../composables/useLayout.js'
@@ -66,12 +61,11 @@ defineProps({
   lives:           Number,
   maxLives:        Number,
   battleCount:     Number,
-  wins:            Number,
-  gold:            Number,
   playerItems:     Array,
   backpackItems:   Array,
   unlockedCols:    Number,
   hasPendingEvents:Boolean,
+  isBossNext:      Boolean,
 })
 
 defineEmits(['startBattle', 'continue'])
@@ -116,6 +110,15 @@ defineEmits(['startBattle', 'continue'])
 .continue-btn {
   background: linear-gradient(135deg, #1a4a7a, #2a6ab0);
   border-color: #3a80c0;
+}
+.boss-btn {
+  background: linear-gradient(135deg, #5a0a0a, #a01818);
+  border-color: #c02020;
+  animation: boss-glow .9s ease-in-out infinite alternate;
+}
+@keyframes boss-glow {
+  from { box-shadow: 0 2px 6px rgba(180,20,20,.3); }
+  to   { box-shadow: 0 2px 18px rgba(220,40,40,.7); }
 }
 
 /* ── 背包+阵容整体容器，推到底部 ── */

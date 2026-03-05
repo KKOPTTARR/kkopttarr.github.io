@@ -9,6 +9,10 @@ android
 
 images
 
+agent/
+
+agent-sessions/
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

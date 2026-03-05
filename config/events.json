@@ -5,88 +5,115 @@
     "img": "/events/upgrade.png",
     "label": "指定升级",
     "desc": "升级一件指定类型的物品",
-    "pool": "normal",
-    "condition": "hasUpgradeable"
+    "pool": "rare",
+    "condition": "hasUpgradeable",
+    "targetPhase": "UPGRADE"
   },
   {
     "id": "exchange",
     "icon": "🔀",
     "img": "/events/exchange.png",
     "label": "以物换物",
-    "desc": "选一件物品换取随机同品质物品",
+    "desc": "用一件指定类型换取另一类型同品质物品",
     "pool": "normal",
-    "condition": "hasItems"
+    "condition": "hasItems",
+    "targetPhase": "EXCHANGE"
   },
   {
     "id": "wreck_search",
     "icon": "⚓",
     "img": "/events/wreck_search.png",
     "label": "残骸搜寻",
-    "desc": "从海底残骸中随机打捞一件与你已有装备相符的宝物",
+    "desc": "从海底残骸中打捞一件铜质宝物",
     "pool": "normal",
-    "condition": "hasItems"
+    "targetPhase": "WRECK_SEARCH"
   },
   {
     "id": "storm_shuffle",
     "icon": "🌪️",
     "img": "/events/storm_shuffle.png",
     "label": "风暴洗牌",
-    "desc": "所有物品的品质将被随机重新分配，有得有失",
+    "desc": "所有物品将被重新生成，品质保持不变",
     "pool": "normal",
-    "condition": "hasMultipleItems"
-  },
-  {
-    "id": "cash_out",
-    "icon": "💰",
-    "img": "/events/cash_out.png",
-    "label": "变现",
-    "desc": "出售一件物品，获得远超正常价格的金币",
-    "pool": "normal",
-    "condition": "hasItems"
-  },
-  {
-    "id": "tavern_gamble",
-    "icon": "🎰",
-    "img": "/events/tavern_gamble.png",
-    "label": "海盗酒馆",
-    "desc": "花费金币参与赌局，50% 概率大赚一笔",
-    "pool": "normal",
-    "condition": "hasTavernGold"
-  },
-  {
-    "id": "black_market",
-    "icon": "🏴",
-    "img": "/events/black_market.png",
-    "label": "走私交易",
-    "desc": "花费大量金币，从黑市换取一件银质物品",
-    "pool": "normal",
-    "condition": "hasBlackMarketGold"
+    "condition": "hasMultipleItems",
+    "immediateAction": "stormShuffle"
   },
   {
     "id": "alchemy",
     "icon": "⚗️",
     "img": "/events/alchemy.png",
     "label": "炼金",
-    "desc": "销毁3件铜质物品，炼制一件金质宝物",
-    "pool": "normal",
-    "condition": "hasThreeBronze"
+    "desc": "销毁3件同品质物品，炼制一件更高品质宝物",
+    "pool": "rare",
+    "condition": "hasThreeMatching",
+    "targetPhase": "ALCHEMY"
   },
   {
     "id": "gambler_dice",
     "icon": "🎲",
     "img": "/events/gambler_dice.png",
     "label": "赌徒的骰子",
-    "desc": "选一件物品，50% 升品质，50% 降品质",
+    "desc": "掷出骰子，1-6点各有不同命运",
     "pool": "normal",
-    "condition": "hasItems"
+    "condition": "hasItems",
+    "targetPhase": "GAMBLER"
   },
   {
-    "id": "storm_blessing",
+    "id": "break_boats",
+    "icon": "💪",
+    "img": "/events/break_boats.png",
+    "label": "破釜沉舟",
+    "desc": "失去20%生命，阵容全部物品获得随机特效",
+    "pool": "normal",
+    "condition": "hasItems",
+    "targetPhase": "BREAK_BOATS"
+  },
+  {
+    "id": "deep_anchor",
+    "icon": "🪝",
+    "img": "/events/deep_anchor.png",
+    "label": "深锚强化",
+    "desc": "随机一件道具获得永久特效",
+    "pool": "normal",
+    "condition": "hasItems",
+    "immediateAction": "deepAnchor"
+  },
+  {
+    "id": "blind_trade",
+    "icon": "🕵️",
+    "img": "/events/blind_trade.png",
+    "label": "开盲盒",
+    "desc": "三张背面牌，只知道类型，选一张翻开带走",
+    "pool": "normal",
+    "targetPhase": "BLIND_TRADE"
+  },
+  {
+    "id": "shop",
+    "icon": "🏪",
+    "img": "/events/shop.png",
+    "label": "宝藏商店",
+    "desc": "随机出现三件宝物，选择一件带走",
+    "pool": "normal",
+    "targetPhase": "SHOP_EVENT"
+  },
+  {
+    "id": "tavern_gamble",
+    "icon": "🍺",
+    "img": "/events/tavern_gamble.png",
+    "label": "猜大小",
+    "desc": "猜骰子大小，随机一件道具升或降一品质",
+    "pool": "normal",
+    "condition": "hasItems",
+    "targetPhase": "TAVERN_GAMBLE"
+  },
+  {
+    "id": "combat_shield",
     "icon": "🛡️",
-    "img": "/events/storm_blessing.png",
+    "img": "/events/combat_shield.png",
     "label": "临时护盾",
-    "desc": "下一场战斗开始时，获得一层临时护盾",
+    "desc": "下一场战斗开始时，获得 50 点临时护盾",
     "pool": "last",
-    "guaranteed": true
+    "guaranteed": true,
+    "immediateAction": "combatShield"
   }
 ]

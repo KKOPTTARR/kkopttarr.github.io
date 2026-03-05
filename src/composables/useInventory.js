@@ -4,7 +4,7 @@ import { incrementStack } from './useMergeAnim.js'
 import { showFlash } from '../utils.js'
 import GC from '../../config/gameConfig.json'
 
-const { MERGE_THRESHOLD, SELL_PRICE } = GC
+const { MERGE_THRESHOLD } = GC
 
 // ── 格子尺寸 ──────────────────────────────────────────────
 export const GRID_COLS = 5
@@ -47,7 +47,7 @@ export function buildBackpackGridState(backpackItems) {
 }
 
 // ── Composable（需要响应式状态作为参数）───────────────────────
-export function useInventory({ playerItems, backpackItems, gold, phase, unlockedCols, mergeFlash }) {
+export function useInventory({ playerItems, backpackItems, phase, unlockedCols, mergeFlash }) {
 
   function findFreeSlot() {
     const state = buildGridState(playerItems)
@@ -168,9 +168,9 @@ export function useInventory({ playerItems, backpackItems, gold, phase, unlocked
   function handleDropToSell(instanceId) {
     if (phase.value !== 'ARRANGE') return
     let idx = playerItems.findIndex(i => i.instanceId === instanceId)
-    if (idx !== -1) { playerItems.splice(idx, 1); gold.value += SELL_PRICE; return }
+    if (idx !== -1) { playerItems.splice(idx, 1); return }
     idx = backpackItems.findIndex(i => i.instanceId === instanceId)
-    if (idx !== -1) { backpackItems.splice(idx, 1); gold.value += SELL_PRICE }
+    if (idx !== -1) backpackItems.splice(idx, 1)
   }
 
   return {

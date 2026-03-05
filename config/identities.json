@@ -8,13 +8,8 @@
     "startItems": [6],
     "startTag": "枪械",
     "itemNames": ["左轮手枪", "+ 2件随机枪械类"],
-    "skill": {
-      "type": "tag_cooldown_reduce",
-      "tags": ["伙伴", "枪械"],
-      "threshold": 3,
-      "ms": 1000,
-      "desc": "伙伴枪械×3：触发间隔-1秒"
-    }
+    "skillId": "gunner_passive",
+    "skillTier": "Bronze"
   },
   {
     "id": "tamer",
@@ -25,13 +20,8 @@
     "startItems": [2],
     "startTag": "伙伴",
     "itemNames": ["食人鱼", "+ 2件随机伙伴类"],
-    "skill": {
-      "type": "tag_cooldown_reduce",
-      "tags": ["伙伴"],
-      "threshold": 3,
-      "ms": 1000,
-      "desc": "伙伴×3：触发间隔-1秒"
-    }
+    "skillId": "tamer_passive",
+    "skillTier": "Bronze"
   },
   {
     "id": "alchemist",
@@ -42,11 +32,7 @@
     "startItems": [1],
     "startTag": "工具",
     "itemNames": ["打火机", "+ 2件随机工具类"],
-    "skill": {
-      "type": "burn_poison_double",
-      "tags": ["工具"],
-      "threshold": 3,
-      "desc": "工具×3：灼毒伤害翻倍"
-    }
+    "skillId": "alchemist_passive",
+    "skillTier": "Bronze"
   }
 ]

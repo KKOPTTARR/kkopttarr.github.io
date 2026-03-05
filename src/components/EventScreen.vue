@@ -30,10 +30,11 @@ defineEmits(['choice'])
 
 <style scoped>
 .event-screen {
+  position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; z-index: 200;
+  backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 100%;
   background:
     linear-gradient(rgba(0,0,0,.52), rgba(0,0,0,.60)),
     url('/background/bg-sea-chart.png') center / cover no-repeat;

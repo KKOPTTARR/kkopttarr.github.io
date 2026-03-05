@@ -1,7 +1,7 @@
 import { ref, reactive } from 'vue'
 import GC from '../../config/gameConfig.json'
 
-const { MAX_LIVES, GOLD_PER_DAY } = GC
+const { MAX_LIVES } = GC
 
 export function useGameState() {
   // ── 游戏进程 ────────────────────────────────────────────
@@ -9,7 +9,6 @@ export function useGameState() {
   const battleCount = ref(0)
   const wins        = ref(0)
   const lives       = ref(MAX_LIVES)
-  const gold        = ref(GOLD_PER_DAY)
   const resultType  = ref('win')
 
   // ── UI 提示 ─────────────────────────────────────────────
@@ -39,6 +38,9 @@ export function useGameState() {
   const playerStat = reactive({ hp: 500, maxHp: 500, shield: 0, burnStacks: 0, poisonStacks: 0 })
   const enemyStat  = reactive({ hp: 200, maxHp: 200, shield: 0, burnStacks: 0, poisonStacks: 0 })
 
+  // ── 技能 ────────────────────────────────────────────────
+  const activeSkills = reactive([])
+
   // ── 奖励 & UI ───────────────────────────────────────────
   const pendingRewards  = ref([])
   const showBackpack    = ref(false)
@@ -50,7 +52,6 @@ export function useGameState() {
     battleCount.value      = 0
     wins.value             = 0
     lives.value            = MAX_LIVES
-    gold.value             = GOLD_PER_DAY
     resultType.value       = 'win'
     mergeFlash.value       = ''
     identitySkill.value    = null
@@ -67,18 +68,20 @@ export function useGameState() {
     playerItems.splice(0)
     backpackItems.splice(0)
     enemyAbilities.splice(0)
+    activeSkills.splice(0)
     Object.assign(playerStat, { hp: 500, maxHp: 500, shield: 0, burnStacks: 0, poisonStacks: 0 })
     Object.assign(enemyStat,  { hp: 200, maxHp: 200, shield: 0, burnStacks: 0, poisonStacks: 0 })
   }
 
   return {
-    phase, battleCount, wins, lives, gold, resultType,
+    phase, battleCount, wins, lives, resultType,
     mergeFlash,
     identitySkill, identityIcon, skillTooltipVisible, selectedIdentityName,
     battleSpeed, battleItemStats, selectedDifficulty,
     currentEnemy, selectEnemies,
     playerItems, backpackItems, enemyAbilities,
     playerStat, enemyStat,
+    activeSkills,
     pendingRewards, showBackpack, battleScreenRef,
     resetState,
   }

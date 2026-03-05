@@ -1,163 +1,72 @@
 <template>
   <div class="app-wrap">
 
-    <!-- ══════════════ 主界面 ══════════════ -->
-    <HomeScreen v-if="phase === 'HOME'" @start="startGame" />
+    <!-- ══════════════ Phase 路由（带淡入过渡）══════════════ -->
+    <Transition name="page">
+      <div :key="phase" class="phase-container">
 
-    <!-- ══════════════ 身份选择 ══════════════ -->
-    <IdentityScreen v-else-if="phase === 'IDENTITY'" @choose="onIdentityChoice" />
+        <!-- 主界面 -->
+        <HomeScreen v-if="phase === 'HOME'" @start="startGame" />
 
-    <!-- ══════════════ 战前预览（已停用，直接出发）══════════════ -->
-    <template v-else-if="phase === 'PREVIEW'"></template>
+        <!-- 身份选择 -->
+        <IdentityScreen v-else-if="phase === 'IDENTITY'" @choose="onIdentityChoice" />
 
-    <!-- ══════════════ 战报 ══════════════ -->
-    <ReportScreen
-      v-else-if="phase === 'REPORT'"
-      :result="resultType"
-      :battle-count="battleCount"
-      :wins="wins"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :enemy-name="currentEnemy.name"
-      :item-stats="battleItemStats"
-      :reward-items="pendingRewards"
-      @next="onResultNext"
-    />
+        <!-- BOSS 后技能选择 -->
+        <SkillSelectScreen
+          v-else-if="phase === 'SKILL_SELECT'"
+          :candidates="skillCandidates"
+          :chapter-number="completedChapterNum"
+          :chapter-name="completedChapterName"
+          @select="onSkillSelect"
+        />
 
-    <!-- ══════════════ 事件三选一 ══════════════ -->
-    <EventScreen
-      v-else-if="phase === 'EVENT'"
-      :key="eventKey"
-      :options="eventOptions"
-      @choice="onEventChoice"
-    />
+        <!-- 敌人选择 -->
+        <EnemySelectScreen
+          v-else-if="phase === 'SELECT'"
+          :enemies="selectEnemies"
+          :lives="lives"
+          :max-lives="MAX_LIVES"
+          :battle-count="battleCount"
+          :wins="wins"
+          @select="onEnemySelect"
+        />
 
-    <!-- ══════════════ 以物换物选择 ══════════════ -->
-    <ExchangeScreen
-      v-else-if="phase === 'EXCHANGE'"
-      :items="exchangeableItems"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      @confirm="doExchange"
-      @skip="afterEventAction"
-    />
+        <!-- 战斗模式 -->
+        <BattleScreen
+          v-else-if="phase === 'BATTLE'"
+          ref="battleScreenRef"
+          :player-stat="playerStat"
+          :enemy-stat="enemyStat"
+          :battle-speed="battleSpeed"
+          :player-items="playerItems"
+          :enemy-abilities="enemyAbilities"
+          :current-enemy="currentEnemy"
+          :latest-attack="latestAttack"
+          :unlocked-cols="unlockedCols"
+          :player-hit-class="playerHitClass"
+          :enemy-hit-class="enemyHitClass"
+          :selected-identity-name="selectedIdentityName"
+          @speed-change="setSpeed"
+          @deploy-complete="onDeployComplete"
+        />
 
-    <!-- ══════════════ 升级选择 ══════════════ -->
-    <UpgradeScreen
-      v-else-if="phase === 'UPGRADE'"
-      :items="upgradeableItems"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      :tag="upgradeEventTag"
-      @upgrade="doUpgrade"
-      @skip="afterEventAction"
-    />
+        <!-- 整理阵容（始终底层）-->
+        <ArrangeScreen
+          v-else-if="phase === 'ARRANGE'"
+          :lives="lives"
+          :max-lives="MAX_LIVES"
+          :battle-count="battleCount"
+          :player-items="playerItems"
+          :backpack-items="backpackItems"
+          :unlocked-cols="unlockedCols"
+          :has-pending-events="pendingEvents > 0"
+          :is-boss-next="isBossNext"
+          @start-battle="onStartBattle"
+          @continue="continueEventRound"
+        />
 
-
-    <!-- ══════════════ 残骸搜寻 ══════════════ -->
-    <WreckSearchScreen
-      v-else-if="phase === 'WRECK_SEARCH'"
-      :candidates="wreckCandidates"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      @select="doWreckSelect"
-      @skip="afterEventAction"
-    />
-
-    <!-- ══════════════ 变现 ══════════════ -->
-    <CashOutScreen
-      v-else-if="phase === 'CASH_OUT'"
-      :items="cashOutItems"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      @confirm="doCashOut"
-      @skip="afterEventAction"
-    />
-
-    <!-- ══════════════ 炼金 ══════════════ -->
-    <AlchemyScreen
-      v-else-if="phase === 'ALCHEMY'"
-      :items="alchemyBronzeItems"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      @confirm="doAlchemyConfirm"
-      @skip="afterEventAction"
-    />
-
-    <!-- ══════════════ 赌徒的骰子 ══════════════ -->
-    <GamblerScreen
-      v-else-if="phase === 'GAMBLER'"
-      :items="gamblerItems"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      @confirm="doGamblerDice"
-      @skip="afterEventAction"
-    />
-
-    <!-- ══════════════ 敌人选择 ══════════════ -->
-    <EnemySelectScreen
-      v-else-if="phase === 'SELECT'"
-      :enemies="selectEnemies"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      @select="onEnemySelect"
-    />
-
-    <!-- ══════════════ 战斗模式 ══════════════ -->
-    <BattleScreen
-      v-else-if="phase === 'BATTLE'"
-      ref="battleScreenRef"
-      :player-stat="playerStat"
-      :enemy-stat="enemyStat"
-      :battle-speed="battleSpeed"
-      :player-items="playerItems"
-      :enemy-abilities="enemyAbilities"
-      :current-enemy="currentEnemy"
-      :latest-attack="latestAttack"
-      :unlocked-cols="unlockedCols"
-      :player-hit-class="playerHitClass"
-      :enemy-hit-class="enemyHitClass"
-      :selected-identity-name="selectedIdentityName"
-      @speed-change="setSpeed"
-      @deploy-complete="onDeployComplete"
-    />
-
-    <!-- ══════════════ 整理阵容模式 ══════════════ -->
-    <ArrangeScreen
-      v-else-if="phase === 'ARRANGE'"
-      :lives="lives"
-      :max-lives="MAX_LIVES"
-      :battle-count="battleCount"
-      :wins="wins"
-      :gold="gold"
-      :player-items="playerItems"
-      :backpack-items="backpackItems"
-      :unlocked-cols="unlockedCols"
-      :has-pending-events="pendingEvents > 0"
-      @start-battle="onStartBattle"
-      @continue="continueEventRound"
-    />
+      </div>
+    </Transition>
 
     <!-- 技能栏（8格横排，点击展开 tooltip） -->
     <div
@@ -181,7 +90,7 @@
           class="skill-tooltip"
           @click="skillTooltipVisible = false"
         >
-          {{ identitySkill.desc }}
+          {{ identitySkillDesc }}
         </div>
       </Teleport>
     </div>
@@ -193,6 +102,139 @@
     <Teleport to="body">
       <div v-if="mergeFlash" class="merge-toast">✨ {{ mergeFlash }}</div>
     </Teleport>
+
+    <!-- ══════════════ 章节开场 Overlay ══════════════ -->
+    <ChapterOverlay
+      :visible="showChapterOverlay"
+      :chapter-num="overlayChapterNum"
+      :chapter-name="overlayChapterName"
+
+    />
+
+    <!-- ══════════════ 事件浮层（叠在 ARRANGE 之上）══════════════ -->
+    <Transition name="event-overlay">
+      <EventScreen
+        v-if="eventOverlay === 'EVENT'"
+        :key="eventKey"
+        :options="eventOptions"
+        @choice="onEventChoice"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <ExchangeScreen
+        v-if="eventOverlay === 'EXCHANGE'"
+        :items="exchangeableItems"
+        :from-type="exchangeFromType"
+        :to-type="exchangeToType"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        @confirm="doExchange"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <UpgradeScreen
+        v-if="eventOverlay === 'UPGRADE'"
+        :items="upgradeableItems"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        :tag="upgradeEventTag"
+        @upgrade="doUpgrade"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <WreckSearchScreen
+        v-if="eventOverlay === 'WRECK_SEARCH'"
+        :candidates="wreckCandidates"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        :inventory-full="inventoryFull"
+        @select="doWreckSelect"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <AlchemyScreen
+        v-if="eventOverlay === 'ALCHEMY'"
+        :items="alchemyItems"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        @confirm="doAlchemyConfirm"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <ShopEventScreen
+        v-if="eventOverlay === 'SHOP_EVENT'"
+        :candidates="shopCandidates"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        :inventory-full="inventoryFull"
+        @select="doShopSelect"
+        @reroll="rerollShopCandidates"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <GamblerScreen
+        v-if="eventOverlay === 'GAMBLER'"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        @confirm="doGamblerDice"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <DeepAnchorScreen
+        v-if="eventOverlay === 'DEEP_ANCHOR'"
+        :items="[...playerItems, ...backpackItems]"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        @confirm="doDeepAnchor"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <BreakBoatsScreen
+        v-if="eventOverlay === 'BREAK_BOATS'"
+        :player-items="playerItems"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        @confirm="doBreakBoats"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <BlindTradeScreen
+        v-if="eventOverlay === 'BLIND_TRADE'"
+        :candidates="blindTradeCandidates"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        :inventory-full="inventoryFull"
+        @select="doBlindTradeSelect"
+        @skip="afterEventAction"
+      />
+    </Transition>
+    <Transition name="event-overlay">
+      <TavernGambleScreen
+        v-if="eventOverlay === 'TAVERN_GAMBLE'"
+        :lives="lives"
+        :max-lives="MAX_LIVES"
+        :battle-count="battleCount"
+        @confirm="doTavernGamble"
+        @skip="afterEventAction"
+      />
+    </Transition>
 
     <!-- 全局 Overlay 组件 -->
     <DragGhostOverlay />
@@ -206,16 +248,21 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, provide } from 'vue'
-import ReportScreen        from './components/ReportScreen.vue'
 import EventScreen         from './components/EventScreen.vue'
 import IdentityScreen      from './components/IdentityScreen.vue'
 import HomeScreen          from './components/HomeScreen.vue'
 import ExchangeScreen      from './components/ExchangeScreen.vue'
 import UpgradeScreen       from './components/UpgradeScreen.vue'
 import WreckSearchScreen   from './components/WreckSearchScreen.vue'
-import CashOutScreen       from './components/CashOutScreen.vue'
 import AlchemyScreen       from './components/AlchemyScreen.vue'
 import GamblerScreen       from './components/GamblerScreen.vue'
+import ShopEventScreen     from './components/ShopEventScreen.vue'
+import DeepAnchorScreen    from './components/DeepAnchorScreen.vue'
+import BreakBoatsScreen    from './components/BreakBoatsScreen.vue'
+import BlindTradeScreen    from './components/BlindTradeScreen.vue'
+import TavernGambleScreen  from './components/TavernGambleScreen.vue'
+import SkillSelectScreen   from './components/SkillSelectScreen.vue'
+import ChapterOverlay      from './components/ChapterOverlay.vue'
 import BattleScreen        from './components/BattleScreen.vue'
 import ArrangeScreen       from './components/ArrangeScreen.vue'
 import EnemySelectScreen   from './components/EnemySelectScreen.vue'
@@ -226,11 +273,13 @@ import DiceAnimOverlay     from './components/DiceAnimOverlay.vue'
 import BattleFlashOverlay  from './components/BattleFlashOverlay.vue'
 import RewardAnimOverlay   from './components/RewardAnimOverlay.vue'
 import { ITEM_POOL, findItem, getIconUrl } from './data/items.js'
-import { findIdentity, getSelectEnemies } from './data/config.js'
+import { findIdentity, getSelectEnemies, EVENT_POOL } from './data/config.js'
 import { TIER_LABELS } from './data/tiers.js'
 import { useInventory, mkInst, GRID_COLS } from './composables/useInventory.js'
 import GC from '../config/gameConfig.json'
 import { useEventActions } from './composables/useEventActions.js'
+import { isBossBattle, getChapterNumber, getChapterInfo, SKILL_POOL } from './composables/useSkills.js'
+const EVENT_LABEL_MAP = Object.fromEntries(EVENT_POOL.map(e => [e.id, e.label]))
 import { useEventSystem } from './composables/useEventSystem.js'
 import { playMergeAnimation } from './composables/useMergeAnim.js'
 import { playDiceAnimation } from './composables/useDiceAnim.js'
@@ -245,21 +294,33 @@ import { stopBattle, setBattleSpeed } from './composables/useBattle.js'
 import { setPixiSpeed } from './composables/usePixiBattle.js'
 import { useGameState } from './composables/useGameState.js'
 import { bubbleItem, hideBubble } from './composables/useBubble.js'
-import { shuffle } from './utils.js'
+import { shuffle, sleep } from './utils.js'
 
-const { MAX_LIVES, GOLD_PER_DAY } = GC
+const { MAX_LIVES } = GC
 
 const {
-  phase, battleCount, wins, lives, gold, resultType,
+  phase, battleCount, wins, lives, resultType,
   mergeFlash,
   identitySkill, identityIcon, skillTooltipVisible, selectedIdentityName,
   battleSpeed, battleItemStats, selectedDifficulty,
   currentEnemy, selectEnemies,
   playerItems, backpackItems, enemyAbilities,
   playerStat, enemyStat,
+  activeSkills,
   pendingRewards, showBackpack, battleScreenRef,
   resetState,
 } = useGameState()
+
+const skillCandidates      = ref([])
+const chapterNumber        = computed(() => getChapterNumber(battleCount.value))
+const chapterInfo          = computed(() => getChapterInfo(battleCount.value))
+// 技能选择时 battleCount 已 +1，需要用 battleCount-1 获取刚通过的章节
+const completedChapterNum  = computed(() => getChapterNumber(Math.max(0, battleCount.value - 1)))
+const completedChapterName = computed(() => getChapterInfo(Math.max(0, battleCount.value - 1))?.name ?? '')
+const isBossNext           = computed(() => isBossBattle(battleCount.value))
+const showChapterOverlay   = ref(false)
+const overlayChapterNum    = ref(1)
+const overlayChapterName   = ref('')
 
 const layoutState = reactive({ skillBar: false })
 provide('layout', {
@@ -272,40 +333,50 @@ const unlockedCols = computed(() => Math.min(2 + battleCount.value, GRID_COLS))
 const {
   findFreeSlot, findFreeBackpackSlot,
   handleDropToGrid, handleDropToBackpack, handleDropToSell,
-} = useInventory({ playerItems, backpackItems, gold, phase, unlockedCols, mergeFlash })
+} = useInventory({ playerItems, backpackItems, phase, unlockedCols, mergeFlash })
+
+const inventoryFull = computed(() => !findFreeSlot() && !findFreeBackpackSlot())
 
 const { deliverRewards } = useRewards({ playerItems, backpackItems, findFreeSlot, findFreeBackpackSlot })
 
 // ── 事件系统 ──────────────────────────────────────────────
 const {
-  eventKey, eventOptions, pendingEvents,
-  stormBlessingActive, upgradeEventTag, wreckCandidates,
-  afterEventAction, onEventChoice, startEventRound, continueEventRound, beginEventRound,
+  eventKey, eventOptions, eventOverlay, pendingEvents,
+  stormBlessingActive, stormShieldAmount, breakBoatsBuff,
+  upgradeEventTag, exchangeFromType, exchangeToType,
+  wreckCandidates, shopCandidates, blindTradeCandidates,
+  afterEventAction, onEventChoice, rerollShopCandidates,
+  startEventRound, continueEventRound, beginEventRound,
 } = useEventSystem({
   phase, battleCount, playerItems, backpackItems,
-  gold, mergeFlash, showBackpack,
+  mergeFlash, showBackpack,
   findFreeSlot, findFreeBackpackSlot, deliverRewards,
 })
 
 // ── 事件动作 ──────────────────────────────────────────────
 const {
   doUpgrade, doExchange,
-  doWreckSelect, doCashOut, doAlchemyConfirm, doGamblerDice,
-  upgradeableItems, exchangeableItems,
-  cashOutItems, alchemyBronzeItems, gamblerItems,
+  doWreckSelect, doAlchemyConfirm, doGamblerDice, doShopSelect,
+  doDeepAnchor, doBreakBoats, doBlindTradeSelect, doTavernGamble,
+  upgradeableItems, exchangeableItems, alchemyItems,
 } = useEventActions({
-  playerItems, backpackItems, gold, mergeFlash,
+  playerItems, backpackItems, mergeFlash,
   findFreeSlot, findFreeBackpackSlot, mkInst,
   deliverRewards, playMergeAnimation, playDiceAnimation, afterEventAction,
-  upgradeEventTag,
+  upgradeEventTag, breakBoatsBuff,
+  lives, maxLives: MAX_LIVES,
+  exchangeFromType, exchangeToType,
 })
 
 // ── 战斗流程 ──────────────────────────────────────────────
 const { startActualBattle, onDeployComplete } = useBattleFlow({
   phase, playerStat, enemyStat, playerItems, enemyAbilities,
-  battleItemStats, stormBlessingActive, battleScreenRef, unlockedCols,
-  wins, lives, pendingRewards, selectedDifficulty, resultType,
-  identitySkill, currentEnemy,
+  battleItemStats, stormBlessingActive, stormShieldAmount, breakBoatsBuff, battleScreenRef, unlockedCols,
+  wins, lives, selectedDifficulty, resultType,
+  identitySkill, currentEnemy, activeSkills, battleCount,
+  skillCandidates,
+  deliverRewards,
+  afterBattleComplete,
 })
 
 onMounted(() => {
@@ -323,10 +394,27 @@ onMounted(() => {
   })
 })
 
+// ── 身份技能描述 ──────────────────────────────────────────
+const identitySkillDesc = computed(() => {
+  if (!identitySkill.value) return ''
+  const base = SKILL_POOL.find(s => s.id === identitySkill.value.id)
+  if (!base) return ''
+  const val = base.tiers?.[identitySkill.value.tier]?.value ?? ''
+  return base.desc_cn.replace('{value}', val)
+})
+
 // ── 游戏流程 ──────────────────────────────────────────────
 
-function startGame() {
-  gold.value = GOLD_PER_DAY
+async function startGame() {
+  const info = getChapterInfo(battleCount.value)
+  if (info) {
+    overlayChapterNum.value  = getChapterNumber(battleCount.value)
+    overlayChapterName.value = info.name
+    showChapterOverlay.value = true
+    await sleep(1800)
+    showChapterOverlay.value = false
+    await sleep(300)
+  }
   phase.value = 'IDENTITY'
 }
 
@@ -349,12 +437,40 @@ function onEnemySelect(enemy) {
   startActualBattle()
 }
 
-async function onResultNext() {
-  if (resultType.value === 'clear' || resultType.value === 'gameover') { resetGame(); return }
-  battleCount.value++
-  await deliverRewards(pendingRewards.value)
-  pendingRewards.value = []
+async function afterBattleComplete(isBoss) {
+  if (resultType.value === 'gameover') { resetGame(); return }
+  if (isBoss && skillCandidates.value.length > 0) {
+    phase.value = 'SKILL_SELECT'
+  } else {
+    startEventRound()
+  }
+}
+
+async function onSkillSelect(skill) {
+  activeSkills.push({ ...skill, _used: false })
+  skillCandidates.value = []
+  // 章节切换提示：battleCount 已 +1，指向新章节
+  const info = getChapterInfo(battleCount.value)
+  if (info) {
+    overlayChapterNum.value  = getChapterNumber(battleCount.value)
+    overlayChapterName.value = info.name
+    showChapterOverlay.value = true
+    await sleep(1800)
+    showChapterOverlay.value = false
+    await sleep(300)
+  }
   startEventRound()
+}
+
+function resetGame() {
+  stopBattle()
+  resetState()
+  stormBlessingActive.value = false
+  stormShieldAmount.value = 0
+  breakBoatsBuff.value = null
+  upgradeEventTag.value = null
+  eventOptions.value = []
+  skillCandidates.value = []
 }
 
 function onIdentityChoice(identityId) {
@@ -362,7 +478,9 @@ function onIdentityChoice(identityId) {
   if (!identity) return
 
   selectedIdentityName.value = identity.name
-  identitySkill.value = identity.skill ?? null
+  identitySkill.value = identity.skillId
+    ? { id: identity.skillId, tier: identity.skillTier ?? 'Bronze' }
+    : null
   identityIcon.value = identity.icon ?? ''
 
   // 1件固定道具 + 2件随机同tag道具
@@ -386,13 +504,6 @@ function onIdentityChoice(identityId) {
   beginEventRound()
 }
 
-function resetGame() {
-  stopBattle()
-  resetState()
-  stormBlessingActive.value = false
-  upgradeEventTag.value = null
-  eventOptions.value = []
-}
 
 function setSpeed(s) {
   battleSpeed.value = s
@@ -407,6 +518,30 @@ function setSpeed(s) {
   display: flex; flex-direction: column;
   height: 100vh; width: 100%; max-width: 600px; margin: 0 auto;
   overflow: hidden;
+}
+
+/* ── Phase 容器（充满父级）── */
+.phase-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Phase 切换淡入淡出 ── */
+.page-enter-active {
+  transition: opacity .25s ease-out;
+  will-change: opacity;
+}
+.page-leave-active {
+  transition: opacity .2s ease-in;
+  will-change: opacity;
+  position: absolute;
+  inset: 0;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
 }
 
 .skill-bar {
@@ -470,5 +605,19 @@ function setSpeed(s) {
   z-index: 100;
   pointer-events: auto;
   cursor: pointer;
+}
+
+/* ── 事件浮层过渡动画 ── */
+.event-overlay-enter-active {
+  transition: opacity .35s ease-out;
+  will-change: opacity;
+}
+.event-overlay-leave-active {
+  transition: opacity .2s ease-in;
+  will-change: opacity;
+}
+.event-overlay-enter-from,
+.event-overlay-leave-to {
+  opacity: 0;
 }
 </style>

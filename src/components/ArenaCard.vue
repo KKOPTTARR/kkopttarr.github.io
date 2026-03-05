@@ -1,7 +1,7 @@
 <template>
   <div
     class="arena-card"
-    :class="[{ triggering: item.triggering }, item.triggering ? `glow-${statType}` : '']"
+    :class="[{ triggering: item.triggering, 'battle-active': item.battleActive }, item.triggering ? `glow-${statType}` : '']"
     :style="gridStyle"
     :data-instance="item.instanceId"
     @click="onCardClick"
@@ -19,7 +19,7 @@
     </div>
 
     <!-- 主数值 pill（顶部居中，与品级行同高） -->
-    <div v-if="mainStat" class="card-stat" :class="`stat-${statType}`">{{ mainStat }}</div>
+    <div v-if="mainStat" class="card-stat" :class="[`stat-${statType}`, { 'stat-growth-flash': growthFlash }]">{{ mainStat }}</div>
 
     <!-- 中央：倒计时数字 -->
     <div class="cd-center" :class="{ charging: isCharging }">{{ cdCountdown }}</div>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { getIconUrl } from '../data/items.js'
 import { showBubble } from '../composables/useBubble.js'
 
@@ -77,21 +77,43 @@ const statType = computed(() => {
   return 'none'
 })
 
+// 战斗内累积 bonus（_bonusXxx 由 useBattle.js 在触发时写入）
+const bonus = computed(() => {
+  const i = props.item
+  if (i.damage > 0) return i._bonusDamage || 0
+  if (i.heal   > 0) return i._bonusHeal   || 0
+  if (i.shield > 0) return i._bonusShield || 0
+  if (i.burn   > 0) return i._bonusBurn   || 0
+  if (i.poison > 0) return i._bonusPoison || 0
+  return 0
+})
+
+// 主数值显示实际有效值（base + bonus）
+const mainStat = computed(() => {
+  const i = props.item
+  const b = bonus.value
+  if (i.damage  > 0) return i.damage + b
+  if (i.heal    > 0) return `+${i.heal + b}`
+  if (i.shield  > 0) return i.shield + b
+  if (i.burn    > 0) return i.burn   + b
+  if (i.poison  > 0) return i.poison + b
+  return ''
+})
+
+// 数值增长时触发脉冲动画
+const growthFlash = ref(false)
+watch(bonus, (newVal, oldVal) => {
+  if (newVal > oldVal) {
+    growthFlash.value = true
+    setTimeout(() => { growthFlash.value = false }, 500)
+  }
+})
+
 function onCardClick(e) {
   e.stopPropagation()
   const elTop = e.currentTarget.getBoundingClientRect().top
   showBubble(props.item, e.clientX, elTop)
 }
-
-const mainStat = computed(() => {
-  const i = props.item
-  if (i.damage  > 0) return i.damage
-  if (i.heal    > 0) return `+${i.heal}`
-  if (i.shield  > 0) return i.shield
-  if (i.burn    > 0) return i.burn
-  if (i.poison  > 0) return i.poison
-  return ''
-})
 </script>
 
 <style scoped>
@@ -106,39 +128,39 @@ const mainStat = computed(() => {
   aspect-ratio: 3 / 4;
 }
 .arena-card.triggering {
-  animation: card-trigger-pulse .32s ease-out;
+  animation: card-trigger-pulse .50s ease-out;
   z-index: 10;
 }
 @keyframes card-trigger-pulse {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.12); }
-  65%  { transform: scale(0.97); }
-  100% { transform: scale(1); }
+  0%   { transform: scale(1);    filter: brightness(1); }
+  22%  { transform: scale(1.22); filter: brightness(1.8); }
+  58%  { transform: scale(0.96); filter: brightness(1.1); }
+  100% { transform: scale(1);    filter: brightness(1); }
 }
 
 /* 类型化发光边框 */
 .triggering.glow-damage {
-  box-shadow: 0 0 0 2px #ff5030, 0 0 14px 4px rgba(255,80,48,.65), 0 0 28px rgba(255,80,48,.25);
+  box-shadow: 0 0 0 3px #ff5030, 0 0 22px 8px rgba(255,80,48,.85), 0 0 48px rgba(255,80,48,.45);
   border-color: #ff5030;
 }
 .triggering.glow-heal {
-  box-shadow: 0 0 0 2px #40dd70, 0 0 14px 4px rgba(64,221,112,.65), 0 0 28px rgba(64,221,112,.25);
+  box-shadow: 0 0 0 3px #40dd70, 0 0 22px 8px rgba(64,221,112,.85), 0 0 48px rgba(64,221,112,.45);
   border-color: #40dd70;
 }
 .triggering.glow-shield {
-  box-shadow: 0 0 0 2px #60b8ff, 0 0 14px 4px rgba(96,184,255,.65), 0 0 28px rgba(96,184,255,.25);
+  box-shadow: 0 0 0 3px #60b8ff, 0 0 22px 8px rgba(96,184,255,.85), 0 0 48px rgba(96,184,255,.45);
   border-color: #60b8ff;
 }
 .triggering.glow-burn {
-  box-shadow: 0 0 0 2px #ff8820, 0 0 14px 4px rgba(255,136,32,.65), 0 0 28px rgba(255,136,32,.25);
+  box-shadow: 0 0 0 3px #ff8820, 0 0 22px 8px rgba(255,136,32,.85), 0 0 48px rgba(255,136,32,.45);
   border-color: #ff8820;
 }
 .triggering.glow-poison {
-  box-shadow: 0 0 0 2px #80cc20, 0 0 14px 4px rgba(128,204,32,.65), 0 0 28px rgba(128,204,32,.25);
+  box-shadow: 0 0 0 3px #80cc20, 0 0 22px 8px rgba(128,204,32,.85), 0 0 48px rgba(128,204,32,.45);
   border-color: #80cc20;
 }
 .triggering.glow-crit {
-  box-shadow: 0 0 0 2px #ffd060, 0 0 14px 4px rgba(255,208,96,.65), 0 0 28px rgba(255,208,96,.25);
+  box-shadow: 0 0 0 3px #ffd060, 0 0 22px 8px rgba(255,208,96,.85), 0 0 48px rgba(255,208,96,.45);
   border-color: #ffd060;
 }
 
@@ -225,6 +247,60 @@ const mainStat = computed(() => {
 .stat-heal   { background: rgba(40,170,60,.9); }
 .stat-shield { background: rgba(180,140,0,.9); }
 .stat-crit   { background: rgba(160,100,0,.9); }
+
+/* 数值增长时的脉冲动画 */
+@keyframes stat-growth-pulse {
+  0%   { transform: translateX(-50%) scale(1); box-shadow: none; }
+  35%  { transform: translateX(-50%) scale(1.35); box-shadow: 0 0 8px 3px rgba(255,210,50,.8); }
+  100% { transform: translateX(-50%) scale(1); box-shadow: none; }
+}
+.card-stat.stat-growth-flash {
+  animation: stat-growth-pulse .5s ease-out;
+}
+
+/* 被充能时蓝白闪光（0.5s）*/
+@keyframes card-charge-flash {
+  0%   { box-shadow: none; border-color: rgba(255,255,255,.1); }
+  20%  { box-shadow: 0 0 0 2px #80d8ff, 0 0 18px 7px rgba(128,216,255,.75); border-color: #80d8ff; }
+  100% { box-shadow: none; border-color: rgba(255,255,255,.1); }
+}
+.arena-card.card-charged {
+  animation: card-charge-flash 0.5s ease-out;
+}
+
+/* 战斗开始飞入动画 */
+@keyframes card-battle-enter {
+  0%   { transform: translateY(64px) scale(0.65); opacity: 0; filter: brightness(2.5); }
+  55%  { transform: translateY(-16px) scale(1.18); opacity: 1; filter: brightness(1.4); }
+  75%  { transform: translateY(-4px) scale(1.04); filter: brightness(1); }
+  100% { transform: translateY(0) scale(1); opacity: 1; filter: brightness(1); }
+}
+.arena-card.battle-entering {
+  animation: card-battle-enter 0.65s cubic-bezier(.22,1.8,.36,1) both;
+  z-index: 15;
+}
+
+/* 战斗中持续漂浮：用 CSS 变量控制错位延迟，不污染其他 animation */
+@keyframes card-battle-float {
+  0%,100% { transform: translateY(0px)   rotate(0deg);     filter: drop-shadow(0 5px 10px rgba(0,0,0,.6)); }
+  45%     { transform: translateY(-9px)  rotate(-0.6deg);  filter: drop-shadow(0 14px 22px rgba(0,0,0,.38)); }
+  72%     { transform: translateY(-4px)  rotate(0.4deg);   filter: drop-shadow(0 9px 15px rgba(0,0,0,.5)); }
+}
+.arena-card.battle-active {
+  animation: card-battle-float 2.4s ease-in-out var(--float-delay, 0s) infinite;
+}
+/* 以下三条：battle-active 存在时，其他瞬态动画必须能覆盖漂浮 */
+.arena-card.battle-active.triggering {
+  animation: card-trigger-pulse .50s ease-out;
+}
+.arena-card.battle-active.card-special {
+  animation:
+    card-special-enter  0.20s ease-out,
+    card-special-active 0.50s 0.20s ease-in-out infinite;
+}
+.arena-card.battle-active.card-charged {
+  animation: card-charge-flash 0.5s ease-out;
+}
 
 /* 底部渐变叠层 */
 .card-bottom {

@@ -154,156 +154,220 @@
 .dice-anim-overlay {
   position: fixed; inset: 0; z-index: 9500;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 24px;
-  background: rgba(0,0,0,.80);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  align-items: center; justify-content: center; gap: 32px;
+  background: rgba(0,0,0,.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .dice-anim-stage {
   position: relative;
   display: flex; flex-direction: column;
-  align-items: center; gap: 18px;
+  align-items: center; gap: 20px;
 }
 
 /* 光晕环 */
 .dice-glow-ring {
   position: absolute;
-  width: 300px; height: 300px;
+  width: 320px; height: 320px;
   border-radius: 50%;
   top: 50%; left: 50%; transform: translate(-50%, -50%);
   pointer-events: none;
-  animation: merge-glow-pulse 1.2s ease-in-out infinite;
+  animation: merge-glow-pulse 1.4s ease-in-out infinite;
 }
-.dice-glow-default { background: radial-gradient(circle, rgba(200,134,10,.40) 0%, transparent 68%); }
-.dice-glow-win     { background: radial-gradient(circle, rgba(200,160,0,.55)  0%, transparent 68%); }
-.dice-glow-lose    { background: radial-gradient(circle, rgba(200,60,40,.55)  0%, transparent 68%); }
-.dice-glow-destroy { background: radial-gradient(circle, rgba(200,60,40,.55)  0%, transparent 68%); }
+.dice-glow-idle { background: radial-gradient(circle, rgba(180,120,10,.35) 0%, transparent 68%); }
+.dice-glow-win  { background: radial-gradient(circle, rgba(220,170,0,.60)  0%, transparent 68%); }
+.dice-glow-lose { background: radial-gradient(circle, rgba(210,55,35,.60)  0%, transparent 68%); }
 
-/* 骰子 emoji */
-.dice-emoji {
-  font-size: 80px; line-height: 1; display: block;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,.8));
+/* 骰子主体 */
+.dice-body {
+  font-size: 108px; line-height: 1;
   position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.9));
+  transition: filter .2s;
 }
-.dice-emoji.dice-spinning { animation: dice-tumble .18s linear infinite; }
-.dice-emoji.dice-land     { animation: dice-bounce .38s cubic-bezier(.2,1.4,.5,1) forwards; }
-.dice-emoji.dice-win      {
-  animation: dice-win-pop .5s cubic-bezier(.2,1.4,.5,1) forwards;
-  filter: drop-shadow(0 0 20px rgba(220,170,0,.9));
+.dice-body.dice-spinning { animation: dice-tumble .16s linear infinite; }
+.dice-body.dice-land     { animation: dice-bounce .40s cubic-bezier(.2,1.4,.5,1) forwards; }
+.dice-body.dice-win      {
+  animation: dice-win-pop .55s cubic-bezier(.15,1.5,.4,1) forwards;
+  filter: drop-shadow(0 0 28px rgba(230,180,0,.95)) drop-shadow(0 6px 20px rgba(0,0,0,.9));
 }
-.dice-emoji.dice-lose     {
-  animation: dice-lose-shake .45s ease-in-out forwards;
-  filter: drop-shadow(0 0 18px rgba(200,60,40,.85));
+.dice-body.dice-lose     {
+  animation: dice-lose-shake .50s ease-in-out forwards;
+  filter: drop-shadow(0 0 24px rgba(210,55,35,.90)) drop-shadow(0 6px 20px rgba(0,0,0,.9));
+}
+.dice-body.dice-exit     { animation: dice-fade-out .45s ease-in forwards; }
+.dice-emoji-inner { display: block; }
+
+/* 落定点数徽章 */
+.dice-face-badge {
+  font-size: 15px; font-weight: 900; letter-spacing: .5px;
+  padding: 4px 14px; border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(4px);
+  color: var(--text-dim);
+  background: rgba(255,255,255,.07);
+}
+.face-badge-win  {
+  color: #f0c040;
+  background: rgba(200,134,10,.18);
+  border-color: rgba(200,134,10,.45);
+  text-shadow: 0 0 10px rgba(200,134,10,.7);
+}
+.face-badge-lose {
+  color: #e05040;
+  background: rgba(200,60,40,.15);
+  border-color: rgba(200,60,40,.40);
+  text-shadow: 0 0 10px rgba(200,60,40,.65);
 }
 
-/* 物品卡牌 */
-.dice-anim-card {
-  position: relative;
-  width: 160px; height: 228px;
-  border-radius: 10px; overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,.8);
-}
-.dice-result-win  .dice-anim-card { box-shadow: 0 8px 40px rgba(200,160,0,.40); }
-.dice-result-lose .dice-anim-card,
-.dice-result-destroy .dice-anim-card { box-shadow: 0 8px 40px rgba(200,60,40,.35); }
-.dice-anim-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.dice-anim-tier-pill {
-  position: absolute; top: 8px; right: 8px;
-  font-size: 12px; font-weight: 900;
-  padding: 3px 8px; border-radius: 8px;
-  backdrop-filter: blur(4px); border: 1px solid transparent;
-  text-shadow: 0 1px 3px rgba(0,0,0,.8);
-}
-
-.dice-anim-card.ma-enter    { animation: ma-enter    .45s cubic-bezier(.2,1.2,.5,1) forwards; }
-.dice-anim-card.ma-flip-out { animation: ma-flip-out .25s ease-in  forwards; }
-.dice-anim-card.ma-flip-in  { animation: ma-flip-in  .25s ease-out forwards; }
-.dice-anim-card.ma-shake    { animation: ma-shake    .35s ease-in-out; }
-.dice-anim-card.ma-exit     { animation: ma-exit     .50s ease-in  forwards; }
+/* 点数徽章出现动画 */
+.face-pop-enter-active { animation: face-badge-pop .35s cubic-bezier(.2,1.4,.5,1) forwards; }
+.face-pop-leave-active { transition: opacity .2s; }
+.face-pop-leave-to    { opacity: 0; }
 
 /* 结果文字 */
 .dice-anim-label {
-  font-size: 18px; font-weight: 900;
-  text-shadow: 0 2px 6px rgba(0,0,0,.9);
-  animation: merge-label-pop .4s cubic-bezier(.2,1.4,.5,1) forwards;
-  white-space: nowrap;
+  font-size: 17px; font-weight: 900; letter-spacing: .3px;
+  max-width: 280px; text-align: center; line-height: 1.5;
+  text-shadow: 0 2px 8px rgba(0,0,0,.9);
+  padding: 0 16px;
 }
-.dice-result-win .dice-anim-label {
-  color: #f0c040;
-  text-shadow: 0 0 16px rgba(200,134,10,.9), 0 2px 6px rgba(0,0,0,.9);
+.dice-label-win  {
+  color: #f5cc50;
+  text-shadow: 0 0 18px rgba(210,160,0,.85), 0 2px 8px rgba(0,0,0,.9);
 }
-.dice-result-lose .dice-anim-label,
-.dice-result-destroy .dice-anim-label {
-  color: #e05040;
-  text-shadow: 0 0 14px rgba(200,60,40,.8), 0 2px 6px rgba(0,0,0,.9);
+.dice-label-lose {
+  color: #e86050;
+  text-shadow: 0 0 16px rgba(200,55,35,.80), 0 2px 8px rgba(0,0,0,.9);
 }
+
+/* 结果文字出现动画 */
+.label-rise-enter-active { animation: label-rise-in .45s cubic-bezier(.2,1.3,.4,1) forwards; }
+.label-rise-leave-active { transition: opacity .2s; }
+.label-rise-leave-to     { opacity: 0; }
 
 /* 骰子专属 keyframes */
 @keyframes dice-tumble {
   0%   { transform: rotate(0deg)   scale(1);    }
-  25%  { transform: rotate(90deg)  scale(1.08); }
-  50%  { transform: rotate(180deg) scale(0.94); }
-  75%  { transform: rotate(270deg) scale(1.08); }
+  25%  { transform: rotate(90deg)  scale(1.06); }
+  50%  { transform: rotate(180deg) scale(0.95); }
+  75%  { transform: rotate(270deg) scale(1.06); }
   100% { transform: rotate(360deg) scale(1);    }
 }
 @keyframes dice-bounce {
-  0%   { transform: scale(1.25) translateY(-8px); }
-  55%  { transform: scale(0.88) translateY(4px);  }
-  80%  { transform: scale(1.04) translateY(0);    }
+  0%   { transform: scale(1.3) translateY(-10px); }
+  50%  { transform: scale(0.86) translateY(6px);  }
+  75%  { transform: scale(1.05) translateY(0);    }
   100% { transform: scale(1)    translateY(0);    }
 }
 @keyframes dice-win-pop {
-  0%   { transform: scale(1);                   }
-  40%  { transform: scale(1.4) rotate(14deg);   }
-  70%  { transform: scale(0.92) rotate(-4deg);  }
-  100% { transform: scale(1.1) rotate(0deg);    }
+  0%   { transform: scale(1);                    }
+  35%  { transform: scale(1.45) rotate(12deg);   }
+  65%  { transform: scale(0.90) rotate(-5deg);   }
+  85%  { transform: scale(1.08) rotate(2deg);    }
+  100% { transform: scale(1.05) rotate(0deg);    }
 }
 @keyframes dice-lose-shake {
-  0%,100% { transform: translateX(0)    rotate(0);     }
-  15%     { transform: translateX(-14px) rotate(-8deg); }
-  30%     { transform: translateX(14px)  rotate(8deg);  }
-  45%     { transform: translateX(-10px) rotate(-5deg); }
-  60%     { transform: translateX(10px)  rotate(5deg);  }
-  75%     { transform: translateX(-5px)  rotate(-2deg); }
-  90%     { transform: translateX(5px)   rotate(2deg);  }
+  0%,100% { transform: translateX(0)     rotate(0);      }
+  12%     { transform: translateX(-16px) rotate(-9deg);  }
+  28%     { transform: translateX(16px)  rotate(9deg);   }
+  44%     { transform: translateX(-11px) rotate(-5deg);  }
+  60%     { transform: translateX(11px)  rotate(5deg);   }
+  76%     { transform: translateX(-5px)  rotate(-2deg);  }
+  90%     { transform: translateX(5px)   rotate(2deg);   }
+}
+@keyframes dice-fade-out {
+  0%   { opacity: 1; transform: scale(1);    }
+  100% { opacity: 0; transform: scale(0.75); }
+}
+@keyframes face-badge-pop {
+  0%   { opacity: 0; transform: scale(0.5) translateY(6px); }
+  70%  { transform: scale(1.12) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0);     }
+}
+@keyframes label-rise-in {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.9); }
+  70%  { transform: translateY(-3px) scale(1.02);            }
+  100% { opacity: 1; transform: translateY(0) scale(1);      }
 }
 
-/* ===== 战利品飞入动画 Overlay ===== */
-.reward-anim-overlay {
+/* ===== 战利品飞入 Overlay（覆盖在战斗页之上）===== */
+.battle-result-overlay {
   position: fixed; inset: 0; z-index: 9600;
-  background: rgba(0,0,0,.78); backdrop-filter: blur(6px);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(3px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  pointer-events: none;
 }
-.reward-anim-title {
-  font-size: 18px; font-weight: bold; color: var(--gold); letter-spacing: 1px;
+
+/* ── 胜负 Banner ── */
+@keyframes banner-drop {
+  0%   { opacity: 0; transform: translateY(-24px) scale(.9); }
+  60%  { transform: translateY(4px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
-.reward-anim-cards {
-  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 340px;
+.result-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 28px; border-radius: 12px;
+  animation: banner-drop .4s cubic-bezier(.2,1.2,.5,1) forwards;
 }
-.reward-anim-card {
+.banner-win  {
+  background: linear-gradient(135deg, rgba(30,60,10,.88), rgba(20,40,6,.92));
+  border: 1px solid rgba(120,200,60,.4);
+  box-shadow: 0 0 24px rgba(80,180,30,.25);
+}
+.banner-lose {
+  background: linear-gradient(135deg, rgba(60,10,10,.88), rgba(40,6,6,.92));
+  border: 1px solid rgba(200,60,40,.4);
+  box-shadow: 0 0 24px rgba(180,40,20,.25);
+}
+.result-icon { font-size: 28px; }
+.result-text {
+  font-size: 22px; font-weight: 900; letter-spacing: 1px;
+}
+.banner-win  .result-text { color: #a0e840; text-shadow: 0 0 12px rgba(100,200,30,.6); }
+.banner-lose .result-text { color: #e86050; text-shadow: 0 0 12px rgba(200,60,30,.6); }
+.lives-text { font-size: 14px; color: var(--text-dim); }
+
+/* ── 战利品标题 ── */
+.reward-title {
+  font-size: 15px; font-weight: bold; color: var(--gold);
+  letter-spacing: 1px; opacity: .9;
+}
+
+/* ── 奖励卡片组 ── */
+.reward-cards {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; max-width: 360px;
+}
+.reward-card {
   position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  width: 64px;
+  width: 68px;
 }
-.reward-anim-img {
-  width: 64px; height: 64px; border-radius: 8px; object-fit: cover;
-  border: 2px solid rgba(255,255,255,.15);
+.reward-img {
+  width: 68px; height: 68px; border-radius: 10px; object-fit: cover;
+  border: 2px solid rgba(255,255,255,.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,.5);
 }
-.reward-anim-tier {
+.reward-tier {
   position: absolute; top: -6px; right: -6px;
   font-size: 10px; font-weight: bold;
   padding: 1px 5px; border-radius: 8px;
 }
-.reward-anim-name {
+.reward-name {
   font-size: 10px; color: var(--text-dim); text-align: center;
-  max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+
 @keyframes rw-show {
-  0%   { opacity: 0; transform: scale(.3) translateY(-20px); }
-  100% { opacity: 1; transform: scale(1)  translateY(0); }
+  0%   { opacity: 0; transform: scale(.25) translateY(-16px); }
+  65%  { transform: scale(1.08) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes rw-fly {
-  0%   { opacity: 1; transform: translateY(0)     scale(1); }
-  100% { opacity: 0; transform: translateY(160px) scale(.35); }
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  30%  { transform: translateY(20px) scale(.9); }
+  100% { opacity: 0; transform: translateY(200px) scale(.2); }
 }
-.rw-show { animation: rw-show .35s ease-out forwards; }
-.rw-fly  { animation: rw-fly  .5s  ease-in  forwards; }
+.rw-show { animation: rw-show .4s cubic-bezier(.2,1.2,.5,1) forwards; }
+.rw-fly  { animation: rw-fly  .55s ease-in forwards; }

@@ -38,6 +38,7 @@ const _arcs        = []
 const _particles   = []
 const _rings       = []
 const _stars       = []
+const _projectiles = []
 
 // ── 初始化 / 销毁 ──────────────────────────────────────────────
 export async function initPixi() {
@@ -61,13 +62,94 @@ export async function initPixi() {
 export function destroyPixi() {
   if (_app) { _app.destroy(true); _app = null }
   if (_canvas) { _canvas.remove(); _canvas = null }
-  _floats.length = _arcs.length = _particles.length = _rings.length = _stars.length = 0
+  _floats.length = _arcs.length = _particles.length = _rings.length = _stars.length = _projectiles.length = 0
 }
 
 // ── 浮字（canvas 坐标，落点专用）─────────────────────────────
 export function spawnFloatingTextAt(x, y, text, type) {
   if (!_app) return
   _addFloat(x, y, text, type)
+}
+
+// ── 闪电辅助：在 gfx 上绘制锯齿路径 ─────────────────────────
+function _drawLightning(gfx, x1, y1, x2, y2, spread) {
+  const segs = 5 + Math.floor(Math.random() * 3)
+  const dx = x2 - x1, dy = y2 - y1
+  const len = Math.sqrt(dx * dx + dy * dy) || 1
+  const px = -dy / len, py = dx / len
+  const pts = [[x1, y1]]
+  for (let i = 1; i < segs; i++) {
+    const t    = i / segs
+    const disp = (Math.random() - 0.5) * spread
+    pts.push([x1 + dx * t + px * disp, y1 + dy * t + py * disp])
+  }
+  pts.push([x2, y2])
+  gfx.moveTo(pts[0][0], pts[0][1])
+  for (let i = 1; i < pts.length; i++) gfx.lineTo(pts[i][0], pts[i][1])
+}
+
+// ── 相邻充能：闪电（卡牌 → 邻居卡牌）────────────────────────
+export function spawnChargeArc(fromId, toId) {
+  if (!_app) return
+  const cr     = _app.canvas.getBoundingClientRect()
+  const fromEl = document.querySelector(`[data-instance="${fromId}"]`)
+  const toEl   = document.querySelector(`[data-instance="${toId}"]`)
+  if (!fromEl || !toEl) return
+  const fr = fromEl.getBoundingClientRect()
+  const tr = toEl.getBoundingClientRect()
+  const fx = fr.left + fr.width  / 2 - cr.left
+  const fy = fr.top  + fr.height / 2 - cr.top
+  const tx = tr.left + tr.width  / 2 - cr.left
+  const ty = tr.top  + tr.height / 2 - cr.top
+
+  // 外晕闪电
+  const mainGlow = new Graphics()
+  _drawLightning(mainGlow, fx, fy, tx, ty, 14)
+  mainGlow.stroke({ color: 0x2080ff, width: 8, alpha: 0.28 })
+  _app.stage.addChild(mainGlow)
+
+  // 主闪电
+  const mainLine = new Graphics()
+  _drawLightning(mainLine, fx, fy, tx, ty, 10)
+  mainLine.stroke({ color: 0xe8f6ff, width: 2, alpha: 0.95 })
+  _app.stage.addChild(mainLine)
+  _arcs.push({ glow: mainGlow, line: mainLine, life: 1.0, decayRate: 2.0 })
+
+  // 副闪电（更抖）
+  const subLine = new Graphics()
+  _drawLightning(subLine, fx, fy, tx, ty, 20)
+  subLine.stroke({ color: 0xa0d8ff, width: 1, alpha: 0.6 })
+  _app.stage.addChild(subLine)
+  _arcs.push({ glow: null, line: subLine, life: 1.0, decayRate: 2.6 })
+
+  // 落点粒子
+  setTimeout(() => {
+    if (!_app) return
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2
+      const spd   = 1.5 + Math.random() * 2
+      const g     = new Graphics()
+      g.circle(0, 0, 1.5 + Math.random()).fill({ color: Math.random() > 0.5 ? 0xffffff : 0x80d8ff })
+      g.x = tx + (Math.random() - 0.5) * 6
+      g.y = ty + (Math.random() - 0.5) * 6
+      _app.stage.addChild(g)
+      const life = 0.2 + Math.random() * 0.15
+      _particles.push({ obj: g, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd, life, maxLife: life })
+    }
+  }, Math.round(40 / _pixiSpeed))
+}
+
+// ── DoT 浮字（在受击方显示伤害数字）─────────────────────────
+export function spawnDotFloatingText(isEnemyTarget, value, type) {
+  if (!_app) return
+  const cr  = _app.canvas.getBoundingClientRect()
+  const sel = isEnemyTarget ? '.enemy-portrait-wrap' : '.arena-grid'
+  const el  = document.querySelector(sel)
+  if (!el) return
+  const r = el.getBoundingClientRect()
+  const x = r.left + r.width  * (0.25 + Math.random() * 0.5) - cr.left
+  const y = r.top  + r.height * (0.15 + Math.random() * 0.45) - cr.top
+  _addFloat(x, y, `-${value}`, type === 'burn' ? 'burn' : 'poison')
 }
 
 // ── DoT 命中粒子（在受击方位置散射小粒子）────────────────────
@@ -83,7 +165,7 @@ export function spawnDotHit(isEnemy, type) {
   const cx  = r.left + r.width  * (0.3 + Math.random() * 0.4) - cr.left
   const cy  = r.top  + r.height * (0.2 + Math.random() * 0.6) - cr.top
   const fx  = FX_PIXI[type] ?? FX_PIXI.dot
-  const cnt = 5 + Math.floor(Math.random() * 4)
+  const cnt = 24
   for (let i = 0; i < cnt; i++) {
     const angle = Math.random() * Math.PI * 2
     const spd   = 1.2 + Math.random() * 2.2
@@ -125,47 +207,88 @@ export function spawnAttackArc(instanceId, isEnemy, type, onImpact) {
   const cr = _app.canvas.getBoundingClientRect()
   let fromX, fromY, toX, toY
 
+  const targetsSelf = type === 'heal' || type === 'shield'
   if (!isEnemy) {
     const src = instanceId ? document.querySelector(`[data-instance="${instanceId}"]`) : null
     if (!src) return
     const sr = src.getBoundingClientRect()
     fromX = sr.left + sr.width  / 2 - cr.left
     fromY = sr.top  + sr.height / 2 - cr.top
-    const dst = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
-    if (!dst) return
-    const dr = dst.getBoundingClientRect()
-    toX = dr.left + dr.width  / 2 - cr.left
-    toY = dr.top  + dr.height / 2 - cr.top
+    if (targetsSelf) {
+      const dst = document.querySelector('.arena-grid')
+      if (!dst) return
+      const dr = dst.getBoundingClientRect()
+      toX = dr.left + dr.width  * (0.1 + Math.random() * 0.8) - cr.left
+      toY = dr.top  + dr.height * (0.2  + Math.random() * 0.6) - cr.top
+    } else {
+      const dst = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
+      if (!dst) return
+      const dr = dst.getBoundingClientRect()
+      toX = dr.left + dr.width  / 2 - cr.left
+      toY = dr.top  + dr.height / 2 - cr.top
+    }
   } else {
     const src = document.querySelector('.enemy-portrait-wrap') ?? document.querySelector('.enemy-section')
     if (!src) return
     const sr = src.getBoundingClientRect()
     fromX = sr.left + sr.width  / 2 - cr.left
     fromY = sr.top  + sr.height / 2 - cr.top
-    const dst = document.querySelector('.arena-grid')
-    if (!dst) return
-    const dr = dst.getBoundingClientRect()
-    toX = dr.left + dr.width  * (0.25 + Math.random() * 0.5) - cr.left
-    toY = dr.top  + dr.height * (0.2  + Math.random() * 0.6) - cr.top
+    if (targetsSelf) {
+      toX = fromX + (Math.random() - 0.5) * sr.width  * 0.6
+      toY = fromY + (Math.random() - 0.5) * sr.height * 0.6
+    } else {
+      const dst = document.querySelector('.arena-grid')
+      if (!dst) return
+      const dr = dst.getBoundingClientRect()
+      toX = dr.left + dr.width  * (0.25 + Math.random() * 0.5) - cr.left
+      toY = dr.top  + dr.height * (0.2  + Math.random() * 0.6) - cr.top
+    }
   }
 
-  const fx  = FX_PIXI[type] ?? FX_PIXI.damage
+  const fx        = FX_PIXI[type] ?? FX_PIXI.damage
+  const isSelfBuff = type === 'heal' || type === 'shield'
   const cpx = (fromX + toX) / 2 + (Math.random() - 0.5) * 50
   const cpy = Math.min(fromY, toY) - 40 - Math.random() * 20
+
+  // 源点爆发（卡牌发射时的小粒子）
+  if (!isSelfBuff) {
+    for (let i = 0; i < 8; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const spd   = 1.8 + Math.random() * 2.2
+      const g = new Graphics()
+      g.circle(0, 0, 1.5 + Math.random() * 1.5).fill({ color: fx.subs[0] })
+      g.x = fromX; g.y = fromY
+      _app.stage.addChild(g)
+      const life = 0.25 + Math.random() * 0.15
+      _particles.push({ obj: g, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd, life, maxLife: life })
+    }
+  }
 
   // 外晕弧（粗、低透明度）
   const glow = new Graphics()
   glow.moveTo(fromX, fromY).quadraticCurveTo(cpx, cpy, toX, toY)
-  glow.stroke({ color: fx.main, width: 10, alpha: 0.28 })
+  glow.stroke({ color: fx.main, width: 18, alpha: 0.35 })
   _app.stage.addChild(glow)
 
   // 主弧线（细、高亮）
   const line = new Graphics()
   line.moveTo(fromX, fromY).quadraticCurveTo(cpx, cpy, toX, toY)
-  line.stroke({ color: fx.subs[0], width: 2.5, alpha: 0.95 })
+  line.stroke({ color: fx.subs[0], width: 4, alpha: 1.0 })
   _app.stage.addChild(line)
 
-  _arcs.push({ glow, line, life: 1.0 })
+  _arcs.push({ glow, line, life: 1.0, decayRate: isSelfBuff ? 1.8 : 3.2 })
+
+  // 投射物头部（伤害/灼烧/剧毒专用）
+  if (!isSelfBuff) {
+    const projColor = { damage: 0xffffff, burn: 0xff9040, poison: 0x88dd20, dot: 0xff8030 }
+    const projSize  = { damage: 5.5, burn: 6, poison: 6.5, dot: 5 }
+    const projSpeed = { damage: 2.4, burn: 1.8, poison: 1.1, dot: 1.5 }
+    const head = new Graphics()
+    head.circle(0, 0, projSize[type] ?? 5).fill({ color: projColor[type] ?? 0xffffff })
+    head.x = fromX; head.y = fromY
+    _app.stage.addChild(head)
+    _projectiles.push({ obj: head, x0: fromX, y0: fromY, cpx, cpy, x1: toX, y1: toY, t: 0, speed: projSpeed[type] ?? 2.0, type })
+  }
 
   // 落点效果稍微延迟，让弧线先出现
   const delay = Math.round(80 / _pixiSpeed)
@@ -253,12 +376,12 @@ export function spawnVictoryBurst() {
 function _burst(x, y, type) {
   if (!_app) return
   const fx    = FX_PIXI[type] ?? FX_PIXI.damage
-  const count = type === 'damage' ? 12 : 8
+  const count = 40
 
   for (let i = 0; i < count; i++) {
     const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.6
-    const spd   = 2.5 + Math.random() * 3.5
-    const sz    = 1.5 + Math.random() * 2.5
+    const spd   = 3.2 + Math.random() * 5.0
+    const sz    = 1.5 + Math.random() * 3.5
     const col   = Math.random() > 0.4
       ? fx.main
       : fx.subs[Math.floor(Math.random() * fx.subs.length)]
@@ -266,15 +389,21 @@ function _burst(x, y, type) {
     g.circle(0, 0, sz).fill({ color: col })
     g.x = x; g.y = y
     _app.stage.addChild(g)
-    const life = 0.5 + Math.random() * 0.3
+    const life = 0.55 + Math.random() * 0.35
     _particles.push({ obj: g, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd, life, maxLife: life })
   }
 
-  // 冲击波环
+  // 冲击波环（双环）
   const ring = new Graphics()
   ring.x = x; ring.y = y
   _app.stage.addChild(ring)
-  _rings.push({ obj: ring, color: fx.main, radius: 4, maxRadius: 52, strokeWidth: 2.5, life: 1.0 })
+  const ringDecay = (type === 'heal' || type === 'shield') ? 1.2 : 2.2
+  _rings.push({ obj: ring, color: fx.main, radius: 6, maxRadius: 140, strokeWidth: 5, life: 1.0, decayRate: ringDecay })
+
+  const ring2 = new Graphics()
+  ring2.x = x; ring2.y = y
+  _app.stage.addChild(ring2)
+  _rings.push({ obj: ring2, color: fx.subs[0], radius: 4, maxRadius: 90, strokeWidth: 2.5, life: 0.8, decayRate: ringDecay * 1.6 })
 }
 
 // ── 主循环 ────────────────────────────────────────────────────
@@ -291,18 +420,38 @@ function _tick(ticker) {
     if (f.life <= 0) { _app.stage.removeChild(f.obj); f.obj.destroy(); _floats.splice(i, 1) }
   }
 
-  // 攻击光弧淡出
+  // 攻击光弧 / 闪电淡出
   for (let i = _arcs.length - 1; i >= 0; i--) {
     const a = _arcs[i]
-    a.life -= dt * 5.5
+    a.life -= dt * (a.decayRate ?? 5.5)
     if (a.life <= 0) {
-      _app.stage.removeChild(a.glow); a.glow.destroy()
-      _app.stage.removeChild(a.line); a.line.destroy()
+      if (a.glow) { _app.stage.removeChild(a.glow); a.glow.destroy() }
+      if (a.line) { _app.stage.removeChild(a.line); a.line.destroy() }
       _arcs.splice(i, 1)
     } else {
-      a.glow.alpha = a.life * 0.28
-      a.line.alpha = a.life
+      if (a.glow) a.glow.alpha = a.life * 0.28
+      if (a.line) a.line.alpha = a.life
     }
+  }
+
+  // 投射物头部（沿贝塞尔曲线运动）
+  for (let i = _projectiles.length - 1; i >= 0; i--) {
+    const p  = _projectiles[i]
+    p.t = Math.min(1, p.t + dt * p.speed)
+    const mt = 1 - p.t
+    const bx = mt*mt*p.x0 + 2*mt*p.t*p.cpx + p.t*p.t*p.x1
+    const by = mt*mt*p.y0 + 2*mt*p.t*p.cpy + p.t*p.t*p.y1
+    p.obj.x = bx; p.obj.y = by
+    p.obj.alpha = p.t > 0.85 ? Math.max(0, (1 - p.t) / 0.15) : 1
+    if (p.type === 'burn' && Math.random() < 0.5) {
+      const g = new Graphics()
+      g.circle(0, 0, 1 + Math.random()).fill({ color: 0xff6010 })
+      g.x = bx + (Math.random() - 0.5) * 3; g.y = by + (Math.random() - 0.5) * 3
+      _app.stage.addChild(g)
+      const life = 0.1 + Math.random() * 0.08
+      _particles.push({ obj: g, vx: (Math.random()-0.5)*0.8, vy: -0.8 - Math.random()*0.5, life, maxLife: life })
+    }
+    if (p.t >= 1) { _app.stage.removeChild(p.obj); p.obj.destroy(); _projectiles.splice(i, 1) }
   }
 
   // 星形粒子
@@ -330,7 +479,7 @@ function _tick(ticker) {
   for (let i = _rings.length - 1; i >= 0; i--) {
     const r = _rings[i]
     r.radius  += (r.maxRadius - r.radius) * 0.22
-    r.life    -= dt * 2.8
+    r.life    -= dt * (r.decayRate ?? 2.8)
     r.obj.alpha = Math.max(0, r.life)
     r.obj.clear()
     r.obj.circle(0, 0, r.radius).stroke({ color: r.color, width: Math.max(0.5, r.life * r.strokeWidth) })

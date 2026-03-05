@@ -58,12 +58,11 @@ defineProps({
   maxLives:    { type: Number, required: true },
   battleCount: { type: Number, required: true },
   wins:        { type: Number, required: true },
-  gold:        { type: Number, required: true },
 })
 defineEmits(['select'])
 
 const DIFF_LABELS = { normal: '普通', elite: '精英', radiant: '辉耀' }
-const TIER_NAMES  = { Bronze: '青铜', Silver: '白银', Gold: '黄金' }
+const TIER_NAMES  = { Bronze: '铜', Silver: '银', Gold: '金' }
 
 function rewardDesc(diff) {
   const cfg   = REWARD_WEIGHTS[diff]
@@ -80,13 +79,13 @@ function rewardDesc(diff) {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 100%;
+  flex: 1;
   background:
     linear-gradient(180deg,
-      rgba(0,0,0,.72) 0%,
-      rgba(0,0,0,.38) 18%,
-      rgba(0,0,0,.32) 80%,
-      rgba(0,0,0,.65) 100%),
+      rgba(0,0,0,.45) 0%,
+      rgba(0,0,0,.28) 30%,
+      rgba(0,0,0,.28) 70%,
+      rgba(0,0,0,.55) 100%),
     url('/background/bg-treasure-map.png') center 40% / cover no-repeat;
   padding: 24px 16px;
   gap: 24px;

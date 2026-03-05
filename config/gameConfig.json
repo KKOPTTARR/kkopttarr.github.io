@@ -1,10 +1,8 @@
 {
   "MAX_LIVES":               3,
-  "GOLD_PER_DAY":            20,
   "WINS_TO_CLEAR":           7,
   "EVENTS_PER_ROUND":        2,
   "STORM_SHIELD":            50,
-  "SELL_PRICE":              1,
   "MERGE_THRESHOLD":         2,
   "EVENT_NORMAL_COUNT":      3,
   "EVENT_LAST_NORMAL_COUNT": 2,
@@ -13,8 +11,33 @@
   "ENEMY_BASE_MULT":         0.7,
   "DIFFICULTY_HP_MULTS":     { "normal": 1, "elite": 1.5, "radiant": 3 },
   "SELECT_DIFFICULTIES":     ["normal", "elite", "radiant"],
-  "CASH_OUT_PRICE":          { "Bronze": 5, "Silver": 10, "Gold": 25, "Diamond": 35 },
-  "TAVERN_COST":             8,
-  "TAVERN_WIN_GOLD":         24,
-  "BLACK_MARKET_COST":       10
+  "SHOP_EVENT_COUNT":        3,
+  "SHOP_TIER_WEIGHTS":       { "Bronze": 75, "Silver": 18, "Gold": 6, "Diamond": 1 },
+  "SHOP_TIER_WEIGHTS_FLOOR": {
+    "Bronze":  { "Bronze": 75, "Silver": 18, "Gold": 6,  "Diamond": 1  },
+    "Silver":  { "Bronze": 45, "Silver": 33, "Gold": 17, "Diamond": 5  },
+    "Gold":    { "Bronze": 20, "Silver": 30, "Gold": 38, "Diamond": 12 },
+    "Diamond": { "Bronze": 8,  "Silver": 17, "Gold": 38, "Diamond": 37 }
+  },
+  "WRECK_TIER_WEIGHTS_BY_BATTLE": [
+    { "minBattle": 0, "weights": { "Bronze": 100, "Silver": 0,  "Gold": 0,  "Diamond": 0  } },
+    { "minBattle": 2, "weights": { "Bronze": 70,  "Silver": 25, "Gold": 5,  "Diamond": 0  } },
+    { "minBattle": 4, "weights": { "Bronze": 45,  "Silver": 35, "Gold": 18, "Diamond": 2  } },
+    { "minBattle": 6, "weights": { "Bronze": 20,  "Silver": 30, "Gold": 38, "Diamond": 12 } }
+  ],
+  "RARE_EVENT_CHANCE":       0.25,
+  "BATTLES_PER_CHAPTER":     4,
+  "CHAPTER_COUNT":           5,
+  "BOSS_HP_MULT":            5,
+  "CHAPTER_SKILL_TIERS":     ["Bronze", "Silver", "Gold", "Diamond"],
+  "CHAPTER_EVENT_BONUS_WEIGHT": 3,
+  "DEEP_ANCHOR_DMG_BONUS":   20,
+  "DEEP_ANCHOR_BURN_BONUS":  5,
+  "BREAK_BOATS_BUFFS": {
+    "damage": { "Bronze": 20, "Silver": 40, "Gold": 70, "Diamond": 110 },
+    "shield": { "Bronze": 20, "Silver": 40, "Gold": 70, "Diamond": 110 },
+    "heal":   { "Bronze": 20, "Silver": 40, "Gold": 70, "Diamond": 110 },
+    "burn":   { "Bronze": 3,  "Silver": 6,  "Gold": 10, "Diamond": 15  },
+    "poison": { "Bronze": 3,  "Silver": 6,  "Gold": 10, "Diamond": 15  }
+  }
 }

@@ -29,8 +29,8 @@ export function buildEnemy(template, difficulty, battleCount = 0) {
     damage: ab.damage ? Math.round(ab.damage * dmgScale * ENEMY_BASE_MULT) : 0,
     heal:   ab.heal   ? Math.round(ab.heal   * ENEMY_BASE_MULT) : 0,
     shield: ab.shield ? Math.round(ab.shield * ENEMY_BASE_MULT) : 0,
-    burn:   ab.burn   ? Math.round(ab.burn   * ENEMY_BASE_MULT) : 0,
-    poison: ab.poison ? Math.round(ab.poison * ENEMY_BASE_MULT) : 0,
+    burn:   ab.burn   ? Math.round(ab.burn   * dmgScale * ENEMY_BASE_MULT) : 0,
+    poison: ab.poison ? Math.round(ab.poison * dmgScale * ENEMY_BASE_MULT) : 0,
   }))
 
   // template.hp is { normal, elite, radiant } — pick the right tier

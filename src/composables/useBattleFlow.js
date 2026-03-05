@@ -1,10 +1,11 @@
 import { ref, computed, nextTick } from 'vue'
 import { startBattle, stopBattle } from './useBattle.js'
-import { rollRewardItems } from './useRewards.js'
+import { rollRewardItems, rewardAnim } from './useRewards.js'
 import { sleep } from '../utils.js'
 import GC from '../../config/gameConfig.json'
+import { SKILL_POOL, isBossBattle, applyBattleStartSkills, rollSkillCandidates, getChapterSkillTier, getChapterInfo } from './useSkills.js'
 
-const { STORM_SHIELD, WINS_TO_CLEAR } = GC
+const { STORM_SHIELD, WINS_TO_CLEAR, BOSS_HP_MULT } = GC
 
 // ── 单例状态（供 App.vue template 监听）────────────────────
 export const battleFlash      = ref(false)
@@ -18,9 +19,11 @@ export const enemyHitClass  = computed(() => enemyHitType.value  ? `hit-${enemyH
 // ── Composable ────────────────────────────────────────────
 export function useBattleFlow({
   phase, playerStat, enemyStat, playerItems, enemyAbilities,
-  battleItemStats, stormBlessingActive, battleScreenRef, unlockedCols,
-  wins, lives, pendingRewards, selectedDifficulty, resultType,
-  identitySkill, currentEnemy,
+  battleItemStats, stormBlessingActive, stormShieldAmount, breakBoatsBuff, battleScreenRef, unlockedCols,
+  wins, lives, selectedDifficulty, resultType,
+  identitySkill, currentEnemy, activeSkills, battleCount,
+  skillCandidates,
+  deliverRewards, afterBattleComplete,
 }) {
   function captureSourceRects() {
     const rects = {}
@@ -75,17 +78,32 @@ export function useBattleFlow({
 
     await sleep(result === 'win' ? 2000 : 1500)
 
-    const isWin = result === 'win'
+    const isWin  = result === 'win'
+    const isBoss = isBossBattle(battleCount.value)
+
     if (isWin) {
       wins.value++
-      resultType.value = wins.value >= WINS_TO_CLEAR ? 'clear' : 'win'
+      resultType.value = 'win'
+      if (isBoss) {
+        const tier = getChapterSkillTier(battleCount.value)
+        skillCandidates.value = rollSkillCandidates(activeSkills, tier)
+      }
     } else {
       lives.value--
       resultType.value = lives.value <= 0 ? 'gameover' : 'lose'
     }
-    pendingRewards.value = rollRewardItems(selectedDifficulty.value, isWin, currentEnemy.value.dropBias ?? [])
-    phase.value = 'REPORT'
+
+    const rewards = rollRewardItems(selectedDifficulty.value, isWin, currentEnemy.value.dropBias ?? [])
+    rewardAnim.isConsolation = !isWin
+    rewardAnim.result    = result
+    rewardAnim.livesLeft = lives.value
+
+    battleCount.value++
     battleEndResult.value = null
+
+    await deliverRewards(rewards)
+
+    afterBattleComplete(isBoss)
   }
 
   async function startActualBattle() {
@@ -102,10 +120,19 @@ export function useBattleFlow({
     enemyStat.burnStacks = 0; enemyStat.poisonStacks = 0
     battleItemStats.value = []
     if (stormBlessingActive.value) {
-      playerStat.shield = STORM_SHIELD
+      playerStat.shield = stormShieldAmount.value
       stormBlessingActive.value = false
+      stormShieldAmount.value = 0
     }
-
+    if (breakBoatsBuff.value) {
+      const b = breakBoatsBuff.value
+      if (b.damage) enemyStat.hp     = Math.max(0, enemyStat.hp - b.damage)
+      if (b.shield) playerStat.shield += b.shield
+      if (b.heal)   playerStat.hp    = Math.min(playerStat.maxHp, playerStat.hp + b.heal)
+      if (b.burn)   enemyStat.burnStacks   += b.burn
+      if (b.poison) enemyStat.poisonStacks += b.poison
+      breakBoatsBuff.value = null
+    }
     await nextTick()
     await new Promise(r => requestAnimationFrame(r))
 
@@ -120,7 +147,10 @@ export function useBattleFlow({
       onBattleEnd:   handleBattleEnd,
       onAttack:      (info) => { latestAttack.value = { ...info, _t: Date.now() } },
       identitySkill: identitySkill?.value ?? null,
+      activeSkills,
+      skillPool: SKILL_POOL,
     })
+    applyBattleStartSkills(activeSkills, playerStat, enemyStat)
   }
 
   return { startActualBattle, onDeployComplete }

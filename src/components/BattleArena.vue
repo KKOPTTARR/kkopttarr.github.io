@@ -121,7 +121,8 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import ArenaCard from './ArenaCard.vue'
 import {
   initPixi, destroyPixi,
-  spawnAttackArc, spawnFloatingTextAt, spawnSpecialBurst, spawnVictoryBurst, spawnDotHit,
+  spawnAttackArc, spawnFloatingTextAt, spawnSpecialBurst, spawnVictoryBurst,
+  spawnDotHit, spawnDotFloatingText, spawnChargeArc,
 } from '../composables/usePixiBattle.js'
 import { battleEndResult } from '../composables/useBattleFlow.js'
 
@@ -221,45 +222,73 @@ function pushLog(info) {
 }
 
 function handleAttack(info) {
-  // DoT：HP 区数字 + 命中粒子
+  // 相邻充能：闪电 + 被充能卡牌闪光 + 充能标签
+  if (info.isCharge) {
+    for (const toId of (info.chargeTargets || [])) {
+      spawnChargeArc(info.instanceId, toId)
+      setTimeout(() => {
+        flashChargedCard(toId)
+        spawnDomLabel(toId, '充能！', 'charge')
+      }, 40)
+    }
+    return
+  }
+
+  // 成长标签
+  if (info.isGrowthLabel) {
+    if (info.floatLabel) spawnDomLabel(info.instanceId, info.floatLabel, info.labelType)
+    return
+  }
+
+  // DoT：浮字 + 粒子 + HP 区数字
   if (info.isDot) {
-    pushLog(info)
+    const isEnemyTarget = !info.isEnemy
     for (const fx of (info.effects || [])) {
-      showHpFlash(fx.value, 'dot', info.isEnemy)
-      spawnDotHit(info.isEnemy, fx.type === 'burn' ? 'burn' : 'poison')
+      showHpFlash(fx.value, 'dot', isEnemyTarget)
+      spawnDotHit(isEnemyTarget, fx.type)
+      spawnDotFloatingText(isEnemyTarget, fx.value, fx.type)
     }
     return
   }
 
   pushLog(info)
   const effectType = info.effects?.[0]?.type || 'damage'
+  const isSelfBuff = effectType === 'heal' || effectType === 'shield'
 
   if (info.specialLabel && !info.isEnemy) {
     spawnSpecialBurst(info.instanceId)
     flashSpecialCard(info.instanceId)
     spawnDomLabel(info.instanceId, info.specialLabel)
   }
+  if (info.floatLabel && !info.isEnemy) {
+    spawnDomLabel(info.instanceId, info.floatLabel, info.labelType)
+  }
 
   spawnAttackArc(info.instanceId, info.isEnemy, effectType, (impactX, impactY) => {
     for (const fx of (info.effects || [])) {
+      const label = fx.type === 'damage' ? `⚔️${fx.value}`
+                  : fx.type === 'heal'   ? `💚+${fx.value}`
+                  : fx.type === 'shield' ? `🛡+${fx.value}`
+                  : fx.type === 'burn'   ? `🔥+${fx.value}`
+                  : fx.type === 'poison' ? `☠+${fx.value}`
+                  : null
+      if (label) spawnFloatingTextAt(impactX, impactY, label, fx.type)
       if (fx.type === 'damage' || fx.type === 'heal' || fx.type === 'shield') {
-        const label = fx.type === 'damage' ? `⚔️${fx.value}` : fx.type === 'heal' ? `+${fx.value}` : `🛡+${fx.value}`
-        spawnFloatingTextAt(impactX, impactY, label, fx.type)
-        showHpFlash(fx.value, fx.type, info.isEnemy)
+        showHpFlash(fx.value, fx.type, isSelfBuff ? info.isEnemy : !info.isEnemy)
       }
     }
-    shakeTarget(info.isEnemy)
+    shakeTarget(isSelfBuff ? !info.isEnemy : info.isEnemy)
   })
 }
 
 const _specialTimers = new Map()
 
-function spawnDomLabel(instanceId, text) {
+function spawnDomLabel(instanceId, text, type = '') {
   const el = document.querySelector(`[data-instance="${instanceId}"]`)
   if (!el) return
   const r = el.getBoundingClientRect()
   const label = document.createElement('div')
-  label.className = 'special-label'
+  label.className = `special-label${type ? ` label-${type}` : ''}`
   label.textContent = text
   label.style.left = (r.left + r.width / 2) + 'px'
   label.style.top  = r.top + 'px'
@@ -321,8 +350,32 @@ onUnmounted(() => {
   destroyPixi()
 })
 
+function flashChargedCard(instanceId) {
+  const el = document.querySelector(`[data-instance="${instanceId}"]`)
+  if (!el) return
+  el.classList.remove('card-charged')
+  void el.offsetWidth
+  el.classList.add('card-charged')
+  setTimeout(() => el.classList.remove('card-charged'), 500)
+}
+
 function startBattleDeploy(_s, _d) { emit('deploy-complete') }
-function onBattleStart() {}
+
+function onBattleStart() {
+  const cards = [...document.querySelectorAll('[data-instance]')]
+  cards.forEach((el, i) => {
+    const instanceId = el.dataset.instance
+    const item = props.playerItems.find(it => String(it.instanceId) === instanceId)
+    setTimeout(() => {
+      el.classList.add('battle-entering')
+      el.style.setProperty('--float-delay', `${(i * 0.28) % 2.4}s`)
+      setTimeout(() => {
+        el.classList.remove('battle-entering')
+        if (item) item.battleActive = true
+      }, 680)
+    }, i * 80)
+  })
+}
 defineExpose({ startBattleDeploy, onBattleStart })
 
 </script>
@@ -555,14 +608,14 @@ defineExpose({ startBattleDeploy, onBattleStart })
 
 /* ── 受击抖动（敌方插画 / 玩家区）── */
 @keyframes elem-shake {
-  0%, 100% { transform: translate(0, 0)       rotate(0deg) }
-  20%      { transform: translate(-3px, 2px)  rotate(-0.5deg) }
-  40%      { transform: translate(3px, -2px)  rotate(0.5deg) }
-  60%      { transform: translate(-2px, 1px)  rotate(-0.3deg) }
-  80%      { transform: translate(2px, -1px)  rotate(0.2deg) }
+  0%, 100% { transform: translate(0, 0)        rotate(0deg) }
+  15%      { transform: translate(-8px, 4px)   rotate(-1.2deg) }
+  35%      { transform: translate(7px, -5px)   rotate(1.0deg) }
+  55%      { transform: translate(-5px, 3px)   rotate(-0.6deg) }
+  75%      { transform: translate(4px, -2px)   rotate(0.4deg) }
 }
 .enemy-portrait-wrap.elem-shake,
 .player-section.elem-shake {
-  animation: elem-shake 0.28s ease-out;
+  animation: elem-shake 0.38s ease-out;
 }
 </style>

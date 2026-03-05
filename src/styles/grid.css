@@ -128,6 +128,13 @@
   text-shadow: 0 0 10px rgba(255,200,50,.95), 0 2px 5px rgba(0,0,0,.9);
   animation: special-label-float 0.85s ease-out forwards;
 }
+.special-label.label-multi   { color: #ffd060; text-shadow: 0 0 12px rgba(255,200,50,.95), 0 2px 5px rgba(0,0,0,.9); }
+.special-label.label-damage  { color: #ff7060; text-shadow: 0 0 12px rgba(255,80,48,.95),  0 2px 5px rgba(0,0,0,.9); }
+.special-label.label-heal    { color: #5ad070; text-shadow: 0 0 12px rgba(64,221,112,.95), 0 2px 5px rgba(0,0,0,.9); }
+.special-label.label-shield  { color: #70c8f0; text-shadow: 0 0 12px rgba(96,184,255,.95), 0 2px 5px rgba(0,0,0,.9); }
+.special-label.label-burn    { color: #ff8830; text-shadow: 0 0 12px rgba(255,136,32,.95), 0 2px 5px rgba(0,0,0,.9); }
+.special-label.label-poison  { color: #80cc20; text-shadow: 0 0 12px rgba(128,204,32,.95), 0 2px 5px rgba(0,0,0,.9); }
+.special-label.label-charge  { color: #80d8ff; text-shadow: 0 0 12px rgba(128,216,255,.95),0 2px 5px rgba(0,0,0,.9); }
 
 /* ===== 卡牌特殊触发高亮 ===== */
 @keyframes card-special-glow {
@@ -136,7 +143,7 @@
   65%  { box-shadow: 0 0 220px 80px rgba(255,210,50,.60), 0 0 80px 30px rgba(255,255,100,.4); border-color: #ffd700; }
   100% { box-shadow: 0 0 60px 20px rgba(255,210,50,.15); border-color: transparent; }
 }
-.card-special {
+.item-card.card-special {
   animation: card-special-glow 2s ease-out forwards !important;
   z-index: 25 !important;
 }

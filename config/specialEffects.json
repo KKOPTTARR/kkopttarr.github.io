@@ -1,0 +1,9 @@
+[
+  { "id": "damageGrowth",   "label": "伤害递增", "values": { "Bronze": 4, "Silver": 6,    "Gold": 9,    "Diamond": 14   } },
+  { "id": "healGrowth",     "label": "治疗递增", "values": { "Bronze": 1, "Silver": 2,    "Gold": 3,    "Diamond": 5    } },
+  { "id": "shieldGrowth",   "label": "护盾递增", "values": { "Bronze": 2, "Silver": 4,    "Gold": 6,    "Diamond": 9    } },
+  { "id": "burnGrowth",     "label": "灼烧递增", "values": { "Bronze": 1, "Silver": 2,    "Gold": 3,    "Diamond": 5    } },
+  { "id": "poisonGrowth",   "label": "剧毒递增", "values": { "Bronze": 1, "Silver": 2,    "Gold": 3,    "Diamond": 5    } },
+  { "id": "multiTrigger",   "label": "双重触发", "values": { "Bronze": 2, "Silver": 2,    "Gold": 2,    "Diamond": 2    } },
+  { "id": "adjacentCharge", "label": "相邻充能", "values": { "Bronze": 1000, "Silver": 1500, "Gold": 2000, "Diamond": 3000 } }
+]

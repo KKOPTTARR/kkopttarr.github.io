@@ -15,8 +15,9 @@ let onHpChange  = null
 let onBattleEnd = null
 let onAttack    = null
 
-let _identitySkill        = null
-let _burnPoisonDoubleActive = false
+let _identitySkill          = null
+let _activeSkills           = null
+let _skillPool              = null
 
 let _playerItems    = null
 let _enemyAbilities = null
@@ -138,6 +139,13 @@ export function startBattle(playerItems, enemyAbilities, playerStat, enemyStat, 
   onBattleEnd     = callbacks.onBattleEnd
   onAttack        = callbacks.onAttack ?? null
   _identitySkill  = callbacks.identitySkill ?? null
+  _activeSkills   = callbacks.activeSkills  ?? null
+  _skillPool      = callbacks.skillPool     ?? null
+
+  // 重置 undying 每场战斗的已触发状态
+  if (_activeSkills) {
+    for (const s of _activeSkills) s._used = false
+  }
 
   for (const item of playerItems) {
     item.cooldownProgress = 0
@@ -155,18 +163,15 @@ export function startBattle(playerItems, enemyAbilities, playerStat, enemyStat, 
   enemyStat.burnStacks   = 0
   enemyStat.poisonStacks  = 0
 
-  // tag_cooldown_reduce 身份技能
-  if (_identitySkill?.type === 'tag_cooldown_reduce') {
-    const { tags, threshold, ms } = _identitySkill
-    const tagged = playerItems.filter(i => tags.some(t => i.tags?.includes(t)))
-    if (tagged.length >= threshold) {
-      for (const item of tagged) item._cooldown = Math.max(COOLDOWN_FLOOR, item._cooldown - ms)
+  // 身份技能：battle_start 类型
+  if (_identitySkill && _skillPool) {
+    const base = _skillPool.find(s => s.id === _identitySkill.id)
+    if (base?.type === 'preemptive_strike') {
+      const val = base.tiers[_identitySkill.tier]?.value ?? 0
+      const count = playerItems.filter(i => base.tags?.some(t => i.tags?.includes(t))).length
+      if (val > 0 && count > 0) applyDamage(enemyStat, 'enemy', val * count)
     }
   }
-
-  // burn_poison_double 身份技能
-  _burnPoisonDoubleActive = _identitySkill?.type === 'burn_poison_double'
-    && playerItems.filter(i => _identitySkill.tags.some(t => i.tags?.includes(t))).length >= (_identitySkill.threshold ?? 3)
 
   for (const ab of enemyAbilities) {
     ab.cooldownProgress = 0
@@ -192,7 +197,8 @@ export function startBattle(playerItems, enemyAbilities, playerStat, enemyStat, 
 export function stopBattle() {
   if (raf) { cancelAnimationFrame(raf); raf = null }
   _identitySkill = null
-  _burnPoisonDoubleActive = false
+  _activeSkills           = null
+  _skillPool              = null
 }
 
 // ── 主循环 ────────────────────────────────────────────────
@@ -210,7 +216,18 @@ function tick(now) {
   }
 
   if (_enemyStat.hp  <= 0) { _push({ t: _t(), wall: _wall(), type: 'end', result: 'win',  ..._st() }); _saveLogToDisk(); onBattleEnd?.('win',  Array.from(_myStats.values())); return }
-  if (_playerStat.hp <= 0) { _push({ t: _t(), wall: _wall(), type: 'end', result: 'lose', ..._st() }); _saveLogToDisk(); onBattleEnd?.('lose', Array.from(_myStats.values())); return }
+  if (_playerStat.hp <= 0) {
+    const undying = _activeSkills?.find(s => s.id === 'undying' && !s._used)
+    if (undying && _skillPool) {
+      const base = _skillPool.find(s => s.id === 'undying')
+      const val  = base?.tiers?.[undying.tier]?.value ?? 25
+      _playerStat.hp = val
+      undying._used  = true
+      onHpChange?.('player', _playerStat.hp, _playerStat.shield, 'heal')
+    } else {
+      _push({ t: _t(), wall: _wall(), type: 'end', result: 'lose', ..._st() }); _saveLogToDisk(); onBattleEnd?.('lose', Array.from(_myStats.values())); return
+    }
+  }
 
   raf = requestAnimationFrame(tick)
 }
@@ -249,11 +266,9 @@ function applyDamage(stat, who, amount) {
     stat.shield -= abs
     dmg -= abs
   }
-  if (dmg > 0) {
-    stat.hp = Math.max(0, stat.hp - dmg)
-    onHpChange?.(who, stat.hp, stat.shield, 'damage')
-  }
-  return { type: 'damage', value: amount }   // 保留 amount（意图值）便于战报展示
+  if (dmg > 0) stat.hp = Math.max(0, stat.hp - dmg)
+  onHpChange?.(who, stat.hp, stat.shield, 'damage')  // 护盾或 HP 任一变化均通知
+  return dmg > 0 ? { type: 'damage', value: dmg } : null  // 实际 HP 扣除值，全被护盾吸收则返回 null
 }
 
 function applyHeal(stat, who, amount) {
@@ -309,12 +324,56 @@ function triggerItem(item) {
 
   const eStacksBefore = { burn: _enemyStat.burnStacks, poison: _enemyStat.poisonStacks }
   const times = item.onTrigger?.multiTrigger ?? 1
+  const multiLabel = times >= 3 ? '三连！' : times === 2 ? '双击！' : null
   const allEffects = []
   for (let i = 0; i < times; i++) {
     const effects = resolveEffects(source, _enemyStat, 'enemy', _playerStat, 'player')
     allEffects.push(...effects)
-    if (effects.length > 0) onAttack?.({ name: item.name_cn, instanceId: item.instanceId, isEnemy: false, effects })
+    if (effects.length > 0) {
+      const delay = i * 100
+      setTimeout(() => onAttack?.({ name: item.name_cn, instanceId: item.instanceId, isEnemy: false, effects, triggerIndex: i, totalTriggers: times, floatLabel: i === 0 ? multiLabel : null, labelType: 'multi' }), delay)
+    }
     applyOnTrigger(item)
+  }
+
+  // ── 中级技能：道具触发钩子 ──────────────────────────────
+  if (_activeSkills && _skillPool && allEffects.length > 0) {
+    const hasDmg    = allEffects.some(f => f.type === 'damage')
+    const hasPoison = source.poison > 0
+
+    const echo = hasDmg && _activeSkills.find(s => s.id === 'blade_echo')
+    if (echo) {
+      const val = _skillPool.find(s => s.id === 'blade_echo')?.tiers?.[echo.tier]?.value ?? 0
+      if (val > 0) { const fx = applyDamage(_enemyStat, 'enemy', val); if (fx) allEffects.push(fx) }
+    }
+
+    const spread = hasPoison && _activeSkills.find(s => s.id === 'poison_spread')
+    if (spread) {
+      const val = _skillPool.find(s => s.id === 'poison_spread')?.tiers?.[spread.tier]?.value ?? 0
+      if (val > 0) { applyPoison(_enemyStat, val); allEffects.push({ type: 'poison', value: val }) }
+    }
+  }
+
+  // ── 身份技能：道具触发钩子 ──────────────────────────────
+  if (_identitySkill && _skillPool) {
+    const base = _skillPool.find(s => s.id === _identitySkill.id)
+    if (base) {
+      const val = base.tiers[_identitySkill.tier]?.value ?? 0
+      const { tags, threshold } = base
+      const taggedCount = _playerItems.filter(i => tags?.some(t => i.tags?.includes(t))).length
+      const itemMatches  = item.tags?.some(t => tags?.includes(t))
+
+      if (base.type === 'tag_shield_on_trigger' && itemMatches && taggedCount >= threshold && val > 0) {
+        const fx = applyShield(_playerStat, 'player', val)
+        if (fx) allEffects.push(fx)
+      }
+      if (base.type === 'tag_burn_poison_on_trigger' && itemMatches && taggedCount >= threshold && val > 0) {
+        const fxB = applyBurn(_enemyStat, val)
+        const fxP = applyPoison(_enemyStat, val)
+        if (fxB) allEffects.push(fxB)
+        if (fxP) allEffects.push(fxP)
+      }
+    }
   }
 
   accumStats(item, allEffects)
@@ -337,14 +396,19 @@ function applyOnTrigger(item) {
       const cap = Math.max(nb._cooldown, COOLDOWN_FLOOR)
       nb.cooldownProgress = Math.min(nb.cooldownProgress + ot.adjacentCharge, cap)
     }
+    if (neighbors.length > 0) {
+      onAttack?.({ name: item.name_cn, instanceId: item.instanceId, isEnemy: false,
+        isCharge: true, chargeTargets: neighbors.map(nb => nb.instanceId), effects: [] })
+    }
   }
 
-  // 战斗内累积：伤害/灼烧/剧毒
-  if (ot.damageGrowth)  item._bonusDamage  = (item._bonusDamage  || 0) + ot.damageGrowth
-  if (ot.healGrowth)    item._bonusHeal    = (item._bonusHeal    || 0) + ot.healGrowth
-  if (ot.shieldGrowth)  item._bonusShield  = (item._bonusShield  || 0) + ot.shieldGrowth
-  if (ot.burnGrowth)    item._bonusBurn    = (item._bonusBurn    || 0) + ot.burnGrowth
-  if (ot.poisonGrowth)  item._bonusPoison  = (item._bonusPoison  || 0) + ot.poisonGrowth
+  // 战斗内累积：伤害/灼烧/剧毒，并发出成长标签
+  const _growthLabel = (label, type) => onAttack?.({ instanceId: item.instanceId, isEnemy: false, isGrowthLabel: true, floatLabel: label, labelType: type, effects: [] })
+  if (ot.damageGrowth)  { item._bonusDamage  = (item._bonusDamage  || 0) + ot.damageGrowth; _growthLabel('伤害↑', 'damage')  }
+  if (ot.healGrowth)    { item._bonusHeal    = (item._bonusHeal    || 0) + ot.healGrowth;    _growthLabel('治疗↑', 'heal')    }
+  if (ot.shieldGrowth)  { item._bonusShield  = (item._bonusShield  || 0) + ot.shieldGrowth;  _growthLabel('护盾↑', 'shield')  }
+  if (ot.burnGrowth)    { item._bonusBurn    = (item._bonusBurn    || 0) + ot.burnGrowth;    _growthLabel('灼烧↑', 'burn')    }
+  if (ot.poisonGrowth)  { item._bonusPoison  = (item._bonusPoison  || 0) + ot.poisonGrowth;  _growthLabel('剧毒↑', 'poison')  }
 }
 
 // ── 触发：敌方技能 ─────────────────────────────────────────
@@ -372,13 +436,12 @@ function applyDoTTick() {
 }
 
 function applyStatDoT(stat, who) {
-  const dotMult = (_burnPoisonDoubleActive && who === 'enemy') ? 2 : 1
   let burnDmg = 0, burnAbsorbed = 0, poisonDmg = 0
   const burnBefore   = stat.burnStacks
   const poisonBefore = stat.poisonStacks
 
   if (stat.burnStacks > 0) {
-    let burn = stat.burnStacks * dotMult
+    let burn = stat.burnStacks
     if (stat.shield > 0) {
       const abs = Math.min(stat.shield, burn)
       stat.shield -= abs
@@ -390,7 +453,7 @@ function applyStatDoT(stat, who) {
     onHpChange?.(who, stat.hp, stat.shield, 'damage')
   }
   if (stat.poisonStacks > 0) {
-    poisonDmg = stat.poisonStacks * dotMult
+    poisonDmg = stat.poisonStacks
     stat.hp = Math.max(0, stat.hp - poisonDmg)
     stat.poisonStacks = Math.floor(stat.poisonStacks * 0.6)
     onHpChange?.(who, stat.hp, stat.shield, 'damage')
@@ -401,5 +464,10 @@ function applyStatDoT(stat, who) {
       burnBefore, burnDmg, burnAbsorbed, burnLeft: stat.burnStacks,
       poisonBefore, poisonDmg, poisonLeft: stat.poisonStacks,
       ..._st() })
+    const isEnemyTakingDmg = who === 'enemy'
+    if (burnBefore > 0 && burnDmg > 0)
+      onAttack?.({ isDot: true, isEnemy: !isEnemyTakingDmg, effects: [{ type: 'burn',   value: burnDmg   }], name: '灼烧' })
+    if (poisonBefore > 0 && poisonDmg > 0)
+      onAttack?.({ isDot: true, isEnemy: !isEnemyTakingDmg, effects: [{ type: 'poison', value: poisonDmg }], name: '剧毒' })
   }
 }

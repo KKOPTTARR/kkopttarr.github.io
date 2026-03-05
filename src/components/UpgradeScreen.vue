@@ -1,12 +1,6 @@
 <template>
   <div class="upgrade-screen">
-    <div class="panel-status">
-      <div class="status-lives">
-        <span v-for="i in maxLives" :key="i" class="heart-icon">{{ i <= lives ? '⚡' : '○' }}</span>
-      </div>
-      <div class="status-info">第 {{ battleCount + 1 }} 战 · {{ wins }}/{{ GC.WINS_TO_CLEAR }} ⭐</div>
-      <div class="status-gold">💰 {{ gold }}</div>
-    </div>
+    <PanelStatus :lives="lives" :max-lives="maxLives" :battle-count="battleCount" />
     <div class="upgrade-header">
       <span class="upgrade-title">⬆️ 升级「{{ tag }}」类物品</span>
       <button class="upgrade-skip-btn" @click="$emit('skip')">跳过</button>
@@ -16,20 +10,18 @@
         v-for="item in items"
         :key="item.instanceId"
         class="upgrade-item-row"
-        :class="{ 'cant-afford': gold < item.price }"
         @click="$emit('upgrade', item)"
       >
         <img :src="getIconUrl(item.name_en, item.tier)" class="upgrade-item-img" draggable="false" />
         <div class="upgrade-item-body">
           <div class="upgrade-item-name">{{ item.name_cn }}</div>
           <div class="upgrade-tier-line">
-            <span :class="`tier-text-${item.tier}`">{{ appTierLabel(item.tier) }}</span>
+            <span :class="`tier-text-${item.tier}`">{{ TIER_LABELS[item.tier] }}</span>
             <span class="upgrade-arrow"> → </span>
-            <span :class="`tier-text-${nextTierOf(item.tier)}`">{{ appTierLabel(nextTierOf(item.tier)) }}</span>
+            <span :class="`tier-text-${nextTierOf(item.tier)}`">{{ nextTierLabel(nextTierOf(item.tier)) }}</span>
           </div>
           <div class="upgrade-preview">{{ upgradePreview(item) }}</div>
         </div>
-        <div class="upgrade-cost" :class="{ dim: gold < item.price }">💰{{ item.price }}</div>
       </div>
       <div v-if="items.length === 0" class="upgrade-empty">
         暂无可升级的「{{ tag }}」类物品
@@ -39,30 +31,20 @@
 </template>
 
 <script setup>
-import GC from '../../config/gameConfig.json'
 import { getIconUrl, findItem } from '../data/items.js'
+import { TIER_LABELS, nextTierOf, nextTierLabel } from '../data/tiers.js'
+import PanelStatus from './PanelStatus.vue'
 
 const props = defineProps({
   items:      { type: Array,  default: () => [] },
   lives:      Number,
   maxLives:   Number,
   battleCount:Number,
-  wins:       Number,
-  gold:       Number,
   tag:        String,
 })
 
 defineEmits(['upgrade', 'skip'])
 
-const TIER_ORDER = ['Bronze', 'Silver', 'Gold', 'Diamond']
-
-function nextTierOf(tier) {
-  return TIER_ORDER[TIER_ORDER.indexOf(tier) + 1] ?? tier
-}
-
-function appTierLabel(t) {
-  return { Bronze: '铜', Silver: '⭐银', Gold: '⭐⭐金', Diamond: '⭐⭐⭐钻' }[t] || t
-}
 
 function upgradePreview(inst) {
   const base = findItem(inst.id)
@@ -82,9 +64,10 @@ function upgradePreview(inst) {
 
 <style scoped>
 .upgrade-screen {
-  flex: 1; display: flex; flex-direction: column;
+  position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; z-index: 200;
+  display: flex; flex-direction: column;
   background:
-    linear-gradient(rgba(4,8,18,.88), rgba(4,8,18,.88)),
+    linear-gradient(rgba(4,8,18,.72), rgba(4,8,18,.72)),
     url('/background/bg-sea-chart.png') center / cover no-repeat;
 }
 .upgrade-header {
@@ -109,19 +92,15 @@ function upgradePreview(inst) {
   background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
   transition: border-color .14s, background .14s;
 }
-.upgrade-item-row:hover:not(.cant-afford) {
+.upgrade-item-row:hover {
   border-color: var(--gold); background: rgba(200,134,10,.08);
 }
-.upgrade-item-row.cant-afford { opacity: .45; cursor: not-allowed; }
-.upgrade-item-row.cant-afford .upgrade-cost { color: #c04030; }
 .upgrade-item-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 .upgrade-item-body { flex: 1; display: flex; flex-direction: column; gap: 3px; }
 .upgrade-item-name { font-size: 13px; font-weight: bold; color: var(--text); }
 .upgrade-tier-line { font-size: 11px; display: flex; align-items: center; gap: 3px; }
 .upgrade-arrow { color: var(--text-dim); }
 .upgrade-preview { font-size: 11px; color: var(--text-dim); }
-.upgrade-cost { font-size: 13px; font-weight: bold; color: var(--gold); flex-shrink: 0; }
-.upgrade-cost.dim { color: #555; }
 .upgrade-empty { color: var(--text-dim); font-size: 13px; text-align: center; padding: 32px 0; opacity: .6; }
 .tier-text-Bronze  { color: var(--bronze); }
 .tier-text-Silver  { color: var(--silver); }

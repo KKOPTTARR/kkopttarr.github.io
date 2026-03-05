@@ -1,0 +1,163 @@
+[
+  {
+    "id": "tidal_armor",
+    "icon": "🌊",
+    "name_cn": "潮涌护甲",
+    "desc_cn": "战斗开始时获得 {value} 点护盾",
+    "category": "chapter",
+    "level": "basic",
+    "trigger": "battle_start",
+    "effect": "shield",
+    "tiers": {
+      "Bronze":  { "value": 25  },
+      "Silver":  { "value": 50  },
+      "Gold":    { "value": 85  },
+      "Diamond": { "value": 130 }
+    }
+  },
+  {
+    "id": "shadow_poison",
+    "icon": "🐍",
+    "name_cn": "幽影剧毒",
+    "desc_cn": "战斗开始时对敌人施加 {value} 层剧毒",
+    "category": "chapter",
+    "level": "basic",
+    "trigger": "battle_start",
+    "effect": "poison",
+    "tiers": {
+      "Bronze":  { "value": 3  },
+      "Silver":  { "value": 6  },
+      "Gold":    { "value": 10 },
+      "Diamond": { "value": 15 }
+    }
+  },
+  {
+    "id": "inferno_start",
+    "icon": "🔥",
+    "name_cn": "炼狱先手",
+    "desc_cn": "战斗开始时对敌人施加 {value} 层灼烧",
+    "category": "chapter",
+    "level": "basic",
+    "trigger": "battle_start",
+    "effect": "burn",
+    "tiers": {
+      "Bronze":  { "value": 3  },
+      "Silver":  { "value": 6  },
+      "Gold":    { "value": 10 },
+      "Diamond": { "value": 15 }
+    }
+  },
+  {
+    "id": "first_strike",
+    "icon": "🗡️",
+    "name_cn": "先发制人",
+    "desc_cn": "战斗开始时对敌人直接造成 {value} 点伤害",
+    "category": "chapter",
+    "level": "basic",
+    "trigger": "battle_start",
+    "effect": "damage",
+    "tiers": {
+      "Bronze":  { "value": 20  },
+      "Silver":  { "value": 45  },
+      "Gold":    { "value": 80  },
+      "Diamond": { "value": 125 }
+    }
+  },
+  {
+    "id": "blade_echo",
+    "icon": "⚔️",
+    "name_cn": "血刃回响",
+    "desc_cn": "每次伤害类道具触发时，额外造成 {value} 点伤害",
+    "category": "chapter",
+    "level": "intermediate",
+    "trigger": "on_item_trigger",
+    "condition": "damage",
+    "effect": "damage",
+    "tiers": {
+      "Bronze":  { "value": 8  },
+      "Silver":  { "value": 18 },
+      "Gold":    { "value": 32 },
+      "Diamond": { "value": 50 }
+    }
+  },
+  {
+    "id": "poison_spread",
+    "icon": "💀",
+    "name_cn": "毒雾蔓延",
+    "desc_cn": "每次剧毒类道具触发时，额外施加 {value} 层剧毒",
+    "category": "chapter",
+    "level": "intermediate",
+    "trigger": "on_item_trigger",
+    "condition": "poison",
+    "effect": "poison",
+    "tiers": {
+      "Bronze":  { "value": 1 },
+      "Silver":  { "value": 2 },
+      "Gold":    { "value": 4 },
+      "Diamond": { "value": 6 }
+    }
+  },
+  {
+    "id": "undying",
+    "icon": "👻",
+    "name_cn": "不屈之魂",
+    "desc_cn": "受到致命伤害时以 {value} 点 HP 存活，每场限 1 次",
+    "category": "chapter",
+    "level": "advanced",
+    "trigger": "on_lethal",
+    "effect": "survive",
+    "tiers": {
+      "Bronze":  { "value": 25  },
+      "Silver":  { "value": 50  },
+      "Gold":    { "value": 80  },
+      "Diamond": { "value": 120 }
+    }
+  },
+  {
+    "id": "gunner_passive",
+    "icon": "💣",
+    "name_cn": "先制炮击",
+    "desc_cn": "战斗开始时，每件枪械造成 {value} 点伤害",
+    "category": "identity",
+    "type": "preemptive_strike",
+    "tags": ["枪械"],
+    "tiers": {
+      "Bronze":  { "value": 15 },
+      "Silver":  { "value": 25 },
+      "Gold":    { "value": 40 },
+      "Diamond": { "value": 60 }
+    }
+  },
+  {
+    "id": "tamer_passive",
+    "icon": "🛡️",
+    "name_cn": "深海护甲",
+    "desc_cn": "伙伴×3：每次触发获得 {value} 点护盾",
+    "category": "identity",
+    "type": "tag_shield_on_trigger",
+    "tags": ["伙伴"],
+    "threshold": 3,
+    "tiers": {
+      "Bronze":  { "value": 8  },
+      "Silver":  { "value": 15 },
+      "Gold":    { "value": 25 },
+      "Diamond": { "value": 40 }
+    }
+  },
+  {
+    "id": "alchemist_passive",
+    "icon": "⚗️",
+    "name_cn": "毒焰协同",
+    "desc_cn": "工具×3：每次触发附加 {value} 层灼烧和剧毒",
+    "category": "identity",
+    "type": "tag_burn_poison_on_trigger",
+    "tags": ["工具"],
+    "threshold": 3,
+    "tiers": {
+      "Bronze":  { "value": 1 },
+      "Silver":  { "value": 2 },
+      "Gold":    { "value": 3 },
+      "Diamond": { "value": 5 }
+    }
+  }
+]

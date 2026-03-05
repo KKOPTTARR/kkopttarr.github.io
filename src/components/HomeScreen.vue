@@ -4,7 +4,8 @@
     <h1 class="home-title">小巴扎</h1>
     <p class="home-sub">海盗贸易·卡牌自战</p>
     <div class="home-rules">
-      <span>赢得 {{ GC.WINS_TO_CLEAR }} 场战斗即可通关</span>
+      <span>闯过 {{ GC.CHAPTER_COUNT }} 章关卡，迎接无尽挑战</span>
+      <span>每章第 {{ GC.BATTLES_PER_CHAPTER }} 战为 BOSS 战，胜利可获得被动技能</span>
       <span>每次失败消耗 1 点士气 ⚡，耗尽则游戏结束</span>
     </div>
     <button class="btn btn-primary home-btn" @click="$emit('start')">开始游戏</button>

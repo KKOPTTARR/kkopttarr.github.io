@@ -111,7 +111,7 @@ const arrowLeft = computed(() => {
 .bubble-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
 }
 .bubble-name {
