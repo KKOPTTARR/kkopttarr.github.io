@@ -68,29 +68,51 @@
       </div>
     </Transition>
 
-    <!-- 技能栏（8格横排，点击展开 tooltip） -->
+    <!-- 技能栏（身份技能 + 章节技能横排，点击展开 tooltip） -->
     <div
       v-if="layoutState.skillBar"
       class="skill-bar"
     >
       <div class="skill-bar-label">— 技能 —</div>
       <div class="skill-bar-slots">
+        <!-- 槽位 0：身份技能 -->
         <div
-          v-for="i in 8" :key="i"
           class="skill-slot"
-          :class="{ 'skill-slot--filled': i === 1 && identitySkill }"
-          @click="i === 1 && identitySkill && (skillTooltipVisible = !skillTooltipVisible)"
+          :class="{ 'skill-slot--filled': !!identitySkill }"
+          @click="identitySkill && (activeSkillTooltipIdx === -1 ? activeSkillTooltipIdx = -2 : activeSkillTooltipIdx = -1)"
         >
-          <span v-if="i === 1 && identitySkill" class="skill-slot-icon">{{ identityIcon }}</span>
+          <span v-if="identitySkill" class="skill-slot-icon">{{ identityIcon }}</span>
         </div>
+        <!-- 章节技能槽位 -->
+        <div
+          v-for="(skill, idx) in activeSkills" :key="skill.id"
+          class="skill-slot skill-slot--filled"
+          @click="activeSkillTooltipIdx === idx ? activeSkillTooltipIdx = -1 : activeSkillTooltipIdx = idx"
+        >
+          <span class="skill-slot-icon">{{ getSkillIcon(skill) }}</span>
+        </div>
+        <!-- 空槽补位（最多显示 4 个章节技能槽） -->
+        <div
+          v-for="i in Math.max(0, 4 - activeSkills.length)" :key="'empty-' + i"
+          class="skill-slot"
+        />
       </div>
       <Teleport to="body">
+        <!-- 身份技能 tooltip -->
         <div
-          v-if="skillTooltipVisible && identitySkill"
+          v-if="activeSkillTooltipIdx === -2 && identitySkill"
           class="skill-tooltip"
-          @click="skillTooltipVisible = false"
+          @click="activeSkillTooltipIdx = -1"
         >
-          {{ identitySkillDesc }}
+          <strong>{{ identitySkill.name_cn }}</strong><br>{{ identitySkillDesc }}
+        </div>
+        <!-- 章节技能 tooltip -->
+        <div
+          v-if="activeSkillTooltipIdx >= 0 && activeSkills[activeSkillTooltipIdx]"
+          class="skill-tooltip"
+          @click="activeSkillTooltipIdx = -1"
+        >
+          <strong>{{ activeSkills[activeSkillTooltipIdx].name_cn }}</strong> <span class="skill-tier">{{ activeSkills[activeSkillTooltipIdx].tier }}</span><br>{{ getSkillDesc(activeSkills[activeSkillTooltipIdx]) }}
         </div>
       </Teleport>
     </div>
@@ -403,6 +425,20 @@ const identitySkillDesc = computed(() => {
   return base.desc_cn.replace('{value}', val)
 })
 
+const activeSkillTooltipIdx = ref(-1)
+
+function getSkillIcon(skill) {
+  const base = SKILL_POOL.find(s => s.id === skill.id)
+  return base?.icon ?? '❓'
+}
+
+function getSkillDesc(skill) {
+  const base = SKILL_POOL.find(s => s.id === skill.id)
+  if (!base) return ''
+  const val = base.tiers?.[skill.tier]?.value ?? ''
+  return base.desc_cn.replace('{value}', val)
+}
+
 // ── 游戏流程 ──────────────────────────────────────────────
 
 async function startGame() {
@@ -516,8 +552,9 @@ function setSpeed(s) {
 .app-wrap {
   position: relative;
   display: flex; flex-direction: column;
-  height: 100vh; width: 100%; max-width: 600px; margin: 0 auto;
+  height: 100dvh; width: 100%; max-width: 600px; margin: 0 auto;
   overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ── Phase 容器（充满父级）── */
@@ -589,6 +626,12 @@ function setSpeed(s) {
 }
 
 .skill-slot-icon { font-size: 18px; line-height: 1; }
+
+.skill-tier {
+  font-size: 11px;
+  color: #f0c040;
+  margin-left: 4px;
+}
 
 .skill-tooltip {
   position: fixed;

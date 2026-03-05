@@ -3,36 +3,40 @@
     "chapter": 1,
     "name": "启航",
     "preBonus":   ["exchange"],
-    "preExclude": ["deep_anchor"],
+    "preExclude": ["deep_anchor", "upgrade", "alchemy"],
     "postBonus":  ["wreck_search"],
-    "postExclude": ["shop", "storm_shuffle", "break_boats"]
+    "postExclude": ["shop", "storm_shuffle", "break_boats", "blind_trade"]
   },
   {
     "chapter": 2,
     "name": "风暴",
-    "preBonus":   ["exchange", "deep_anchor"],
-    "postBonus":  ["wreck_search", "blind_trade"],
-    "postExclude": ["shop", "storm_shuffle"]
+    "preBonus":   ["exchange"],
+    "preExclude": ["deep_anchor", "upgrade"],
+    "postBonus":  ["blind_trade"],
+    "postExclude": ["shop", "storm_shuffle", "break_boats"]
   },
   {
     "chapter": 3,
     "name": "深渊",
-    "preBonus":   ["upgrade", "exchange", "deep_anchor"],
-    "postBonus":  ["shop", "blind_trade", "gambler_dice"],
-    "postExclude": ["storm_shuffle"]
+    "preBonus":   ["exchange"],
+    "preExclude": ["deep_anchor"],
+    "postBonus":  ["shop", "blind_trade"],
+    "postExclude": ["break_boats", "wreck_search"]
   },
   {
     "chapter": 4,
     "name": "宝藏岛",
-    "preBonus":   ["upgrade", "alchemy", "deep_anchor"],
-    "postBonus":  ["storm_shuffle", "break_boats", "shop"],
-    "postExclude": []
+    "preBonus":   [],
+    "preExclude": [],
+    "postBonus":  ["shop"],
+    "postExclude": ["wreck_search"]
   },
   {
     "chapter": 5,
     "name": "传奇海域",
-    "preBonus":   ["alchemy", "upgrade", "deep_anchor", "exchange"],
-    "postBonus":  ["break_boats", "blind_trade", "tavern_gamble"],
+    "preBonus":   ["upgrade", "alchemy"],
+    "preExclude": [],
+    "postBonus":  ["blind_trade"],
     "postExclude": ["storm_shuffle", "wreck_search"]
   }
 ]

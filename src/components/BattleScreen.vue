@@ -86,7 +86,9 @@ defineExpose({
 /* ── 战斗速度（顶部） ── */
 .speed-bar {
   flex-shrink: 0; display: flex; justify-content: center; gap: 6px;
-  padding: 4px 8px; background: rgba(0,0,0,.2);
+  padding: 4px 8px;
+  padding-top: max(4px, env(safe-area-inset-top, 0px));
+  background: rgba(0,0,0,.2);
   border-bottom: 1px solid var(--panel-border);
 }
 .speed-btn {
